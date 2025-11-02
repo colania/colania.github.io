@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="John Doe">
+
+
+
+
+
+
+
+<title>本地知识库搭建 | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/menu.js"></script>
+    
+    <script src="/js/format.js"></script>
+    
+
+
+
+
+
+
+
+
+
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/">
+          
+            首页
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/archives/">归档</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/categories/">分类</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/tags/">标签</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/about">关于我</a>
+              </li> 
+                   
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+<script src="/js/menu.js"></script>
+
+
+      <div class="main">
+        <div class="flex-container">
+          <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+                
+                    <span class="post-tag">
+                        <a href="/tags/RAG/">
+                            RAG
+                        </a>
+                    </span>    
+                           
+            
+        </div>
+        <div class="post-title">
+            
+            
+                本地知识库搭建
+            
+            
+        </div>
+        <span class="post-date">
+            Sep 23, 2025
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <div class="h-line-primary"></div>
+              
+    </div>
+</div>
+    <div class="post-content">
+    <p><img src="/images/RAG.png" alt="RAG"></p>
+<h3 id="🖥️-本地运行部分"><a href="#🖥️-本地运行部分" class="headerlink" title="🖥️ 本地运行部分"></a>🖥️ <strong>本地运行部分</strong></h3><p>通常为了降低延迟和保护数据隐私，以下步骤<strong>常在本地运行</strong>：</p>
+<ol>
+<li><strong>用户提出问题</strong>（User → Application）<ul>
+<li>用户通过应用程序输入问题。</li>
+</ul>
+</li>
+<li><strong>将问题转换为向量</strong>（Application → EmbeddingModel → Application）<ul>
+<li>应用程序调用本地嵌入模型，将问题转化为向量。</li>
+</ul>
+</li>
+<li><strong>向量相似度搜索</strong>（Application → VectorDB → Application）<ul>
+<li>使用问题向量在本地向量数据库中检索相关文档片段。</li>
+</ul>
+</li>
+<li><strong>组织提示词</strong>（Application）<ul>
+<li>将用户问题和检索到的文档片段组合成提示词，准备发送给云端模型。</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p>✅ 本地运行原因：</p>
+<ul>
+<li><strong>EmbeddingModel（嵌入模型）</strong> 通常较小，适合本地部署。（也可能在云端）</li>
+<li><strong>VectorDB（向量数据库）</strong> 用于快速检索，本地运行可以减少延迟并保护数据隐私。</li>
+</ul>
+</blockquote>
+<hr>
+<h3 id="☁️-云端大模型部分"><a href="#☁️-云端大模型部分" class="headerlink" title="☁️ 云端大模型部分"></a>☁️ <strong>云端大模型部分</strong></h3><p>以下步骤<strong>通常在云端运行</strong>，因为LLM模型参数庞大，推理资源需求高：</p>
+<ol>
+<li><strong>发送提示词给LLM</strong>（Application → LLM）<ul>
+<li>应用程序将整理好的提示词（问题 + 文档片段）发送到云端的大语言模型。</li>
+</ul>
+</li>
+<li><strong>生成答案</strong>（LLM）<ul>
+<li><strong>云端LLM</strong>处理提示词并生成回答。</li>
+</ul>
+</li>
+<li><strong>返回答案</strong>（LLM → Application → User）<ul>
+<li>云端返回生成的答案，应用程序再返回给用户。</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p>☁️ 云端运行原因：</p>
+<ul>
+<li>大型语言模型（如GPT-4、PaLM）计算量大，通常需要云端算力支持。</li>
+<li>云端可确保模型版本更新及时，性能稳定。</li>
+</ul>
+</blockquote>
+<hr>
+<h3 id="📝-总结表格"><a href="#📝-总结表格" class="headerlink" title="📝 总结表格"></a>📝 <strong>总结表格</strong></h3><table>
+<thead>
+<tr>
+<th><strong>流程步骤</strong></th>
+<th><strong>涉及组件</strong></th>
+<th><strong>运行位置</strong></th>
+<th><strong>原因说明</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>提出问题</td>
+<td>User → Application</td>
+<td>本地</td>
+<td>前端输入无需云端计算</td>
+</tr>
+<tr>
+<td>转换为向量</td>
+<td>Application → EmbeddingModel</td>
+<td>本地</td>
+<td>嵌入模型小，适合本地运行</td>
+</tr>
+<tr>
+<td>向量检索</td>
+<td>Application → VectorDB</td>
+<td>本地</td>
+<td>本地检索快，保证隐私</td>
+</tr>
+<tr>
+<td>组织提示词</td>
+<td>Application</td>
+<td>本地</td>
+<td>简单处理无需云端资源</td>
+</tr>
+<tr>
+<td>发送提示词并生成答案</td>
+<td>Application → LLM</td>
+<td>云端</td>
+<td>LLM模型庞大，云端推理</td>
+</tr>
+<tr>
+<td>返回答案</td>
+<td>LLM → Application → User</td>
+<td>云端生成，本地展示</td>
+<td>云端生成，本地呈现</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="🚀-为什么要这样划分？"><a href="#🚀-为什么要这样划分？" class="headerlink" title="🚀 为什么要这样划分？"></a>🚀 <strong>为什么要这样划分？</strong></h3><ul>
+<li>✅ <strong>本地运行</strong>：减少延迟，保护用户数据。</li>
+<li>☁️ <strong>云端大模型</strong>：利用强大算力，生成高质量回答。</li>
+</ul>
+<p>如果你希望大模型也能本地运行，可以考虑使用较小的模型（如Llama2 7B、Mistral等），但生成效果和速度会有所权衡。</p>
+<hr>
+<p>需要我帮你生成一个本地与云端部署架构图吗？🎨</p>
+<p>4o</p>
+<h3 id="You-said"><a href="#You-said" class="headerlink" title="You said:"></a>You said:</h3><p>能帮我举个例子吗，完整描述整个过程中问题的转换和答案生成的过程</p>
+<h3 id="ChatGPT-said"><a href="#ChatGPT-said" class="headerlink" title="ChatGPT said:"></a>ChatGPT said:</h3><p>当然可以！下面我将通过一个完整的例子，详细描述这张图中<strong>从用户提问到答案生成</strong>的整个流程。</p>
+<hr>
+<h3 id="🎯-场景设定"><a href="#🎯-场景设定" class="headerlink" title="🎯 场景设定"></a>🎯 <strong>场景设定</strong></h3><p>用户希望了解某个公司的人事政策。假设用户输入的问题是：</p>
+<blockquote>
+<p>用户提问：”What is the company’s leave policy?”（公司的休假政策是什么？）</p>
+</blockquote>
+<hr>
+<h3 id="🧩-流程逐步解析"><a href="#🧩-流程逐步解析" class="headerlink" title="🧩 流程逐步解析"></a>🧩 <strong>流程逐步解析</strong></h3><h3 id="1️⃣-用户提出问题-（User-→-Application）"><a href="#1️⃣-用户提出问题-（User-→-Application）" class="headerlink" title="1️⃣ 用户提出问题 （User → Application）"></a><strong>1️⃣ 用户提出问题</strong> （User → Application）</h3><ul>
+<li>用户通过应用程序输入：“What is the company’s leave policy?”</li>
+<li><strong>此步骤运行位置</strong>：本地</li>
+</ul>
+<hr>
+<h3 id="2️⃣-问题转换为向量-（Application-→-EmbeddingModel-→-Application）"><a href="#2️⃣-问题转换为向量-（Application-→-EmbeddingModel-→-Application）" class="headerlink" title="2️⃣ 问题转换为向量 （Application → EmbeddingModel → Application）"></a><strong>2️⃣ 问题转换为向量</strong> （Application → EmbeddingModel → Application）</h3><ul>
+<li><p>应用程序调用本地部署的<strong>嵌入模型</strong>（如Sentence Transformers），将文本转化为向量。例如：</p>
+<blockquote>
+<p>输入文本 → 转换向量: [0.23, -0.11, 0.56, …]</p>
+</blockquote>
+</li>
+<li><p><strong>为什么要这样？</strong> 向量能表示问题的语义，以便后续检索相关文档。</p>
+</li>
+<li><p><strong>此步骤运行位置</strong>：本地</p>
+</li>
+</ul>
+<hr>
+<h3 id="3️⃣-使用问题向量进行相似度搜索-（Application-→-VectorDB-→-Application）"><a href="#3️⃣-使用问题向量进行相似度搜索-（Application-→-VectorDB-→-Application）" class="headerlink" title="3️⃣ 使用问题向量进行相似度搜索 （Application → VectorDB → Application）"></a><strong>3️⃣ 使用问题向量进行相似度搜索</strong> （Application → VectorDB → Application）</h3><ul>
+<li>向量被发送到本地的<strong>向量数据库（VectorDB）</strong>（如FAISS、Milvus），用于检索语义上最相似的文档片段。</li>
+<li>假设数据库中有以下相关片段：<ul>
+<li>文档片段1: <em>“Employees are entitled to 15 days of annual leave and 10 days of sick leave.”</em></li>
+<li>文档片段2: <em>“Maternity leave is provided for up to 90 days.”</em></li>
+</ul>
+</li>
+<li>检索返回与问题最相关的片段（如上面两个）。</li>
+<li><strong>此步骤运行位置</strong>：本地</li>
+</ul>
+<hr>
+<h3 id="4️⃣-组织提示词-（Application）"><a href="#4️⃣-组织提示词-（Application）" class="headerlink" title="4️⃣ 组织提示词 （Application）"></a><strong>4️⃣ 组织提示词</strong> （Application）</h3><ul>
+<li><p>应用程序将用户问题和检索到的文档片段组织成提示词，用于发送给大模型。例如：</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">vbnet</span><br><span class="line">CopyEdit</span><br><span class="line">Question: What is the company&#x27;s leave policy?</span><br><span class="line">Relevant Documents:</span><br><span class="line">1. Employees are entitled to 15 days of annual leave and 10 days of sick leave.</span><br><span class="line">2. Maternity leave is provided for up to 90 days.</span><br><span class="line">Please provide a concise summary based on the relevant documents.</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>此步骤运行位置</strong>：本地</p>
+</li>
+</ul>
+<hr>
+<h3 id="5️⃣-发送提示词到LLM并生成答案-（Application-→-LLM-→-Application）"><a href="#5️⃣-发送提示词到LLM并生成答案-（Application-→-LLM-→-Application）" class="headerlink" title="5️⃣ 发送提示词到LLM并生成答案 （Application → LLM → Application）"></a><strong>5️⃣ 发送提示词到LLM并生成答案</strong> （Application → LLM → Application）</h3><ul>
+<li><p>应用程序将提示词发送给<strong>云端的大语言模型（LLM）</strong>（如GPT-4、PaLM 2）。</p>
+</li>
+<li><p>云端模型处理提示词并生成答案，例如：</p>
+<blockquote>
+<p>生成答案：</p>
+<p><em>“The company’s leave policy includes 15 days of annual leave, 10 days of sick leave, and up to 90 days of maternity leave.”</em></p>
+</blockquote>
+</li>
+<li><p><strong>此步骤运行位置</strong>：云端</p>
+</li>
+</ul>
+<hr>
+<h3 id="6️⃣-返回答案给用户-（LLM-→-Application-→-User）"><a href="#6️⃣-返回答案给用户-（LLM-→-Application-→-User）" class="headerlink" title="6️⃣ 返回答案给用户 （LLM → Application → User）"></a><strong>6️⃣ 返回答案给用户</strong> （LLM → Application → User）</h3><ul>
+<li><p>应用程序接收云端返回的答案并展示给用户。</p>
+</li>
+<li><p>用户看到的最终回答为：</p>
+<blockquote>
+<p>Answer: “The company’s leave policy includes 15 days of annual leave, 10 days of sick leave, and up to 90 days of maternity leave.”</p>
+</blockquote>
+</li>
+<li><p><strong>此步骤运行位置</strong>：本地展示（云端生成）</p>
+</li>
+</ul>
+<hr>
+<h3 id="📊-完整流程总览表"><a href="#📊-完整流程总览表" class="headerlink" title="📊 完整流程总览表"></a>📊 <strong>完整流程总览表</strong></h3><table>
+<thead>
+<tr>
+<th><strong>步骤</strong></th>
+<th><strong>操作内容</strong></th>
+<th><strong>运行位置</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1️⃣ 用户提问</td>
+<td>“What is the company’s leave policy?”</td>
+<td>本地</td>
+<td>用户输入问题</td>
+</tr>
+<tr>
+<td>2️⃣ 转换为向量</td>
+<td>文本转向量: <code>[0.23, -0.11, 0.56, ...]</code></td>
+<td>本地</td>
+<td>嵌入模型生成问题向量</td>
+</tr>
+<tr>
+<td>3️⃣ 向量检索</td>
+<td>检索出相关文档片段</td>
+<td>本地</td>
+<td>VectorDB返回匹配片段</td>
+</tr>
+<tr>
+<td>4️⃣ 组织提示词</td>
+<td>将问题+文档片段拼接为提示</td>
+<td>本地</td>
+<td>提供上下文供LLM使用</td>
+</tr>
+<tr>
+<td>5️⃣ LLM生成答案</td>
+<td>生成完整回答</td>
+<td>云端</td>
+<td>LLM生成自然语言回答</td>
+</tr>
+<tr>
+<td>6️⃣ 返回答案</td>
+<td>向用户返回答案</td>
+<td>本地展示</td>
+<td>最终答案展示在应用中</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="🚀-为什么要这样设计？"><a href="#🚀-为什么要这样设计？" class="headerlink" title="🚀 为什么要这样设计？"></a>🚀 <strong>为什么要这样设计？</strong></h3><ul>
+<li><strong>本地处理</strong>（向量转换与检索）：提升速度、降低延迟，并保护文档隐私。</li>
+<li><strong>云端生成答案</strong>：利用云端大模型的强大生成能力，提供高质量答案。</li>
+</ul>
+<hr>
+<h3 id="🧠-如果嵌入模型和向量数据库都在云端呢？"><a href="#🧠-如果嵌入模型和向量数据库都在云端呢？" class="headerlink" title="🧠 如果嵌入模型和向量数据库都在云端呢？"></a>🧠 <strong>如果嵌入模型和向量数据库都在云端呢？</strong></h3><ul>
+<li>这样做可以减轻本地负担，但会牺牲部分隐私性与实时性。</li>
+<li>推荐场景：设备资源有限，但有稳定的网络连接。</li>
+</ul>
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+                <div class="icon arrow-left"></div>
+                <div class="post-link">
+                    <a href="/2025/09/24/%E5%A6%82%E4%BD%95%E8%AE%A9AI%E6%8C%89%E9%A1%B9%E7%9B%AE%E5%AE%9A%E5%90%91%E5%8C%96%E5%BC%80%E5%8F%91/">Prev</a>
+                </div>
+            
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/2025/09/23/spec-%E4%BB%A3%E7%A0%81%E6%8F%90%E7%A4%BA%E8%AF%8D/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+     
+
+     
+    
+    
+
+</div>
+     
+  
+</article>
+        </div>
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+            
+                Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> & <a target="_blank" rel="noopener" href="https://github.com/zoeingwingkei/frame/">Frame</a>
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+    
+
+  </body>
+</html>
