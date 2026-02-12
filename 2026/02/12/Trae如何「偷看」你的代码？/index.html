@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="John Doe">
+
+
+
+
+
+
+
+<title>Trae如何「偷看」你的代码？ | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/menu.js"></script>
+    
+    <script src="/js/format.js"></script>
+    
+
+
+
+
+
+
+
+
+
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/">
+          
+            LEO
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/archives/">归档</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/categories/">分类</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/tags/">标签</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/about">关于我</a>
+              </li> 
+                   
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+<script src="/js/menu.js"></script>
+
+
+      <div class="main">
+        <div class="flex-container">
+          <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+        </div>
+        <div class="post-title">
+            
+            
+                Trae如何「偷看」你的代码？
+            
+            
+        </div>
+        <span class="post-date">
+            Feb 12, 2026
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <div class="h-line-primary"></div>
+              
+    </div>
+</div>
+    <div class="post-content">
+    <p>在 AI 编程领域国内外有一堆能叫的上号的应用：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Cursor</span><br><span class="line">Windsurf</span><br><span class="line">Trae</span><br><span class="line">阿里的「通义灵码」</span><br><span class="line">百度的「文心快码」</span><br><span class="line">字节跳动的「MarsCode」</span><br><span class="line">科大讯飞的「iFlyCode」</span><br><span class="line">GitHub 的「Copilot」</span><br><span class="line">等等等等...</span><br></pre></td></tr></table></figure>
+
+<p>这么多的 AI 编程应用，它们到底有什么区别？</p>
+<p>这些编程应用的实现原理到底是什么样的？</p>
+<p><strong>如果你也对上述问题怀有好奇心，那么接下来这篇文章就会彻底打消你的疑惑！</strong></p>
+<p><strong>&#x2F;</strong> AI IDE 和 AI Extensions <strong>&#x2F;</strong></p>
+<p>目前市面上所有的 AI 编程工具都可以分为两类。</p>
+<p><strong>一类是：AI IDE（AI 集成开发环境）</strong></p>
+<p>这类应用通常和开发环境深度集成，比如上面提到的 Cursor、Windsurf、Trae 这些都属于 AI IDE 应用。</p>
+<p>这类工具的最大特点就是：</p>
+<ol>
+<li>它们本身就是一个单独的软件开发工具</li>
+<li>在原有软件开发工具的基础上，通过代码魔改使得该开发工具，具备了 AI 的功能。</li>
+</ol>
+<p><strong>而另外一类则是：AI Extensions（AI 插件）</strong></p>
+<p>阿里的「通义灵码」、百度的「文心快码」、字节跳动的「MarsCode」、科大讯飞的「iFlyCode」、GitHub 的「Copilot」</p>
+<p>这类应用都属于 AI 插件，所谓 AI 插件，就是这类应用必须被集成进对应的开发环境中才能被使用。</p>
+<p>比如常用的 VSCode 和 IntelliJ IDEA，我们只要在这两个开发工具的扩展插件中搜索上述的 AI 应用，就可以直接下载并安装使用了。</p>
+<h1 id="两种类型应用的区别"><a href="#两种类型应用的区别" class="headerlink" title="两种类型应用的区别"></a><strong>两种类型应用的区别</strong></h1><h2 id="AI-Extensions："><a href="#AI-Extensions：" class="headerlink" title="AI Extensions："></a>AI Extensions：</h2><p>由于 AI Extensions 本身只是 IDE 的一个插件，所以 AI Extensions 所能拿到当前代码仓库的相关信息必须依赖于该 IDE 所提供的插件 API 接口。<br>如果 IDE 的 API 接口不支持获取详尽的代码历史数据，那么这些 AI 插件能够获取的上下文信息就会受到限制。而这种限制的上下文信息对于模型准确分析和理解用户意图来说，则是相对不利的。</p>
+<h2 id="AI-IDE"><a href="#AI-IDE" class="headerlink" title="AI IDE :"></a>AI IDE :</h2><p>而 AI IDE 则不同，它是一个完整的软件开发工具，所以 AI IDE 能够直接访问到当前代码仓库的所有信息。<br>通过分析用户意图，并据此调整上下文信息的权重，AI IDE 能够显著增强检索效果，这是 AI Extensions 所无法实现的。</p>
+<h2 id="举例"><a href="#举例" class="headerlink" title="举例"></a>举例</h2><p>一般当我们学习一个新的项目，不知道从何开始看起的时候，就可以让 AI 帮我们快速总结一下该项目的主要功能和特点了。</p>
+<h3 id="1-通义灵码"><a href="#1-通义灵码" class="headerlink" title="1. 通义灵码"></a>1. 通义灵码</h3><p>当我直接问这个项目做了什么事情，他会返回一个跟我的项目完全无关的内容。（我的项目和猫没有半毛钱关系）</p>
+<img src="/2026/02/12/Trae%E5%A6%82%E4%BD%95%E3%80%8C%E5%81%B7%E7%9C%8B%E3%80%8D%E4%BD%A0%E7%9A%84%E4%BB%A3%E7%A0%81%EF%BC%9F/%E9%80%9A%E4%B9%89%E7%81%B5%E7%A0%81.png" class="" title="通义灵码">
+<h3 id="2-trae"><a href="#2-trae" class="headerlink" title="2. trae"></a>2. trae</h3><p>此时我们问 Trae 一个相同的问题：“我这个项目做了什么？”</p>
+<img src="/2026/02/12/Trae%E5%A6%82%E4%BD%95%E3%80%8C%E5%81%B7%E7%9C%8B%E3%80%8D%E4%BD%A0%E7%9A%84%E4%BB%A3%E7%A0%81%EF%BC%9F/trae.png" class="" title="trae">
+<p>此时我们可以看到 Trae 读取了我当前整个工作空间的代码数据，并进行分析后，给出了对应的项目总结。</p>
+<h3 id="3-总结"><a href="#3-总结" class="headerlink" title="3. 总结"></a>3. 总结</h3><p>对于通义灵码来说，你需要给他提供上下文信息，才能进行内容总结。并且，他只会根据这几个提供的代码文件来进行分析。<br>而 Trae 则不同，在 Builder 模式，默认情况下，就是直接读取你当前整个 WorkSpace 空间下的所有代码内容。<br>所以此时使用 Trae 来进行自然语言交互时，就会非常顺畅，比如：“帮我把 A 文件中的内容修改为 XX ”Trae 此时会直接定位到你的 A 文件具体内容，然后根据你具体的指令来进行文件修改。</p>
+<p>而“通义灵码”则不同，当你告诉它 “帮我把 A 文件中的内容修改为 XX ”时，此时你还需要手动的先把 A 文件添加到“通义灵码”的上下文当中才行。</p>
+<p><strong>这就是一个非常大的差别，因为正常情况下，用户在描述一个需求时，通常是会涉及到非常多的相关代码文件的，此时作为用户的你在问一个问题前，还需要把所有的相关文件都先一个个的添加到对应的上下文中，这简直是太痛苦了。</strong></p>
+<h1 id="AI-IDE的原理（RAG）"><a href="#AI-IDE的原理（RAG）" class="headerlink" title="AI IDE的原理（RAG）"></a>AI IDE的原理（RAG）</h1><p>RAG 的使用场景非常的广泛，构建私有知识库、内容创作、数据分析、AI 编程等，只要是需要模型需要外挂知识源来进行处理的场景都需要用到 RAG。<br>详情可以查看 <a href="/2025/09/23/%E6%9C%AC%E5%9C%B0%E7%9F%A5%E8%AF%86%E5%BA%93%E6%90%AD%E5%BB%BA/" title="本地知识库搭建">本地知识库搭建</a> 这篇文章，这里我们回到 AI IDE 的实现原理。</p>
+<h2 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h2><p>AI IDE 的实现原理，本质上就是一个基于 RAG 架构的模型。</p>
+<p>当我们在问 Trae 一个问题：“帮我把当前的代码给优化一下” 时，此时是先把当前的本地代码和该问题一起丢给模型，然后让模型来优化完再输出的吗？</p>
+<p>不是这样的。</p>
+<p>首先我们的请求是先到 Trae 自己的服务器上，然后 Trae 自己的服务器再去请求对应的模型，然后返回数据。</p>
+<p>其次，当我们发送一个问题：“帮我把当前的代码给优化一下” 时，此时并不会真正的把当前本地的代码文件也发送到 Trae 的云端，而只是发送你的“文件名”加“问题”给到 Trae 的云端即可。</p>
+<p>我们来验证一下：</p>
+<img src="/2026/02/12/Trae%E5%A6%82%E4%BD%95%E3%80%8C%E5%81%B7%E7%9C%8B%E3%80%8D%E4%BD%A0%E7%9A%84%E4%BB%A3%E7%A0%81%EF%BC%9F/%E6%8F%90%E9%97%AE.png" class="" title="提问">
+<p>然后抓包看该请求的具体内容：</p>
+<img src="/2026/02/12/Trae%E5%A6%82%E4%BD%95%E3%80%8C%E5%81%B7%E7%9C%8B%E3%80%8D%E4%BD%A0%E7%9A%84%E4%BB%A3%E7%A0%81%EF%BC%9F/%E6%8A%93%E5%8C%85.png" class="" title="抓包">
+<p>首先我们可以看到该请求是直接先发送到了 Trae 自己的服务器，然后我们把对应的请求内容 json 格式化看一下：</p>
+<img src="/2026/02/12/Trae%E5%A6%82%E4%BD%95%E3%80%8C%E5%81%B7%E7%9C%8B%E3%80%8D%E4%BD%A0%E7%9A%84%E4%BB%A3%E7%A0%81%EF%BC%9F/%E6%A0%BC%E5%BC%8F%E5%8C%96.png" class="" title="格式化">
+<p>可以看到最终 input_content 参数中的内容，实际只是携带了当前要优化的文件名和该代码文件中从 13-16 行这个代码标识，而并不是直接上传了 13-16 行的代码块。</p>
+<p>而对于你当前的这个代码文件，实际在最开始 Trae 打开你的项目进行索引构建的时候，已经将你的项目文件全部在云端构建好了。</p>
+<p>当请求到达 Trae 的云端后，Trae 会先在自己的向量数据中，检索该代码片段，然后再针对该代码片段和对应的提示词优化后丢给对应的模型进行处理，最终将模型输出的结果再输出到 Trae 的客户端。</p>
+<p><strong>换句话说：当你使用 Trae 这类 AI 编程工具进行开发时，实际上你的代码本身已经被传递到了 Trae 的服务器上。</strong></p>
+<p>这个东西对我们会有什么影响吗？个人用户对代码不是很在意的其实不影响。</p>
+<p>但是对于企业级用户，对代码安全性要求较为严格的场景下，则需要有所注意了。</p>
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/2026/02/12/%E5%9F%BA%E4%BA%8E%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E6%96%B9%E6%B3%95%E8%AE%BA/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+     
+
+     
+    
+    
+
+</div>
+     
+  
+</article>
+        </div>
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+            
+                Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> & <a target="_blank" rel="noopener" href="https://github.com/zoeingwingkei/frame/">Frame</a>
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+    
+
+  </body>
+</html>
