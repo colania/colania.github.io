@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="John Doe">
+
+
+
+
+
+
+
+<title>在 Mac 上设置定时任务 | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/menu.js"></script>
+    
+    <script src="/js/format.js"></script>
+    
+
+
+
+
+
+
+
+
+
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/">
+          
+            Arden
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/archives/">归档</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/categories/">分类</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/tags/">标签</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/about">关于我</a>
+              </li> 
+                   
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+<script src="/js/menu.js"></script>
+
+
+      <div class="main">
+        <div class="flex-container">
+          <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+                
+                    <span class="post-tag">
+                        <a href="/tags/MAC/">
+                            MAC
+                        </a>
+                    </span>    
+                
+                    <span class="post-tag">
+                        <a href="/tags/cron/">
+                            cron
+                        </a>
+                    </span>    
+                           
+            
+        </div>
+        <div class="post-title">
+            
+            
+                在 Mac 上设置定时任务
+            
+            
+        </div>
+        <span class="post-date">
+            Jan 21, 2025
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <div class="h-line-primary"></div>
+              
+    </div>
+</div>
+    <div class="post-content">
+    <h2 id="在-Mac-上设置定时任务：使用-cron-和-launchd"><a href="#在-Mac-上设置定时任务：使用-cron-和-launchd" class="headerlink" title="在 Mac 上设置定时任务：使用 cron 和 launchd"></a>在 Mac 上设置定时任务：使用 cron 和 launchd</h2><p>在日常使用 Mac 时，我们常常需要执行一些定期任务，比如备份文件、清理缓存、运行脚本等。幸运的是，Mac 提供了多种方式来设置定时任务，其中最常用的是 cron 和 launchd。本文将详细介绍如何使用这两种工具来设置定时任务。</p>
+<h2 id="1-使用-cron-设置定时任务"><a href="#1-使用-cron-设置定时任务" class="headerlink" title="1. 使用 cron 设置定时任务"></a>1. 使用 cron 设置定时任务</h2><p>cron 是一个传统的 Unix 工具，用于在指定的时间间隔内运行命令或脚本。虽然 cron 在现代 macOS 中逐渐被 launchd 替代，但它仍然是一个非常有用的工具，尤其是在需要简单定时任务时。</p>
+<h3 id="1-1-查看当前的-cron-任务"><a href="#1-1-查看当前的-cron-任务" class="headerlink" title="1.1 查看当前的 cron 任务"></a>1.1 查看当前的 cron 任务</h3><p>在终端中输入以下命令，可以查看当前用户的 cron 任务列表：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">crontab -l</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-2-编辑-cron-任务"><a href="#1-2-编辑-cron-任务" class="headerlink" title="1.2 编辑 cron 任务"></a>1.2 编辑 cron 任务</h3><p>要编辑 cron 任务，可以使用以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">crontab -e</span><br></pre></td></tr></table></figure>
+
+<p>这将打开一个文本编辑器（通常是 nano 或 vi），你可以在这里添加或修改定时任务。</p>
+<h3 id="1-3-cron-格式"><a href="#1-3-cron-格式" class="headerlink" title="1.3 cron 格式"></a>1.3 cron 格式</h3><p>cron 格式和日常的 cron 是一样的。例如，以下任务将在每天凌晨 2 点运行一个脚本：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0 2 * * * /path/to/your/script.sh</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-使用-launchd-设置定时任务"><a href="#2-使用-launchd-设置定时任务" class="headerlink" title="2. 使用 launchd 设置定时任务"></a>2. 使用 launchd 设置定时任务</h2><p>launchd 是 macOS 的原生任务调度工具，它比 cron 更强大，支持更多复杂的触发条件和资源管理。launchd 任务通过 plist 文件配置。</p>
+<h3 id="2-1-创建一个-launchd-任务"><a href="#2-1-创建一个-launchd-任务" class="headerlink" title="2.1 创建一个 launchd 任务"></a>2.1 创建一个 launchd 任务</h3><h4 id="创建一个-plist-文件"><a href="#创建一个-plist-文件" class="headerlink" title="创建一个 plist 文件"></a>创建一个 plist 文件</h4><p>在 <code>~/Library/LaunchAgents</code> 目录下创建一个 .plist 文件。例如，创建一个名为 <code>com.yourname.backup.plist</code> 的文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p ~/Library/LaunchAgents</span><br><span class="line">nano ~/Library/LaunchAgents/com.yourname.backup.plist</span><br></pre></td></tr></table></figure>
+
+<h4 id="编辑-plist-文件"><a href="#编辑-plist-文件" class="headerlink" title="编辑 plist 文件"></a>编辑 plist 文件</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">plist</span> <span class="keyword">PUBLIC</span> <span class="string">&quot;-//Apple//DTD PLIST 1.0//EN&quot;</span> <span class="string">&quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">plist</span> <span class="attr">version</span>=<span class="string">&quot;1.0&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">key</span>&gt;</span>Label<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">string</span>&gt;</span>com.yourname.backup<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">key</span>&gt;</span>ProgramArguments<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">array</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">string</span>&gt;</span>/Users/yourname/backup.sh<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">array</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">key</span>&gt;</span>StartCalendarInterval<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">key</span>&gt;</span>Hour<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">integer</span>&gt;</span>2<span class="tag">&lt;/<span class="name">integer</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">key</span>&gt;</span>Minute<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">integer</span>&gt;</span>0<span class="tag">&lt;/<span class="name">integer</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">plist</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="加载-launchd-任务"><a href="#加载-launchd-任务" class="headerlink" title="加载 launchd 任务"></a>加载 launchd 任务</h4><p>保存并关闭文件后，使用以下命令加载任务：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">launchctl load ~/Library/LaunchAgents/com.yourname.backup.plist</span><br></pre></td></tr></table></figure>
+
+<h4 id="启动任务"><a href="#启动任务" class="headerlink" title="启动任务"></a>启动任务</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">launchctl start com.yourname.backup</span><br></pre></td></tr></table></figure>
+
+<h4 id="卸载任务"><a href="#卸载任务" class="headerlink" title="卸载任务"></a>卸载任务</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">launchctl unload ~/Library/LaunchAgents/com.yourname.backup.plist</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-总结"><a href="#3-总结" class="headerlink" title="3. 总结"></a>3. 总结</h2><p>cron 和 launchd 都是强大的定时任务工具，但它们各有优缺点：</p>
+<p><strong>cron：</strong></p>
+<ul>
+<li><strong>优点：</strong> 简单易用，适合简单的定时任务</li>
+<li><strong>缺点：</strong> 功能有限，不能处理复杂的触发条件</li>
+</ul>
+<p><strong>launchd：</strong></p>
+<ul>
+<li><strong>优点：</strong> 功能强大，支持复杂的触发条件和资源管理</li>
+<li><strong>缺点：</strong> 配置相对复杂，需要编辑 plist 文件</li>
+</ul>
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+                <div class="icon arrow-left"></div>
+                <div class="post-link">
+                    <a href="/2025/02/11/%E4%B8%80%E6%AC%A1-HTTP-%E5%AF%BC%E8%87%B4%E7%9A%84%E8%B5%84%E6%8D%9F%E4%BA%8B%E6%95%85%EF%BC%81/">Prev</a>
+                </div>
+            
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/2024/02/11/2023%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93%E6%84%9F%E6%82%9F/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+     
+
+     
+    
+    
+
+</div>
+     
+  
+</article>
+        </div>
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+            
+                Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> & <a target="_blank" rel="noopener" href="https://github.com/zoeingwingkei/frame/">Frame</a>
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+    
+
+  </body>
+</html>

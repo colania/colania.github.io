@@ -607,6 +607,7 @@ input[type="search"]::-webkit-search-results-decoration {
   margin-top: 3.5rem;
   display: flex;
   flex-direction: row-reverse;
+  align-items: center;
 }
 .profile .profile-content {
   width: 50%;
@@ -643,17 +644,46 @@ input[type="search"]::-webkit-search-results-decoration {
 }
 .profile .profile-image {
   width: 50%;
+  text-align: center;
+}
+.profile .profile-image img {
+  max-width: 80%;
+  border-radius: 50%;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  transition: transform 0.3s ease;
+}
+.profile .profile-image img:hover {
+  transform: scale(1.02);
+}
+.home-section-header {
+  margin-top: $margin-xl-0;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.0625rem;
+  border-bottom: 1px solid var(--color-border-secondary);
+}
+.home-section-header h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 2rem;
+  color: #373633;
+  margin: 0;
 }
 @media (max-width: 480px) {
   .profile {
     flex-wrap: wrap;
+    flex-direction: column-reverse;
   }
   .profile .profile-content {
     width: 100%;
     margin-top: 0.75rem;
+    text-align: center;
+    margin-right: 0;
   }
   .profile .profile-image {
     width: 100%;
+  }
+  .profile .profile-image img {
+    max-width: 60%;
   }
 }
 .search-popup {

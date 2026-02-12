@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="John Doe">
+
+
+
+
+
+
+
+<title>Markdown语法 | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/menu.js"></script>
+    
+    <script src="/js/format.js"></script>
+    
+
+
+
+
+
+
+
+
+
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/">
+          
+            Arden
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/archives/">归档</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/categories/">分类</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/tags/">标签</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/about">关于我</a>
+              </li> 
+                   
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+<script src="/js/menu.js"></script>
+
+
+      <div class="main">
+        <div class="flex-container">
+          <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+                
+                    <span class="post-tag">
+                        <a href="/tags/Markdown/">
+                            Markdown
+                        </a>
+                    </span>    
+                           
+            
+        </div>
+        <div class="post-title">
+            
+            
+                Markdown语法
+            
+            
+        </div>
+        <span class="post-date">
+            Feb 11, 2023
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <div class="h-line-primary"></div>
+              
+    </div>
+</div>
+    <div class="post-content">
+    <p>Markdown 是一种轻量级标记语言，易读易写，并对于图片、图表、数学式都有支持，目前许多网站与应用都支持了 Markdown。</p>
+<p>Markdown 入门：<a target="_blank" rel="noopener" href="https://docs.github.com/cn/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#styling-text">Markdown 基本撰写和格式语法</a>，<a target="_blank" rel="noopener" href="https://theme-hope.vuejs.press/zh/cookbook/markdown/">Markdown 转 HTML 语法介绍</a></p>
+<h2 id="图片尺寸"><a href="#图片尺寸" class="headerlink" title="图片尺寸"></a>图片尺寸</h2><p>md 格式调整图片尺寸，在不同编辑器中显示效果不同，不一定会生效。使用 html 格式调整图片尺寸能确保成功率。</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 按页面宽度的 60% 来缩小 --&gt;</span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;&quot;</span> <span class="attr">width</span>=<span class="string">&quot;60%&quot;</span>&gt;</span></span></span><br><span class="line"></span><br><span class="line">&lt;!-- md 图片设置，有时不能被识别 --&gt;</span><br><span class="line"></span><br><span class="line">![<span class="string">同时设置宽度和高度</span>](<span class="link">https://files.mdnice.com/logo.png =150x150</span>)</span><br><span class="line">![<span class="string">只设置宽度，推荐使用百分比</span>](<span class="link">https://files.mdnice.com/logo.png =40%x</span>)</span><br><span class="line"></span><br><span class="line">&lt;!-- 指针移动到图片时，显示图片说明 --&gt;</span><br><span class="line"></span><br><span class="line">![<span class="string">name</span>](<span class="link">https://docsify.js.org/_media/icon.svg &quot;图片说明&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 按图片尺寸的 60% 等比缩小 --&gt;</span></span><br><span class="line">?imageMogr2/thumbnail/!60p</span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 指定图片宽度 --&gt;</span></span><br><span class="line">?imageMogr2/thumbnail/500x</span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 指定宽度，调整质量，改变格式 --&gt;</span></span><br><span class="line">?imageMogr2/thumbnail/500x/strip/quality/50/format/webp</span><br></pre></td></tr></table></figure>
+
+<h2 id="资料引用"><a href="#资料引用" class="headerlink" title="资料引用"></a>资料引用</h2><p>文章中加 <code>^[引用内容]</code> 会在底部自动添加引用资料。如果想添加链接标题，则为 <code>^[[标题](链接)]</code>。</p>
+<p>如果同一引用要在多个地方使用，则需要手动编号。</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">这是一条引用 [^1]</span><br><span class="line">这是一条引用 [^2]</span><br><span class="line">这是一条引用 [^1]</span><br><span class="line">这是一条引用 [^3]</span><br><span class="line">[<span class="symbol">^1</span>]:<span class="link">链接</span></span><br><span class="line">[<span class="string">^2</span>]:[<span class="string">标题</span>](<span class="link">链接</span>)</span><br><span class="line">[<span class="string">^3</span>]:<span class="language-xml"><span class="tag">&lt;<span class="name">br</span>&gt;</span></span>![<span class="string">图片描述</span>](<span class="link">图片链接</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="代码块自动换行"><a href="#代码块自动换行" class="headerlink" title="代码块自动换行"></a>代码块自动换行</h2><p>自动换行需要 css 支持，暂不能自动启用。</p>
+<h2 id="整段删除线"><a href="#整段删除线" class="headerlink" title="整段删除线"></a>整段删除线</h2><p><code>~~</code> 只支持对本行内容添加删除线。</p>
+<p>如果要对大段内容添加删除线，可以用 HTML 标签 <code>&lt;s&gt;</code> 和 <code>&lt;/s&gt;</code>，被该标签包围的内容会全部添加删除线。VuePress 暂不支持该代码，会将标签识别为不完整而报错。</p>
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+                <div class="icon arrow-left"></div>
+                <div class="post-link">
+                    <a href="/2024/02/11/MAT-Java%E5%A0%86%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7-%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F/">Prev</a>
+                </div>
+            
+        </div>
+        <div class="next-item">
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+     
+
+     
+    
+    
+
+</div>
+     
+  
+</article>
+        </div>
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+            
+                Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> & <a target="_blank" rel="noopener" href="https://github.com/zoeingwingkei/frame/">Frame</a>
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+    
+
+  </body>
+</html>
