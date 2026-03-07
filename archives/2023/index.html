@@ -77,25 +77,25 @@
           
             
               <li class="menu-item">
-                <a href="/archives/">归档</a>
+                <a href="/">主页</a>
               </li> 
                    
           
             
               <li class="menu-item">
-                <a href="/categories/">分类</a>
+                <a href="/archives/">文章</a>
               </li> 
                    
           
             
               <li class="menu-item">
-                <a href="/tags/">标签</a>
+                <a href="/tags/%E9%A1%B9%E7%9B%AE/">项目</a>
               </li> 
                    
           
             
               <li class="menu-item">
-                <a href="/about">关于我</a>
+                <a href="/tags/">合集</a>
               </li> 
                    
           
@@ -109,36 +109,128 @@
 
 
       <div class="main">
-        <div class="flex-container">
-          <div class="post-list">
-    
-    
-
         
-
-        
-            <div class="year-title">2023</div>
-        
-
-        <div class="post-list-item">
-            <div class="post-title">
-            <a href="/2023/02/11/Markdown%E8%AF%AD%E6%B3%95/">
-                
-                    Markdown语法
-                
-                </a> 
-            </div>
-            
-            <span class="post-date">Feb 11, 2023</span>
-        </div>
-
-    
-    <div id="paginator">
-        
+          <div class="full-width-container">
+            <div class="archive-page">
+  <div class="archive-header">
+    <h1 class="page-title">最新帖子</h1>
+    <div class="archive-filters">
+      <button class="filter-btn active" data-filter="all">全部</button>
+      
+        <button class="filter-btn" data-filter="AI">AI</button>
+      
+        <button class="filter-btn" data-filter="JAVA">JAVA</button>
+      
+        <button class="filter-btn" data-filter="MAC">MAC</button>
+      
+        <button class="filter-btn" data-filter="OpenClaw">OpenClaw</button>
+      
+        <button class="filter-btn" data-filter="RAG">RAG</button>
+      
+        <button class="filter-btn" data-filter="cron">cron</button>
+      
+        <button class="filter-btn" data-filter="skills">skills</button>
+      
+        <button class="filter-btn" data-filter="事故复盘">事故复盘</button>
+      
+        <button class="filter-btn" data-filter="年终总结">年终总结</button>
+      
+        <button class="filter-btn" data-filter="抄录">抄录</button>
+      
+        <button class="filter-btn" data-filter="提示词工程">提示词工程</button>
+      
+        <button class="filter-btn" data-filter="方法论">方法论</button>
+      
+        <button class="filter-btn" data-filter="炒股">炒股</button>
+      
+        <button class="filter-btn" data-filter="语法">语法</button>
+      
+        <button class="filter-btn" data-filter="风险">风险</button>
+      
     </div>
+  </div>
+
+  <div class="archive-content">
+    
+      <article class="archive-post" data-categories="语法">
+        <div class="archive-post-inner">
+          
+            <div class="post-thumbnail">
+              <a href="/2023/02/11/Markdown%E8%AF%AD%E6%B3%95/">
+                <img src="/images/RAG.png" alt="Markdown语法">
+              </a>
+            </div>
+          
+          <div class="post-body">
+            <div class="post-header">
+              
+                <div class="post-categories">
+                  
+                    <span class="category-badge">语法</span>
+                  
+                </div>
+              
+              <span class="post-date">2023-02-11</span>
+            </div>
+            <h2 class="post-title">
+              <a href="/2023/02/11/Markdown%E8%AF%AD%E6%B3%95/">Markdown语法</a>
+            </h2>
+            <p class="post-excerpt">
+              Markdown 是一种轻量级标记语言，易读易写，并对于图片、图表、数学式都有支持，目前许多网站与应用都支持了 Markdown。
+Markdown 入门：Markdown 基本撰写和格式语法，Markdown 转 HTML 语法介绍
+图片尺寸md 格式调整图片尺寸，在不同编辑器中显示效果不同，不一定会生效。使用 html 格式调整图片尺寸能确保成功率。
+1234567891011&amp;lt;!-- ...
+            </p>
+            
+              <div class="post-tags">
+                
+                  <a href="/tags/%E5%B7%A5%E4%BD%9C/" class="tag-link">#工作</a>
+                
+              </div>
+            
+            <div class="post-footer">
+              <a href="/2023/02/11/Markdown%E8%AF%AD%E6%B3%95/" class="read-more">阅读更多 →</a>
+            </div>
+          </div>
+        </div>
+      </article>
+    
+  </div>
+
+  
 </div>
 
-        </div>
+<script>
+  // 简单的分类筛选功能
+  document.querySelectorAll('.filter-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var filter = this.getAttribute('data-filter');
+      
+      // 更新按钮状态
+      document.querySelectorAll('.filter-btn').forEach(function(b) {
+        b.classList.remove('active');
+      });
+      this.classList.add('active');
+      
+      // 筛选文章
+      document.querySelectorAll('.archive-post').forEach(function(post) {
+        if (filter === 'all') {
+          post.style.display = 'block';
+        } else {
+          var categories = post.getAttribute('data-categories');
+          if (categories && categories.includes(filter)) {
+            post.style.display = 'block';
+          } else {
+            post.style.display = 'none';
+          }
+        }
+      });
+    });
+  });
+</script>
+
+          </div>
+        
       </div>
       
       <div class="footer">

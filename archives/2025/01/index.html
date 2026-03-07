@@ -77,25 +77,25 @@
           
             
               <li class="menu-item">
-                <a href="/archives/">归档</a>
+                <a href="/">主页</a>
               </li> 
                    
           
             
               <li class="menu-item">
-                <a href="/categories/">分类</a>
+                <a href="/archives/">文章</a>
               </li> 
                    
           
             
               <li class="menu-item">
-                <a href="/tags/">标签</a>
+                <a href="/tags/%E9%A1%B9%E7%9B%AE/">项目</a>
               </li> 
                    
           
             
               <li class="menu-item">
-                <a href="/about">关于我</a>
+                <a href="/tags/">合集</a>
               </li> 
                    
           
@@ -109,36 +109,122 @@
 
 
       <div class="main">
-        <div class="flex-container">
-          <div class="post-list">
-    
-    
-
         
-
-        
-            <div class="year-title">2025</div>
-        
-
-        <div class="post-list-item">
-            <div class="post-title">
-            <a href="/2025/01/21/%E5%9C%A8mac%E4%B8%8A%E8%AE%BE%E7%BD%AE%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/">
-                
-                    在 Mac 上设置定时任务
-                
-                </a> 
-            </div>
-            
-            <span class="post-date">Jan 21, 2025</span>
-        </div>
-
-    
-    <div id="paginator">
-        
+          <div class="full-width-container">
+            <div class="archive-page">
+  <div class="archive-header">
+    <h1 class="page-title">最新帖子</h1>
+    <div class="archive-filters">
+      <button class="filter-btn active" data-filter="all">全部</button>
+      
+        <button class="filter-btn" data-filter="AI">AI</button>
+      
+        <button class="filter-btn" data-filter="JAVA">JAVA</button>
+      
+        <button class="filter-btn" data-filter="MAC">MAC</button>
+      
+        <button class="filter-btn" data-filter="OpenClaw">OpenClaw</button>
+      
+        <button class="filter-btn" data-filter="RAG">RAG</button>
+      
+        <button class="filter-btn" data-filter="cron">cron</button>
+      
+        <button class="filter-btn" data-filter="skills">skills</button>
+      
+        <button class="filter-btn" data-filter="事故复盘">事故复盘</button>
+      
+        <button class="filter-btn" data-filter="年终总结">年终总结</button>
+      
+        <button class="filter-btn" data-filter="抄录">抄录</button>
+      
+        <button class="filter-btn" data-filter="提示词工程">提示词工程</button>
+      
+        <button class="filter-btn" data-filter="方法论">方法论</button>
+      
+        <button class="filter-btn" data-filter="炒股">炒股</button>
+      
+        <button class="filter-btn" data-filter="语法">语法</button>
+      
+        <button class="filter-btn" data-filter="风险">风险</button>
+      
     </div>
+  </div>
+
+  <div class="archive-content">
+    
+      <article class="archive-post" data-categories="MAC,cron">
+        <div class="archive-post-inner">
+          
+          <div class="post-body">
+            <div class="post-header">
+              
+                <div class="post-categories">
+                  
+                    <span class="category-badge">MAC</span>
+                  
+                    <span class="category-badge">cron</span>
+                  
+                </div>
+              
+              <span class="post-date">2025-01-21</span>
+            </div>
+            <h2 class="post-title">
+              <a href="/2025/01/21/%E5%9C%A8mac%E4%B8%8A%E8%AE%BE%E7%BD%AE%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/">在 Mac 上设置定时任务</a>
+            </h2>
+            <p class="post-excerpt">
+              在 Mac 上设置定时任务：使用 cron 和 launchd在日常使用 Mac 时，我们常常需要执行一些定期任务，比如备份文件、清理缓存、运行脚本等。幸运的是，Mac 提供了多种方式来设置定时任务，其中最常用的是 cron 和 launchd。本文将详细介绍如何使用这两种工具来设置定时任务。
+1. 使用 cron 设置定时任务cron 是一个传统的 Unix 工具，用于在指定的时间间隔内运行命令...
+            </p>
+            
+              <div class="post-tags">
+                
+                  <a href="/tags/%E5%B7%A5%E4%BD%9C/" class="tag-link">#工作</a>
+                
+              </div>
+            
+            <div class="post-footer">
+              <a href="/2025/01/21/%E5%9C%A8mac%E4%B8%8A%E8%AE%BE%E7%BD%AE%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/" class="read-more">阅读更多 →</a>
+            </div>
+          </div>
+        </div>
+      </article>
+    
+  </div>
+
+  
 </div>
 
-        </div>
+<script>
+  // 简单的分类筛选功能
+  document.querySelectorAll('.filter-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var filter = this.getAttribute('data-filter');
+      
+      // 更新按钮状态
+      document.querySelectorAll('.filter-btn').forEach(function(b) {
+        b.classList.remove('active');
+      });
+      this.classList.add('active');
+      
+      // 筛选文章
+      document.querySelectorAll('.archive-post').forEach(function(post) {
+        if (filter === 'all') {
+          post.style.display = 'block';
+        } else {
+          var categories = post.getAttribute('data-categories');
+          if (categories && categories.includes(filter)) {
+            post.style.display = 'block';
+          } else {
+            post.style.display = 'none';
+          }
+        }
+      });
+    });
+  });
+</script>
+
+          </div>
+        
       </div>
       
       <div class="footer">

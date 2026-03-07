@@ -77,25 +77,25 @@
           
             
               <li class="menu-item">
-                <a href="/archives/">归档</a>
+                <a href="/">主页</a>
               </li> 
                    
           
             
               <li class="menu-item">
-                <a href="/categories/">分类</a>
+                <a href="/archives/">文章</a>
               </li> 
                    
           
             
               <li class="menu-item">
-                <a href="/tags/">标签</a>
+                <a href="/tags/%E9%A1%B9%E7%9B%AE/">项目</a>
               </li> 
                    
           
             
               <li class="menu-item">
-                <a href="/about">关于我</a>
+                <a href="/tags/">合集</a>
               </li> 
                    
           
@@ -109,8 +109,9 @@
 
 
       <div class="main">
-        <div class="flex-container">
-          <article id="post">
+        
+          <div class="flex-container">
+            <article id="post">
 
   
     <div class="post-head">
@@ -144,7 +145,7 @@
     </div>
 </div>
     <div class="post-content">
-    <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近在技术圈看到一个挺有意思的项目，叫 OpenCLaw。简单说，就是把 AI 直接塞进操作系统里，让它能真正”操控”你的电脑。不需要写命令、不需要写脚本，动动嘴皮子（或者打几个字），AI 就能帮你干活。</p>
+    <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近在技术圈看到一个挺有意思的项目，叫 OpenCLaw(小龙虾🦞)。简单说，就是把 AI 直接塞进操作系统里，让它能真正”操控”你的电脑。不需要写命令、不需要写脚本，动动嘴皮子（或者打几个字），AI 就能帮你干活。</p>
 <p>听起来很酷对吧？但越想越觉得哪里不对劲。</p>
 <h2 id="OpenCLaw-到底是什么"><a href="#OpenCLaw-到底是什么" class="headerlink" title="OpenCLaw 到底是什么"></a>OpenCLaw 到底是什么</h2><p>先说说这东西能干嘛。想象一下这些场景：</p>
 <ul>
@@ -171,7 +172,8 @@
 <p>首先，Mac Mini 确实能起到物理隔离的作用——但前提是它真的”隔离”。如果你的 Mac Mini 和你的主电脑在同一个局域网里，它能通过 SMB、SSH 之类的协议访问你的主电脑，那这道隔离墙就不存在了。</p>
 <p>其次，这个方案本身就说明了一个问题：<strong>用户需要额外花几千块钱买硬件，才能”安全”地使用一个软件</strong>。这难道不是产品设计的失败吗？</p>
 <p>最后，即使完全隔离，那台 Mac Mini 上的东西就不重要了吗？你的代码、配置、密钥，都在上面。</p>
-<h3 id="这东西还不够成熟"><a href="#这东西还不够成熟" class="headerlink" title="这东西还不够成熟"></a>这东西还不够成熟</h3><p>OpenCLaw 还在快速迭代中。开源项目的特点是：功能迭代快，但安全加固往往滞后。</p>
+<h3 id="这东西还不够成熟"><a href="#这东西还不够成熟" class="headerlink" title="这东西还不够成熟"></a>这东西还不够成熟</h3><img src="/2026/02/27/%E4%BD%A0%E7%9C%9F%E7%9A%84%E6%84%BF%E6%84%8F%E6%8A%8A%E9%9A%90%E7%A7%81%E4%BA%A4%E7%BB%99%E4%BC%9Aopenclaw-%E5%90%97/elon.png" class="" title="root">
+<p>OpenCLaw 还在快速迭代中。开源项目的特点是：功能迭代快，但安全加固往往滞后。</p>
 <p>我不是说开发团队不重视安全——他们肯定在意。但当你在和时间赛跑、忙着加新功能的时候，安全审计、边界检查、权限控制这些东西，很容易被往后排。</p>
 <p>而且，代码开源不代表 AI 的行为可控。你很难预测 AI 在什么情况下会做什么决定——这也是 AI 的魅力所在，但在这里，它是风险来源。</p>
 <h3 id="那个”网络乞讨”的真实事件"><a href="#那个”网络乞讨”的真实事件" class="headerlink" title="那个”网络乞讨”的真实事件"></a>那个”网络乞讨”的真实事件</h3><p>最近在 X 上看到个挺离谱的事。</p>
@@ -243,6 +245,11 @@
     <nav class="post-nav">
         <div class="prev-item">
            
+                <div class="icon arrow-left"></div>
+                <div class="post-link">
+                    <a href="/2026/03/06/%E5%BD%93%E8%B5%9B%E5%8D%9A%E7%9A%87%E5%B8%9D%EF%BC%8C%E4%BA%ABAI%E4%BA%BA%E7%94%9F%EF%BC%9F/">Prev</a>
+                </div>
+            
         </div>
         <div class="next-item">
             
@@ -268,7 +275,8 @@
      
   
 </article>
-        </div>
+          </div>
+        
       </div>
       
       <div class="footer">
