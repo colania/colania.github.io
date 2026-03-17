@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="John Doe">
+
+
+
+
+
+
+
+<title>Claude Code：架构、治理与工程实践 | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/menu.js"></script>
+    
+    <script src="/js/format.js"></script>
+    
+
+
+
+
+
+
+
+
+
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/">
+          
+            LEO
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/">主页</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/archives/">文章</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/tags/%E9%A1%B9%E7%9B%AE/">项目</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/tags/">合集</a>
+              </li> 
+                   
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+<script src="/js/menu.js"></script>
+
+
+      <div class="main">
+        
+          <div class="flex-container">
+            <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+                
+                    <span class="post-tag">
+                        <a href="/tags/AI/">
+                            AI
+                        </a>
+                    </span>    
+                           
+            
+        </div>
+        <div class="post-title">
+            
+            
+                Claude Code：架构、治理与工程实践
+            
+            
+        </div>
+        <span class="post-date">
+            Mar 16, 2026
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <div class="h-line-primary"></div>
+              
+    </div>
+</div>
+    <div class="post-content">
+    <h1 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h1><p>刚开始我也把它当 ChatBot 用，后来很快发现不对劲：上下文越来越乱、工具越来越多但效果越来越差、规则越写越长却越不遵守，折腾了一段时间，研究了 Claude Code 本身之后才意识到，这不是 Prompt 问题，而是这套系统的设计就是这样的。<br>这篇文章想和大伙聊聊这几个事：Claude Code 底层怎么运作、上下文为什么会乱以及怎么治理、Skills 和 Hooks 应该怎么设计、Subagents 的正确用法、Prompt Caching 的架构影响，以及怎么写一个真正有用的 CLAUDE.md。<br>我觉得最直接的理解方式，是把 Claude Code 拆成六层来看：</p>
+<table>
+<thead>
+<tr>
+<th align="left">层</th>
+<th align="left">职责</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">CLAUDE.md &#x2F; rules &#x2F; memory</td>
+<td align="left">长期上下文，告诉 Claude “是什么”</td>
+</tr>
+<tr>
+<td align="left">Tools &#x2F; MCP</td>
+<td align="left">动作能力，告诉 Claude “能做什么”</td>
+</tr>
+<tr>
+<td align="left">Skills</td>
+<td align="left">按需加载的方法论，告诉 Claude “怎么做”</td>
+</tr>
+<tr>
+<td align="left">Hooks</td>
+<td align="left">强制执行某些行为，不依赖 Claude 自己判断</td>
+</tr>
+<tr>
+<td align="left">Subagents</td>
+<td align="left">隔离上下文的工作者，负责受控自治</td>
+</tr>
+<tr>
+<td align="left">Verifiers</td>
+<td align="left">验证闭环，让输出可验、可回滚、可审计</td>
+</tr>
+</tbody></table>
+<p>只强化其中一层，系统就会失衡，CLAUDE.md 写太长，上下文先污染自己了；工具堆太多了，选择就搞不清楚了；subagents 开得到处都是，状态就漂移了；验证这步跳过了，出了问题根本不知道是哪里挂的。</p>
+<h1 id="1-他的底层是如何运行的"><a href="#1-他的底层是如何运行的" class="headerlink" title="1. 他的底层是如何运行的"></a>1. 他的底层是如何运行的</h1><img src="/2026/03/16/Claude-Code%EF%BC%9A%E6%9E%B6%E6%9E%84%E3%80%81%E6%B2%BB%E7%90%86%E4%B8%8E%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/cc%E5%BA%95%E5%B1%82%E9%80%BB%E8%BE%91.png" class="" title="cc底层逻辑">
+<p>Claude Code 的主 Agent 充当系统的“大脑”，负责接收用户的自然语言指令，并在其 200K token 的上下文中进行意图识别和任务分解 。在底层运行中，它采用 ReAct（推理与行动）模式，通过一个“思考（Thought）提取动作（Action）并执行工具”的循环机制来不断推进任务 。当模型推断出需要操作时，会调用合适的内置工具，并将执行结果反馈给模型，这个过程会一直重复进行，直到系统确认任务完成并生成最终结果（Final Answer） 。对于更复杂的任务，主 Agent 还会动态调度专门的 Plan Agent（负责规划）或 Explore Agent（负责探索代码库结构）来进行协同工作 。</p>
+<h3 id="五层系统架构设计"><a href="#五层系统架构设计" class="headerlink" title="五层系统架构设计"></a>五层系统架构设计</h3><p>为了实现从自然语言到代码落地的转化，Claude Code 的底层采用了清晰的分层架构 ：<br>​</p>
+<ul>
+<li><p>用户交互层：涵盖 CLI、IDE 插件及桌面应用，各个环境均由相同的底层引擎驱动，并跨界面同步会话状态 。</p>
+</li>
+<li><p>决策编排层：负责维护上下文、解析指令、制定执行计划，并决定在何时使用何种工具 。<br>​</p>
+</li>
+<li><p>核心能力层：包含 20 多种内置工具（如 Grep 搜索、文件读写 Edit、Bash 命令执行等），以及负责不同维度的专业子 Agent 矩阵 。<br>​</p>
+</li>
+<li><p>扩展集成层：通过 MCP（模型上下文协议）连接外部服务（例如 GitHub、Slack、Notion 和数据库），并引入 Hook 机制（如 pre-commit 或 post-edit）来实现事件驱动的自动化 。</p>
+</li>
+<li><p>外部系统层：系统的最终触角，直接对 Git 版本控制系统、本地文件系统及外部 API 发起物理级别的操作指令 。<br>​</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">收集上下文 → 采取行动 → 验证结果 → [完成 or 回到收集]</span><br><span class="line">     ↑                    ↓</span><br><span class="line">  CLAUDE.md          Hooks / 权限 / 沙箱</span><br><span class="line">  Skills             Tools / MCP</span><br><span class="line">  Memory</span><br></pre></td></tr></table></figure>
+<p>基于上面的结构，我们要真正关注下面五个层面：</p>
+<img src="/2026/03/16/Claude-Code%EF%BC%9A%E6%9E%B6%E6%9E%84%E3%80%81%E6%B2%BB%E7%90%86%E4%B8%8E%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/HDNnGJybQAA7KCR.jpeg" class="" title="五个层面">
+<p>对着这几个面看，很多问题就好排查了。结果不稳定，查上下文加载顺序，不是模型的事；自动化失控，看控制层有没有设计，不是 agent 太主动；长会话质量下降，中间产物把上下文污染了，换个新会话比反复调 prompt 有用得多。</p>
+<h1 id="2-概念边界：MCP-Plugin-Tools-Skills-Hooks-Subagents"><a href="#2-概念边界：MCP-Plugin-Tools-Skills-Hooks-Subagents" class="headerlink" title="2.概念边界：MCP &#x2F; Plugin &#x2F; Tools &#x2F; Skills &#x2F; Hooks &#x2F; Subagents"></a>2.概念边界：MCP &#x2F; Plugin &#x2F; Tools &#x2F; Skills &#x2F; Hooks &#x2F; Subagents</h1><img src="/2026/03/16/Claude-Code%EF%BC%9A%E6%9E%B6%E6%9E%84%E3%80%81%E6%B2%BB%E7%90%86%E4%B8%8E%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/HDNngxyaMAAcgV9.jpeg" class="" title="概念">
+<p>给 Claude 新动作能力用 Tool&#x2F;MCP，给它一套工作方法用 Skill，需要隔离执行环境用 Subagent，要强制约束和审计用 Hook，跨项目分发用 Plugin。学习项目和上下文就用Claude.md</p>
+<h1 id="3-上下文工程：最重要的系统约束"><a href="#3-上下文工程：最重要的系统约束" class="headerlink" title="3. 上下文工程：最重要的系统约束"></a>3. 上下文工程：最重要的系统约束</h1><p>很多人把上下文当”容量问题”，但卡住的地方通常不是不够长，而是太多了，有用的信息被大量无关内容淹没了。</p>
+<h3 id="真实的上下文成本构成"><a href="#真实的上下文成本构成" class="headerlink" title="真实的上下文成本构成"></a>真实的上下文成本构成</h3><img src="/2026/03/16/Claude-Code%EF%BC%9A%E6%9E%B6%E6%9E%84%E3%80%81%E6%B2%BB%E7%90%86%E4%B8%8E%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/HDNnxhbbQAEmIP5.png" class="" title="真实的上下文成本构成">
+<h3 id="推荐的上下文分层"><a href="#推荐的上下文分层" class="headerlink" title="推荐的上下文分层"></a>推荐的上下文分层</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">始终常驻    → CLAUDE.md：项目契约 / 构建命令 / 禁止事项</span><br><span class="line">按路径加载  → rules：语言 / 目录 / 文件类型特定规则</span><br><span class="line">按需加载    → Skills：工作流 / 领域知识</span><br><span class="line">隔离加载    → Subagents：大量探索 / 并行研究</span><br><span class="line">不进上下文  → Hooks：确定性脚本 / 审计 / 阻断</span><br></pre></td></tr></table></figure>
+<p>说白了，偶尔用的东西就不要每次都加载进来。</p>
+<h3 id="上下文最佳实践"><a href="#上下文最佳实践" class="headerlink" title="上下文最佳实践"></a>上下文最佳实践</h3><ul>
+<li>保持 CLAUDE.md 短、硬、可执行，优先写命令、约束、架构边界。Anthropic 官方自己的 CLAUDE.md 大约只有 2.5K tokens，可以参考</li>
+<li>把大型参考文档拆到 Skills 的 supporting files，不要塞进 SKILL.md 正文</li>
+<li>使用 .claude&#x2F;rules&#x2F; 做路径&#x2F;语言规则，不让根 CLAUDE.md 承担所有差异</li>
+<li>长会话主动用 &#x2F;context 观察消耗，不要等系统自动压缩后再补救</li>
+<li>任务切换优先 &#x2F;clear，同一任务进入新阶段用 &#x2F;compact</li>
+<li><strong>把 Compact Instructions 写进 CLAUDE.md</strong>，压缩后必须保留什么由你控制，不由算法猜</li>
+</ul>
+<h3 id="Compact机制（上下文压缩机制）"><a href="#Compact机制（上下文压缩机制）" class="headerlink" title="Compact机制（上下文压缩机制）"></a>Compact机制（上下文压缩机制）</h3><p>当智能体不断读取文件、执行工具调用并返回长篇结果时，很容易耗尽大语言模型的上下文窗口。Compact 机制通过自动或手动触发总结，丢弃冗余细节并保留关键信息，从而实现“无限会话”能力 。但是 频繁的压缩会导致模型像“失忆的轮班工程师”一样陷入逻辑混乱 。根据 Anthropic 工程师的揭秘，当 Compact 触发超过 3-4 次后，模型可能会忘记早期设定的核心逻辑，出现“重复造轮子”或破坏已完成功能的现象（失败模式 A&#x2F;B） 。</p>
+
+<p>左边是上下文快满时的状态，中间是 Claude Code 开一个 fork 调用，把完整对话历史喂给模型，加一句”Summarize this conversation”，这一步命中缓存所以只需 1&#x2F;10 的价格，右边是压缩完之后，原来几十轮对话被替换成一段 ~20k tokens 的摘要，System + Tools 还在，再挂上之前用到的文件引用，腾出空间继续新的轮次。</p>
+<p><strong>​因此，目前的最佳实践是：在同一个任务进入下一个明确阶段时，使用带有具体 Instruction 的 <code>/compact</code> 平滑过渡</strong>；而在两个没有关联的独立任务之间，或者发现模型因为错误尝试而“污染”了上下文时，应果断使用 <code>/clear</code> 彻底清空记忆并重新开始，而不是依赖多次压缩 。<br>或者，解决方案就是在 CLAUDE.md 里写明：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">## Compact Instructions</span><br><span class="line">When compressing, preserve in priority order:</span><br><span class="line">1. Architecture decisions (NEVER summarize)</span><br><span class="line">2. Modified files and their key changes</span><br><span class="line">3. Current verification status (pass/fail)</span><br><span class="line">4. Open TODOs and rollback notes</span><br><span class="line">5. Tool outputs (can delete, keep pass/fail only)</span><br></pre></td></tr></table></figure>
+<p>还有一种更主动的方案：在开新会话前，先让 Claude 写一份 HANDOFF.md，把当前进度、尝试过什么、哪些走通了、哪些是死路、下一步该做什么写清楚。下一个 Claude 实例只读这个文件就能接着做，不依赖压缩算法的摘要质量：</p>
+<h1 id="4-Plan-Mode-的工程价值"><a href="#4-Plan-Mode-的工程价值" class="headerlink" title="4.Plan Mode 的工程价值"></a>4.Plan Mode 的工程价值</h1><img src="/2026/03/16/Claude-Code%EF%BC%9A%E6%9E%B6%E6%9E%84%E3%80%81%E6%B2%BB%E7%90%86%E4%B8%8E%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/planMode.png" class="" title="plan">
+<p>Plan Mode 的核心是把探索和执行拆开，探索阶段不动文件，确认方案后再执行：</p>
+<ul>
+<li>探索阶段以只读操作为主</li>
+<li>Claude 可以先澄清目标和边界，再提交具体方案</li>
+<li>执行成本在计划确认之后才发生</li>
+</ul>
+<p>对于复杂重构、迁移、跨模块改动，这样做比”急着出代码”有用多了，它能显著降低在错误假设上持续修改的概率。按两下 Shift+Tab 进入 Plan Mode，<strong>进阶玩法是开一个 Claude 写计划，再开一个 Codex 以”高级工程师”身份审这个计划，让 AI 审 AI，效果很好。</strong></p>
+<h1 id="5-Skills-设计：不是模板库，是用的时候才加载的工作流"><a href="#5-Skills-设计：不是模板库，是用的时候才加载的工作流" class="headerlink" title="5.Skills 设计：不是模板库，是用的时候才加载的工作流"></a>5.Skills 设计：不是模板库，是用的时候才加载的工作流</h1><p>skills 是最近很火的概念。你可以把它理解为教给 Claude 的**“菜谱”**：如果说 MCP（模型上下文协议）是给 Claude 提供了各种锅碗瓢盆（工具），那么 Skills 就是告诉 Claude 在特定场景下，该按什么步骤使用这些工具来完成一道特定的“菜” 。<br>​&#96;&#96;&#96;<br>.claude&#x2F;skills&#x2F;<br>└── incident-triage&#x2F;<br>    ├── SKILL.md<br>    ├── runbook.md<br>    ├── examples.md<br>    └── scripts&#x2F;<br>        └── collect-context.sh<br>&#96;&#96;</p>
+<ul>
+<li>SKILL.md 负责定义任务语义、边界和执行骨架</li>
+<li>supporting files 负责提供领域细节</li>
+<li>脚本负责确定性收集上下文或证据</li>
+</ul>
+<h3 id="Skill-的三种典型类型"><a href="#Skill-的三种典型类型" class="headerlink" title="Skill 的三种典型类型"></a>Skill 的三种典型类型</h3><h4 id="类型一：检查清单型（质量门禁）"><a href="#类型一：检查清单型（质量门禁）" class="headerlink" title="类型一：检查清单型（质量门禁）"></a>类型一：检查清单型（质量门禁）</h4><p>在提交前跑一遍，确保不漏项：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">name: release-check</span><br><span class="line">description: Use before push a commit to verify build, version, and smoke test.</span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">## Pre-flight (All must pass)</span><br><span class="line">- [ ] `cargo build --release` passes</span><br><span class="line">- [ ] `cargo clippy -- -D warnings` clean</span><br><span class="line">- [ ] Version bumped in Cargo.toml</span><br><span class="line">- [ ] CHANGELOG updated</span><br><span class="line">- [ ] `kaku doctor` passes on clean env</span><br><span class="line"></span><br><span class="line">## Output</span><br><span class="line">Pass / Fail per item. Any Fail must be fixed before release.</span><br></pre></td></tr></table></figure>
+<h4 id="类型二：工作流型（标准化操作）"><a href="#类型二：工作流型（标准化操作）" class="headerlink" title="类型二：工作流型（标准化操作）"></a>类型二：工作流型（标准化操作）</h4><p>配置迁移高风险，显式调用 + 内置回滚步骤：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">name: config-migration</span><br><span class="line">description: Migrate config schema. Run only when explicitly requested.</span><br><span class="line">disable-model-invocation: true</span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">## Steps</span><br><span class="line">1. Backup: `cp ~/.config/kaku/config.toml ~/.config/kaku/config.toml.bak`</span><br><span class="line">2. Dry run: `kaku config migrate --dry-run`</span><br><span class="line">3. Apply: remove `--dry-run` after confirming output</span><br><span class="line">4. Verify: `kaku doctor` all pass</span><br><span class="line"></span><br><span class="line">## Rollback</span><br><span class="line">`cp ~/.config/kaku/config.toml.bak ~/.config/kaku/config.toml`</span><br></pre></td></tr></table></figure>
+<h4 id="类型三：领域专家型（封装决策框架）"><a href="#类型三：领域专家型（封装决策框架）" class="headerlink" title="类型三：领域专家型（封装决策框架）"></a>类型三：领域专家型（封装决策框架）</h4><p>运行时出问题时让 Claude 按固定路径收集证据，不要瞎猜</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">name: runtime-diagnosis</span><br><span class="line">description: Use when kaku crashes, hangs, or behaves unexpectedly at runtime.</span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">## Evidence Collection</span><br><span class="line">1. Run `kaku doctor` and capture full output</span><br><span class="line">2. Last 50 lines of `~/.local/share/kaku/logs/`</span><br><span class="line">3. Plugin state: `kaku --list-plugins`</span><br><span class="line"></span><br><span class="line">## Decision Matrix</span><br><span class="line">| Symptom | First Check |</span><br><span class="line">|---|---|</span><br><span class="line">| Crash on startup | doctor output → Lua syntax error |</span><br><span class="line">| Rendering glitch | GPU backend / terminal capability |</span><br><span class="line">| Config not applied | Config path + schema version |</span><br><span class="line"></span><br><span class="line">## Output Format</span><br><span class="line">Root cause / Blast radius / Fix steps / Verification command</span><br></pre></td></tr></table></figure>
+<h1 id="6-Hooks：在-Claude-执行操作前后，强制插入你自己的逻辑"><a href="#6-Hooks：在-Claude-执行操作前后，强制插入你自己的逻辑" class="headerlink" title="6.Hooks：在 Claude 执行操作前后，强制插入你自己的逻辑"></a>6.Hooks：在 Claude 执行操作前后，强制插入你自己的逻辑</h1><p><strong>Hooks（钩子）</strong> 允许你在 Claude 执行任务的特定生命周期节点（例如：修改文件前后、执行 Bash 命令前、任务结束时）自动触发你自定义的 Shell 脚本、HTTP 请求或 LLM 提示词 。</p>
+<h3 id="常见应用场景"><a href="#常见应用场景" class="headerlink" title="常见应用场景"></a>常见应用场景</h3><ul>
+<li><strong>安全防护与行为拦截</strong>：在 Claude 试图执行某个终端命令前（PreToolUse 事件），你可以用 Hook 进行拦截。例如，强制团队规范：“如果 Claude 尝试运行 npm install，则拦截并报错，强制让它改用 bun install” </li>
+<li><strong>动态注入上下文</strong>：在每次会话开始时（SessionStart 事件）或提交提示词时（UserPromptSubmit），自动拉取最新的数据库 Schema 或内部 API 文档，无缝注入到 Claude 的上下文中 。<br>​* <strong>状态通知</strong>：当 Claude 跑完一个长达半小时的复杂重构任务，或者它遇到权限阻拦需要你手动确认时，触发一个系统的声音提示或发送一条企业微信&#x2F;Slack 消息给你 。</li>
+</ul>
+<h3 id="适合-vs-不适合放到-Hooks-的场景"><a href="#适合-vs-不适合放到-Hooks-的场景" class="headerlink" title="适合 vs 不适合放到 Hooks 的场景"></a>适合 vs 不适合放到 Hooks 的场景</h3><ul>
+<li>适合：阻断修改受保护文件、Edit 后自动格式化&#x2F;lint&#x2F;轻量校验、SessionStart 后注入动态上下文（Git 分支、环境变量）、任务完成后推送通知。</li>
+<li>不适合：需要读大量上下文的复杂语义判断、长时间运行的业务流程、需要多步推理和权衡的决策，这些该在 Skill 或 Subagent 里。</li>
+</ul>
+<h1 id="7-Subagents：派一个独立的-Claude-去干一件具体的事"><a href="#7-Subagents：派一个独立的-Claude-去干一件具体的事" class="headerlink" title="7. Subagents：派一个独立的 Claude 去干一件具体的事"></a>7. Subagents：派一个独立的 Claude 去干一件具体的事</h1><p>Subagent 就是从主对话派出去的一个独立 Claude 实例，有自己的上下文窗口、只用你指定的工具、干完汇报结果。核心价值不是”并行”，而是隔离，扫代码库、跑测试、做审查这类会产生大量输出的事，交给 Subagent 做，主线程只拿摘要，不会被中间过程污染。Claude Code 内置了 Explore（只读扫库，跑 Haiku 省成本）、Plan（规划调研）、General-purpose（通用），也可以自定义。</p>
+<h3 id="配置时要显式约束"><a href="#配置时要显式约束" class="headerlink" title="配置时要显式约束"></a>配置时要显式约束</h3><ul>
+<li>tools &#x2F; disallowedTools：限定能用什么工具，别给和主线程一样宽的权限</li>
+<li>model：探索任务用 Haiku&#x2F;Sonnet，重要审查用 Opus</li>
+<li>maxTurns：防止跑飞</li>
+<li>isolation: worktree：需要动文件时隔离文件系统</li>
+</ul>
+<h1 id="8-Prompt-Caching：Claude-Code-内部架构的核心"><a href="#8-Prompt-Caching：Claude-Code-内部架构的核心" class="headerlink" title="8. Prompt Caching：Claude Code 内部架构的核心"></a>8. Prompt Caching：Claude Code 内部架构的核心</h1><p><strong>Prompt Caching（提示词缓存）</strong> 是一项底层的性能优化和成本控制机制。它允许大语言模型“记住”之前已经处理过的静态上下文（例如整个代码库结构、系统指令、长文档或此前的多轮对话历史），从而在后续的对话中避免重复计算 。<br>在很多长周期的编程任务中，随着上下文越来越大，每次你提出一个新问题，模型本来都需要把前面的几万字重新读一遍。Prompt Caching 的出现彻底改变了这一点。</p>
+<h3 id="它是如何工作的？"><a href="#它是如何工作的？" class="headerlink" title="它是如何工作的？"></a>它是如何工作的？</h3><p>Prompt Caching 就像数据库里的索引一样，你使用得当，会提高不少速度，你违反它的使用规则，就会失效。<br>Prompt Caching 的核心逻辑是<strong>前缀匹配（Prefix Matching）<strong>和</strong>检查点（Checkpoints）</strong>：</p>
+<ul>
+<li><p><strong>自动标记缓存点</strong>：Claude Code 在底层会自动识别那些“不常变化”的内容（比如项目的 CLAUDE.md、内置工具的定义、加载的大型文件），并在这些内容的末尾打上“缓存检查点标记（Cache Breakpoints）” 。</p>
+</li>
+<li><p><strong>首次写入</strong>：当你的第一条请求发出时，模型会正常读取所有内容，并将到达检查点之前的计算状态保存到服务器的缓存中 。</p>
+</li>
+<li><p><strong>后续命中（Cache Hit）</strong>：当你发出第二条请求时，系统会检查你的新 Prompt。如果它的“前缀部分”与之前缓存的内容完全一致，模型就会直接从缓存中加载状态，只计算新增加的那几句话 。</p>
+</li>
+</ul>
+<h3 id="好处："><a href="#好处：" class="headerlink" title="好处："></a>好处：</h3><ul>
+<li>降低成本</li>
+<li>近乎瞬时的响应</li>
+</ul>
+<h3 id="使用时的注意事项："><a href="#使用时的注意事项：" class="headerlink" title="使用时的注意事项："></a>使用时的注意事项：</h3><ul>
+<li><strong>不要在头部注入动态变量</strong>：如果你通过 Hooks 在每次请求的开头注入一个动态的时间戳或随机数，这会导致每次的前缀都不同</li>
+<li><strong>中途切换模型</strong>：如果在对话中途从 Claude 3.5 Sonnet 切换到 Opus，缓存无法跨模型共享，需要重新计算。如果你要切换模型，它会重建整个缓存。确实需要切换的话，用 Subagent 交接：Opus 准备一条”交接消息”给另一个模型，说明需要完成的任务就行。</li>
+<li><strong>中途添加 MCP 工具</strong>：工具定义是放在 Prompt 最前面的，如果你在对话一半时动态加载了一个新的外部工具，整个提示词前缀被改变，之前的缓存也会失效 。</li>
+</ul>
+<h1 id="9-验证闭环：没有-Verifier-就没有工程上的-Agent"><a href="#9-验证闭环：没有-Verifier-就没有工程上的-Agent" class="headerlink" title="9.验证闭环：没有 Verifier 就没有工程上的 Agent"></a>9.验证闭环：没有 Verifier 就没有工程上的 Agent</h1><p>「Claude 说完成了」其实没啥用，你得能知道它做没做对、出了问题能退回来、过程还能查，这才算数。</p>
+<h3 id="Verifier-的层级"><a href="#Verifier-的层级" class="headerlink" title="Verifier 的层级"></a>Verifier 的层级</h3><ul>
+<li>最低层：命令退出码、lint、typecheck、unit test</li>
+<li>中间层：集成测试、截图对比、contract test、smoke test</li>
+<li>更高层：生产日志验证、监控指标、人工审查清单<br>在 Prompt、Skill 和 CLAUDE.md 中显式定义验证</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">## Verification</span><br><span class="line"></span><br><span class="line">For backend changes:</span><br><span class="line"></span><br><span class="line">- Run `make test` and `make lint`</span><br><span class="line">- For API changes, update contract tests under `tests/contracts/`</span><br><span class="line"></span><br><span class="line">For UI changes:</span><br><span class="line"></span><br><span class="line">- Capture before/after screenshots if visual</span><br><span class="line"></span><br><span class="line">Definition of done:</span><br><span class="line"></span><br><span class="line">- All tests pass</span><br><span class="line">- Lint passes</span><br><span class="line">- No TODO left behind unless explicitly tracked</span><br></pre></td></tr></table></figure>
+<p>写任务 Prompt 或 Skill 的时候，最好把验收标准提前说清楚。哪些命令跑完算完成，失败了先查什么，截图和日志看到什么才算过，这些越早讲明白，后面越省事。<br><strong>假如一个任务你都说不清楚「Claude 怎么才算做对了」，那它大概率也不适合直接丢给 Claude 自动完成。</strong></p>
+<h1 id="10-高频命令的工程意义"><a href="#10-高频命令的工程意义" class="headerlink" title="10. 高频命令的工程意义"></a>10. 高频命令的工程意义</h1><p>主动管理上下文，别等系统自己处理。</p>
+<h3 id="上下文管理"><a href="#上下文管理" class="headerlink" title="上下文管理"></a>上下文管理</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/context   # 查看 token 占用结构，排查 MCP 和文件读取占比</span><br><span class="line">/clear     # 清空会话，同一问题被纠偏两次以上就重来</span><br><span class="line">/compact   # 压缩但保留重点，配合 Compact Instructions</span><br><span class="line">/memory    # 确认哪些 CLAUDE.md 真的被加载了</span><br></pre></td></tr></table></figure>
+<h3 id="能力与治理"><a href="#能力与治理" class="headerlink" title="能力与治理"></a>能力与治理</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">/mcp       # 管理 MCP 连接，检查 token 成本，断开闲置 server</span><br><span class="line">/hooks     # 管理 hooks，控制平面入口</span><br><span class="line">/permissions # 查看或更新权限白名单</span><br><span class="line">/sandbox   # 配置沙箱隔离，高自动化场景必备</span><br><span class="line">/model     # 切换模型：Opus 用于深度推理，Sonnet 用于常规，Haiku 用于快速探索</span><br></pre></td></tr></table></figure>
+<h3 id="会话连续性与并行"><a href="#会话连续性与并行" class="headerlink" title="会话连续性与并行"></a>会话连续性与并行</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">claude --continue               # 恢复当前目录最近会话，隔天接着做</span><br><span class="line">claude --resume                 # 打开选择器恢复历史会话</span><br><span class="line">claude --continue --fork    # 从已有会话分叉，同一起点不同方案</span><br><span class="line">claude --worktree              # 创建隔离 git worktree</span><br><span class="line">claude -p &quot;prompt&quot;            # 非交互模式，接入 CI / pre-commit / 脚本</span><br><span class="line">claude -p --output-format json  # 结构化输出，便于脚本消费</span><br></pre></td></tr></table></figure>
+<h1 id="几个不常见但很好用的命令"><a href="#几个不常见但很好用的命令" class="headerlink" title="几个不常见但很好用的命令"></a>几个不常见但很好用的命令</h1><p><strong>&#x2F;simplify</strong>：对刚改完的代码做三维检查，代码复用、质量和效率，发现问题直接修掉。特别适合改完一段逻辑后立刻跑一遍，代替手动 review。  </p>
+<p><strong>&#x2F;rewind</strong>：不是”撤销”，而是回到某个会话 checkpoint 重新总结。适合：Claude 已沿错误路径探索太久；想保留前半段共识但丢掉后半段失败。  </p>
+<p><strong>&#x2F;btw</strong>：在不打断主任务的前提下快速问一个侧问题，适合”两个命令有什么区别”这类单轮旁路问答，不适合需要读仓库或调用工具的问题。  </p>
+<p><strong>claude -p –output-format stream-json</strong>：实时 JSON 事件流，适合长任务监控、增量处理、流式集成到自己的工具。  </p>
+<p><strong>&#x2F;insight</strong>：让 Claude 分析当前会话，提炼出哪些内容值得沉淀到 CLAUDE.md。用法是会话做了一段之后跑一次，它会指出”这个约定你们反复提到，但没有写进契约”之类的盲点，是迭代优化 CLAUDE.md 的好手段。  </p>
+<p><strong>双击 ESC 回溯</strong>：按两次 ESC 可以回到上一条输入重新编辑，不用重新手打。Claude 走偏了、或者上一句话没说清楚，双击 ESC 修改后重发，比重新开会话省事得多。  </p>
+<p><strong>对话历史都在本地</strong>：所有会话记录存放在 ~&#x2F;.claude&#x2F;projects&#x2F; 下，文件夹名按项目路径命名（斜杠变横杠），每个会话是一个 .jsonl 文件。想找某个话题的历史，直接 grep -rl “关键词” ~&#x2F;.claude&#x2F;projects&#x2F; 就能定位，或者直接告诉 Claude「帮我搜一下之前关于 X 的讨论」，它会自己去翻。</p>
+<h1 id="11-如何写一个好的-CLAUDE-md"><a href="#11-如何写一个好的-CLAUDE-md" class="headerlink" title="11. 如何写一个好的 CLAUDE.md"></a>11. 如何写一个好的 CLAUDE.md</h1><p>CLAUDE.md 在我看来更像是你和 Claude 之间的协作契约，不是团队文档，也不是知识库，里面只放那些每次会话都得成立的事。<br>我自己的建议其实很简单，一开始甚至可以什么都不写。先用起来，等你发现自己老是在重复同一件事，再把它补进去。加法也不复杂，输入 # 可以把当前对话里的内容直接追加进 CLAUDE.md，或者直接告诉 Claude「把这条加到项目的 CLAUDE.md 里」，它会知道该改哪个文件。</p>
+<h3 id="应该放什么"><a href="#应该放什么" class="headerlink" title="应该放什么"></a>应该放什么</h3><ul>
+<li>怎么 build、怎么 test、怎么跑（最核心）</li>
+<li>关键目录结构与模块边界</li>
+<li>代码风格和命名约束</li>
+<li>那些不明显的环境坑</li>
+<li>绝对不能干的事（NEVER 列表）</li>
+<li>压缩时必须保留的信息（Compact Instructions）</li>
+</ul>
+<h3 id="不该放什么"><a href="#不该放什么" class="headerlink" title="不该放什么"></a>不该放什么</h3><ul>
+<li>大段背景介绍</li>
+<li>完整 API 文档</li>
+<li>空泛原则，如”写高质量代码”</li>
+<li>Claude 通过读仓库即可推断的显然信息</li>
+<li>大量背景资料和低频任务知识（这些放到 Skills）</li>
+</ul>
+<h3 id="让-Claude-维护自己的-CLAUDE-md"><a href="#让-Claude-维护自己的-CLAUDE-md" class="headerlink" title="让 Claude 维护自己的 CLAUDE.md"></a>让 Claude 维护自己的 CLAUDE.md</h3><blockquote>
+<p>“Update your CLAUDE.md so you don’t make that mistake again.”</p>
+</blockquote>
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/2026/03/11/%E6%BB%9E%E6%B6%A8%E6%97%B6%E4%BB%A3-%E7%BE%8E%E4%BB%A5%E4%BC%8A%E6%88%98%E4%BA%89/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+     
+
+     
+    
+    
+
+</div>
+     
+  
+</article>
+          </div>
+        
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+            
+                Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> & <a target="_blank" rel="noopener" href="https://github.com/zoeingwingkei/frame/">Frame</a>
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+    
+
+  </body>
+</html>
