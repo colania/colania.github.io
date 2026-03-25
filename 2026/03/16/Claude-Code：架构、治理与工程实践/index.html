@@ -140,7 +140,7 @@
     </div>
     <div class="post-img">
         
-            <div class="h-line-primary"></div>
+            <img src="/2026/03/16/Claude-Code%EF%BC%9A%E6%9E%B6%E6%9E%84%E3%80%81%E6%B2%BB%E7%90%86%E4%B8%8E%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/cover.png" alt="featured_image">
               
     </div>
 </div>
@@ -226,7 +226,8 @@
 <li>执行成本在计划确认之后才发生</li>
 </ul>
 <p>对于复杂重构、迁移、跨模块改动，这样做比”急着出代码”有用多了，它能显著降低在错误假设上持续修改的概率。按两下 Shift+Tab 进入 Plan Mode，<strong>进阶玩法是开一个 Claude 写计划，再开一个 Codex 以”高级工程师”身份审这个计划，让 AI 审 AI，效果很好。</strong></p>
-<h1 id="5-Skills-设计：不是模板库，是用的时候才加载的工作流"><a href="#5-Skills-设计：不是模板库，是用的时候才加载的工作流" class="headerlink" title="5.Skills 设计：不是模板库，是用的时候才加载的工作流"></a>5.Skills 设计：不是模板库，是用的时候才加载的工作流</h1><p>skills 是最近很火的概念。你可以把它理解为教给 Claude 的**“菜谱”**：如果说 MCP（模型上下文协议）是给 Claude 提供了各种锅碗瓢盆（工具），那么 Skills 就是告诉 Claude 在特定场景下，该按什么步骤使用这些工具来完成一道特定的“菜” 。<br>​&#96;&#96;&#96;<br>.claude&#x2F;skills&#x2F;<br>└── incident-triage&#x2F;<br>    ├── SKILL.md<br>    ├── runbook.md<br>    ├── examples.md<br>    └── scripts&#x2F;<br>        └── collect-context.sh<br>&#96;&#96;</p>
+<h1 id="5-Skills-设计：不是模板库，是用的时候才加载的工作流"><a href="#5-Skills-设计：不是模板库，是用的时候才加载的工作流" class="headerlink" title="5.Skills 设计：不是模板库，是用的时候才加载的工作流"></a>5.Skills 设计：不是模板库，是用的时候才加载的工作流</h1><p>skills 是最近很火的概念。你可以把它理解为教给 Claude 的**“菜谱”**：如果说 MCP（模型上下文协议）是给 Claude 提供了各种锅碗瓢盆（工具），那么 Skills 就是告诉 Claude 在特定场景下，该按什么步骤使用这些工具来完成一道特定的“菜” .</p>
+<p>claude&#x2F;skills&#x2F;<br>└── incident-triage&#x2F;<br>    ├── SKILL.md<br>    ├── runbook.md<br>    ├── examples.md<br>    └── scripts&#x2F;<br>        └── collect-context.sh</p>
 <ul>
 <li>SKILL.md 负责定义任务语义、边界和执行骨架</li>
 <li>supporting files 负责提供领域细节</li>
@@ -311,7 +312,102 @@
 <h3 id="让-Claude-维护自己的-CLAUDE-md"><a href="#让-Claude-维护自己的-CLAUDE-md" class="headerlink" title="让 Claude 维护自己的 CLAUDE.md"></a>让 Claude 维护自己的 CLAUDE.md</h3><blockquote>
 <p>“Update your CLAUDE.md so you don’t make that mistake again.”</p>
 </blockquote>
+<style>
+/* 表格样式美化 */
+.post-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border-radius: 8px;
+    overflow: hidden;
+}
+.post-content table th {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 14px 16px;
+    text-align: left;
+    font-weight: 600;
+}
+.post-content table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #eee;
+}
+.post-content table tr:hover {
+    background-color: #f8f9ff;
+    transition: background-color 0.2s ease;
+}
+.post-content table tr:last-child td {
+    border-bottom: none;
+}
 
+/* 代码块样式 */
+.post-content pre {
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    margin: 20px 0;
+}
+.post-content code {
+    font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+    font-size: 0.9em;
+}
+
+/* 引用块样式 */
+.post-content blockquote {
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+    border-left: 4px solid #667eea;
+    border-radius: 0 8px 8px 0;
+    padding: 16px 20px;
+    margin: 20px 0;
+    font-style: italic;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.post-content blockquote p {
+    margin: 0;
+}
+
+/* 图片样式 */
+.post-content img {
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    margin: 24px 0;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.post-content img:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+}
+
+/* 标题样式 */
+.post-content h2 {
+    border-bottom: 3px solid #667eea;
+    padding-bottom: 10px;
+    margin-top: 40px;
+    color: #2d3748;
+}
+.post-content h3 {
+    color: #4a5568;
+    margin-top: 30px;
+}
+
+/* 列表样式 */
+.post-content ul li {
+    margin: 8px 0;
+    position: relative;
+}
+.post-content ul li::marker {
+    color: #667eea;
+}
+
+/* 行内代码样式 */
+.post-content p code, .post-content li code {
+    background-color: #f0f4f8;
+    color: #667eea;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+}
+</style>
 </div> 
 
 <script>

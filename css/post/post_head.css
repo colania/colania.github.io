@@ -11,4 +11,13 @@
 }
 .post-head .post-img {
   margin-top: $margin-l-1;
+  max-height: 400px;
+  overflow: hidden;
+  border-radius: 12px;
+}
+.post-head .post-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  max-height: 400px;
 }
