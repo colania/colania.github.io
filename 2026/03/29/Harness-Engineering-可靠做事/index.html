@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="John Doe">
+
+
+
+
+
+
+
+<title>Harness Engineering:可靠做事 | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/menu.js"></script>
+    
+    <script src="/js/format.js"></script>
+    
+
+
+
+
+
+
+
+
+
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/">
+          
+            LEO
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/">主页</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/archives/">文章</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/projects/">项目</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/tags/">合集</a>
+              </li> 
+                   
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+<script src="/js/menu.js"></script>
+
+
+      <div class="main">
+        
+          <div class="flex-container">
+            <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+                
+                    <span class="post-tag">
+                        <a href="/tags/%E5%B7%A5%E4%BD%9C/">
+                            工作
+                        </a>
+                    </span>    
+                
+                    <span class="post-tag">
+                        <a href="/tags/AI/">
+                            AI
+                        </a>
+                    </span>    
+                           
+            
+        </div>
+        <div class="post-title">
+            
+            
+                Harness Engineering:可靠做事
+            
+            
+        </div>
+        <span class="post-date">
+            Mar 29, 2026
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <img src="/2026/03/29/Harness-Engineering-%E5%8F%AF%E9%9D%A0%E5%81%9A%E4%BA%8B/%E6%A0%B8%E5%BF%83%E7%BB%84%E6%88%90%E9%83%A8%E5%88%86.png" alt="featured_image">
+              
+    </div>
+</div>
+    <div class="post-content">
+    <h2 id="什么是-Harness-Engineering-？"><a href="#什么是-Harness-Engineering-？" class="headerlink" title="什么是 Harness Engineering ？"></a>什么是 Harness Engineering ？</h2><p>AI进化的实在是太快了，配套的各种工程学方法也层出不穷。最近又突然爆火一个新词： <code>Harness Engineering</code> 。 它最早由 OpenAI 在 2026 年 2 月的官方博客中正式提出（文章标题：《Harness engineering: leveraging Codex in an agent-first world》），随后被 Mitchell Hashimoto（HashiCorp 联合创始人）等业界大牛推广，目前在 AI 编程、Agent 开发圈已成热词。 <br>那这个 Harness Engineering 到底是什么呢？简单一句话介绍，他的核心思想就是：</p>
+<blockquote>
+<p>“Humans steer, agents execute”（人类掌舵，代理执行）。<br>这个名字很形象，Harness 是“马具”的意思。  AI 是“马”，人类是“骑手”，Harness 就是那套缰绳、马鞍、刹车和导航系统，确保马跑得快、跑得稳、不会跑偏或崩溃。 <br>从对AI的严格指导，到与AI的平等对话，到为AI准备环境，直到为AI服务，人类越来越尊重AI的智慧和能力，在AI工作时更加安静默不干扰。</p>
+</blockquote>
+<h2 id="为什么会出现-Harness-Engineering-？"><a href="#为什么会出现-Harness-Engineering-？" class="headerlink" title="为什么会出现 Harness Engineering ？"></a>为什么会出现 Harness Engineering ？</h2><img src="/2026/03/29/Harness-Engineering-%E5%8F%AF%E9%9D%A0%E5%81%9A%E4%BA%8B/%E9%98%B6%E6%AE%B5.png" class="" title="阶段">
+<p> 传统 Prompt Engineering（提示工程）只管“怎么跟 AI 说话”，Context Engineering（上下文工程）只管“给 AI 看什么信息”。但当 Agent 要完成百万行代码、长达数月的复杂项目时，AI 会出现幻觉、架构漂移，上下文越来越臃肿，冗余代码也不断堆积。这会导致系统失控。 <br>举一个简单的例子：<br>比如你让一个代码 agent 修 bug：</p>
+<ol>
+<li>Prompt engineering 只是在告诉它“修这个 bug”。</li>
+<li>Context engineering 会把相关日志、代码片段、报错和文档喂给它 。</li>
+<li>Harness Engineering 还会给它测试环境、lint 规则、PR 流程、权限边界、回滚机制，以及修完后自动验证的流程 。<br>这样 AI 不是“猜着改”，而是在一个受控系统里完成闭环 。</li>
+</ol>
+<p>它核心解决的问题就是：<br><strong>如果没有 harness，AI 很容易出现上下文混乱、输出不一致、越权操作、以及在复杂项目里“看起来会做、实际上不稳定”的问题 。Harness Engineering 的目标就是通过工具权限、结构化测试、观察日志、自动检查和迭代反馈，把这些风险压下去，同时让 agent 更有能力更加可靠 。</strong></p>
+<h2 id="核心组成"><a href="#核心组成" class="headerlink" title="核心组成"></a>核心组成</h2><img src="/2026/03/29/Harness-Engineering-%E5%8F%AF%E9%9D%A0%E5%81%9A%E4%BA%8B/%E6%A0%B8%E5%BF%83%E7%BB%84%E6%88%90%E9%83%A8%E5%88%86.png" class="" title="核心">
+
+<p>Harness Engineering 的核心实践可以总结为以下几个关键原则：</p>
+<table>
+<thead>
+<tr>
+<th>原则</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>动态上下文系统</strong></td>
+<td>通过设计动态、按需加载的知识库 + 目录系统，按需加载信息，避免上下文窗口爆炸。OpenAI 认为 Agent 在运行时看不到的内容，对它来说等于不存在。只有进入代码仓库、被版本管理的内容，才能参与 Agent 的决策。</td>
+</tr>
+<tr>
+<td><strong>架构约束</strong></td>
+<td>用确定性规则（Linter、结构化测试、依赖方向强制）代替 Prompt 里的”软建议”，让 AI 无法违反架构。</td>
+</tr>
+<tr>
+<td><strong>反馈回路 &amp; 自验证</strong></td>
+<td>Agent 每次行动后自动跑测试、读日志、自我评审，失败就自动修复或求助人类。</td>
+</tr>
+<tr>
+<td><strong>熵管理 &#x2F; 垃圾回收</strong></td>
+<td>定期清理过时文档、漂移架构、冗余代码，防止系统越跑越乱。</td>
+</tr>
+<tr>
+<td><strong>工具链 &amp; 编排</strong></td>
+<td>精心设计的工具、钩子（Hooks）、子 Agent 编排，让 AI 只能做”被允许”的事。</td>
+</tr>
+<tr>
+<td><strong>可观测性 &amp; 人类监督</strong></td>
+<td>实时监控 + 人类只在高层意图和最终验收时介入。</td>
+</tr>
+</tbody></table>
+<p>作为传统的人类体系工程师，知识分散在下面几个地方：</p>
+<ol>
+<li>人脑 </li>
+<li>聊天&#x2F;会议</li>
+<li>文档<br>人有记忆、会问人、能思考，有很多内容存储在大脑里，AI无法获取到。<br>对于AI来说，这些知识都需要通过落地的文档和代码来呈现。 所以Harness Engineering的本质转变是： <blockquote>
+<p>把“人类依靠和沟通维持的隐性知识”→变成“版本控制的、重构的、居住代码库里的显性知识”</p>
+</blockquote>
+</li>
+</ol>
+<h2 id="典型落地例子"><a href="#典型落地例子" class="headerlink" title="典型落地例子"></a>典型落地例子</h2><p>最直观的例子是：<strong>让 AI 代理直接参与软件开发流水线</strong>，去复现 bug、改代码、跑测试、看日志、开 PR，甚至在通过验证后再合并 。<br><a href="https://openai.com/index/harness-engineering/" class="link-card" target="_blank"></p>
+  <div class="link-content">
+    <div class="link-title">⚔️ Harness engineering: leveraging Codex in an agent-first world</div>
+    <div class="link-url">https://openai.com/index/harness-engineering/</div>
+  </div>
+</a>
+OpenAI 在 Codex 相关实践里举了一个很具体的例子：他们把应用做成 per git worktree 可启动，并接上 Chrome DevTools 之类的验证能力，让 Codex 能独立启动一个环境、驱动应用、验证修改效果 。在这个 harness 里，agent 可以先复现问题、记录失败视频、实现修复、再驱动应用验证修复结果，最后提交 PR 。
+
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+                <div class="icon arrow-left"></div>
+                <div class="post-link">
+                    <a href="/2026/05/13/Spec-Workflow-MCP%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/">Prev</a>
+                </div>
+            
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/2026/03/16/Claude-Code%EF%BC%9A%E6%9E%B6%E6%9E%84%E3%80%81%E6%B2%BB%E7%90%86%E4%B8%8E%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+     
+
+     
+    
+    
+
+</div>
+     
+  
+</article>
+          </div>
+        
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+            
+                Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> & <a target="_blank" rel="noopener" href="https://github.com/zoeingwingkei/frame/">Frame</a>
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+    
+
+  </body>
+</html>
