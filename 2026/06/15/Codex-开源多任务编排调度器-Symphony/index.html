@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="John Doe">
+
+
+
+
+
+
+
+<title>Codex 开源多任务编排调度器：Symphony | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/menu.js"></script>
+    
+    <script src="/js/format.js"></script>
+    
+
+
+
+
+
+
+
+
+
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/">
+          
+            LEO
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/">主页</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/archives/">文章</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/projects/">项目</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/tags/">合集</a>
+              </li> 
+                   
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+<script src="/js/menu.js"></script>
+
+
+      <div class="main">
+        
+          <div class="flex-container">
+            <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+                
+                    <span class="post-tag">
+                        <a href="/tags/AI/">
+                            AI
+                        </a>
+                    </span>    
+                           
+            
+        </div>
+        <div class="post-title">
+            
+            
+                Codex 开源多任务编排调度器：Symphony
+            
+            
+        </div>
+        <span class="post-date">
+            Jun 15, 2026
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <img src="/2026/06/15/Codex-%E5%BC%80%E6%BA%90%E5%A4%9A%E4%BB%BB%E5%8A%A1%E7%BC%96%E6%8E%92%E8%B0%83%E5%BA%A6%E5%99%A8-Symphony/cover.png" alt="featured_image">
+              
+    </div>
+</div>
+    <div class="post-content">
+    <p>去年我跟一个朋友聊天，他说自己最多能同时盯三个 Codex 会话，超过四个就开始手忙脚乱——不记得哪个窗口在干嘛，哪个 agent 跑偏了，哪个已经卡了半天没人管。当时我觉得是个人习惯问题，直到 OpenAI 发了这篇博客，我才意识到这根本不是个人问题，这是一个系统级瓶颈。</p>
+<span id="more"></span>
+<img src="/2026/06/15/Codex-%E5%BC%80%E6%BA%90%E5%A4%9A%E4%BB%BB%E5%8A%A1%E7%BC%96%E6%8E%92%E8%B0%83%E5%BA%A6%E5%99%A8-Symphony/cover.png" class="" title="list">
+<h2 id="为什么需要-Symphony？人的注意力才是真正的瓶颈"><a href="#为什么需要-Symphony？人的注意力才是真正的瓶颈" class="headerlink" title="为什么需要 Symphony？人的注意力才是真正的瓶颈"></a>为什么需要 Symphony？人的注意力才是真正的瓶颈</h2><p>OpenAI 的团队发现了一个很朴实的事实：<strong>一个工程师最多能舒服地管理三到五个并行的 agent 会话</strong>。超过这个数，就会出现上下文切换成本过高的问题——你会在不同终端之间反复横跳，忘记哪个 session 在做什么，debug 那些跑着跑着就卡住的任务。</p>
+<p>问题是，agents 越做越强了，但我们的管理方式还停留在”开着几个终端盯进度”的阶段。这就像你招了一群能力不错的实习生，结果每天花大量时间给他们分配任务、检查代码、纠正方向——如果只带一个人，这没问题；带三五个也还行；但要同时带十几个，你基本就不用干别的了。</p>
+<p>OpenAI 的原话很直接：<strong>如果你的大量时间都花在监督 agent 干活上，那这套系统就没有真正释放生产力，只是把管理对象从初级工程师换成了 AI 工程师。</strong></p>
+<p>所以他们的思路是：与其让人去管理 agent，不如让系统自己去调度。这就是 Symphony 的由来。</p>
+<h2 id="Symphony-是干什么的？怎么用？"><a href="#Symphony-是干什么的？怎么用？" class="headerlink" title="Symphony 是干什么的？怎么用？"></a>Symphony 是干什么的？怎么用？</h2><p>Symphony 的核心思想一句话就能说清楚：<strong>每个打开的issue，都自动配一个 agent 去跑。</strong></p>
+<p>它做的事情很纯粹——监控你的 Issue Tracker（比如 Linear），当有新任务出现时，自动创建一个独立的工作区，然后派一个 Codex agent 去干活。agent 跑完了，把结果整理成一个 review packet，人只需要看一眼决定接不接受就行。</p>
+<p>具体来说，它有几个关键设计：</p>
+<img src="/2026/06/15/Codex-%E5%BC%80%E6%BA%90%E5%A4%9A%E4%BB%BB%E5%8A%A1%E7%BC%96%E6%8E%92%E8%B0%83%E5%BA%A6%E5%99%A8-Symphony/detail.png" class="" title="detail">
+<p><strong>1. 把任务看板变成控制平面</strong></p>
+<p>不围绕会话和 PR 来组织工作，而是围绕 issue、ticket、milestone 这些真正的交付单元。任务在，agent 就跑；任务完成了，agent 就收工。简单直接。</p>
+<p><strong>2. 每个 Issue 都是一个独立的工作区</strong></p>
+<p>一个 task 一个 workspace，相互隔离，互不干扰。agent 只能在限定的目录范围内操作，不能越界。这个隔离是硬约束，不是建议。</p>
+<p><strong>3. 按依赖关系并行工作</strong></p>
+<p>Symphony 支持定义 task 之间的依赖关系。打个比方，你说”React 升级依赖 Vite 迁移先完成”，那只有在 Vite 迁移完成后，React 升级的 agent 才会启动。这种基于 DAG 的调度比人工协调可靠得多。</p>
+<p><strong>4. Agent 不只是执行者，也会主动创建后续工作</strong></p>
+<p>这一点特别有意思。agent 在实现过程中发现性能问题、重构机会、或者更好的架构方案时，不会当场扩大范围把代码改得面目全非，而是会主动创建一个新的 issue，交给系统后续评估。这意味着开发过程中的”顺便改一下”终于有地方可以记录了，不会忘，也不会跑偏。</p>
+<p><strong>5. 低成本试错</strong></p>
+<p>因为启动一个任务几乎不需要人工监督，所以你可以让 agent 去做各种探索：试试这个重构方案、验证一个假设、做一个原型——不满意就直接丢弃，来回成本几乎为零。</p>
+<h2 id="用-Symphony-开发-Symphony：OpenAI-的自我实践"><a href="#用-Symphony-开发-Symphony：OpenAI-的自我实践" class="headerlink" title="用 Symphony 开发 Symphony：OpenAI 的自我实践"></a>用 Symphony 开发 Symphony：OpenAI 的自我实践</h2><p>这件事听着有点套娃，但 OpenAI 确实这么干了——<strong>他们用 Symphony 来构建 Symphony</strong>。</p>
+<p>过程是这样的：他们先用 tmux 跑了一个简陋的 Codex session，让它去轮询 Linear，给新创建的 task 启动子 agent。这个版本能跑，但不够健壮。</p>
+<p>然后他们做了一个关键决策：把 Symphony 的定义写成一个 SPEC.md，然后用 Codex 去实现它。Codex 一次性建出了 Elixir 的实现版本。之后他们继续用 Codex 来迭代 spec 和实现。更有意思的是，为了打磨规范，他们让 Codex 用 TypeScript、Go、Rust、Java 和 Python 分别实现了一遍，然后用这些不同语言的实现来暴露 spec 中的歧义，反过来继续精炼规范。</p>
+<p>这个流程本身就是 Symphony 最好的案例展示：把任务丢出去，agent 完成，人看一眼结果，觉得不行就改 spec 再来一遍。</p>
+<p>另一个值得注意的结果是：<strong>OpenAI 内部部分团队在使用 Symphony 的前三周，落地 PR 数量增长了 500%。</strong> 这个数字的背后含义不是”agent 写代码变快了”，而是”团队对发起变更的感知成本降低了”。以前每做一个改动都要有人持续盯着，现在工程师主要管的是目标、约束和验收标准，具体操作步骤交给了系统。</p>
+<p>他们甚至提到，有工程师在小木屋里用手机上的 Linear app 提交了三个需求，然后 Symphony 在云端自动完成了编码、测试和 PR——全程工程师没有打开过终端。</p>
+<h2 id="我的思考：如何在团队中落地-AI？"><a href="#我的思考：如何在团队中落地-AI？" class="headerlink" title="我的思考：如何在团队中落地 AI？"></a>我的思考：如何在团队中落地 AI？</h2><p>看完 OpenAI 的实践，我在想一个问题：普通团队能不能也用上类似的工作方式？</p>
+<p>我觉得答案是肯定的，而且思路可以比 Symphony 更接地气。Symphony 背后依赖的是 Codex App Server 和一些基础设施，但它的核心理念并不需要那些重型组件——<strong>核心就是一个：把”人盯 agent”变成”系统调度 agent”</strong>。</p>
+<p>我设想的一个落地流程是这样的：</p>
+<p><strong>第一步：创建任务</strong></p>
+<p>当一个需求过来时，不再是直接派给某个开发去做，而是先结构化成一个 Symphony 式的任务。这个任务包含清楚的目标描述、技术约束、验收标准，以及如果需要的话，关联的依赖任务。</p>
+<p><strong>第二步：云端自动执行</strong></p>
+<p>Symphony（或者我们自建的类似系统）在云端接手这个任务。它创建一个独立的工作区，启动 agent，让 agent 按 WORKFLOW.md 中定义的流程去执行。这个阶段人可以完全脱手——不管你是在开会、吃饭、还是睡觉，agent 都在跑。</p>
+<p>具体来说，一个典型的 Symphony 任务应该包含：</p>
+<ul>
+<li><strong>技术方案</strong>：agent 先做调研，出方案文档，标注依赖和风险点</li>
+<li><strong>编码实现</strong>：按技术方案的拆分，逐步实现代码</li>
+<li><strong>单元测试</strong>：自动生成并运行测试用例，确保覆盖率和通过率</li>
+<li><strong>工程落地</strong>：自动处理 CI、代码风格检查、冲突解决，甚至创建 PR</li>
+</ul>
+<p><strong>第三步：人工确认</strong></p>
+<p>agent 完成后产出一个 review packet——代码 diff、测试结果、运行截图、甚至是功能演示视频。然后由对应的负责人进行 review 和确认。这一步只做决策：”接收”还是”重做”。</p>
+<p><strong>第四步：交付上线</strong></p>
+<p>确认后，agent 自动合入代码，更新任务状态，进入交付流程。</p>
+<p>这个流程的精髓在哪里？在于人从”执行者”变成了”决策者”。以前你既要写代码又要盯进度，现在你只需要在关键节点做判断：这个方案方向对吗？这个实现质量可以吗？可以，那就合入。</p>
+<p>而且这种模式天然带着知识沉淀的效果。因为每个任务都有结构化的输入和输出，一段时间后你会积累起大量的技术方案文档、代码变更记录、测试报告——这些东西本身就是团队的知识库。新人来了可以直接看，再也不需要靠口口相传。</p>
+<p>当然，不是所有任务都适合这样搞。需求模糊的、技术路线不确定的、需要重度架构判断的，还是得人亲自上手。但这不冲突——让系统处理那些常规实现工作，把人解放出来去解决真正困难的问题，这才是 AI 辅助开发的理想状态。</p>
+<p>OpenAI 说过一句话我印象很深：<strong>模型的力量来自它们的推理能力，所以给它们工具和上下文，然后让它们发挥。</strong> 就像一个好的管理者不会事无巨细地告诉下属每一步怎么做，而是给清晰的目标、必要的资源和充分的信任。</p>
+<p>我觉得这就是未来一两年里 AI 辅助编程会走的方向：不是让 AI 写得更快，而是让 AI 成为持续运转的工程系统的一部分，而人站在更高层去审视和决策。</p>
+<hr>
+<p><em>相关资料：<a target="_blank" rel="noopener" href="https://github.com/openai/symphony">Symphony GitHub</a> | <a target="_blank" rel="noopener" href="https://openai.com/index/open-source-codex-orchestration-symphony/">OpenAI 官方博客</a></em></p>
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/2026/06/10/%E8%BF%91%E6%9C%9F%E9%9D%A2%E8%AF%95%E6%80%BB%E7%BB%93%E6%84%9F%E6%82%9F/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+     
+
+     
+    
+    
+
+</div>
+     
+  
+</article>
+          </div>
+        
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+            
+                Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> & <a target="_blank" rel="noopener" href="https://github.com/zoeingwingkei/frame/">Frame</a>
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+    
+
+  </body>
+</html>
