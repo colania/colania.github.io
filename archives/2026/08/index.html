@@ -65,7 +65,7 @@
       <div class="site-brand-container">
         <a href="/">
           
-            Colania
+            LEO
           
         </a>
       </div>
@@ -145,6 +145,8 @@
       
         <button class="filter-btn" data-filter="事故复盘">事故复盘</button>
       
+        <button class="filter-btn" data-filter="工具">工具</button>
+      
         <button class="filter-btn" data-filter="年终总结">年终总结</button>
       
         <button class="filter-btn" data-filter="抄录">抄录</button>
@@ -167,6 +169,92 @@
   </div>
 
   <div class="archive-content">
+    
+      <article class="archive-post" data-categories="Tau,agent 解决方案">
+        <div class="archive-post-inner">
+          
+            <div class="post-thumbnail">
+              <a href="/2026/08/05/%E3%80%8ATau-Agent-%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E3%80%8B3-1-%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%80%E4%B8%AA-provider/">
+                <img src="/2026/08/05/%E3%80%8ATau-Agent-%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E3%80%8B3-1-%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%80%E4%B8%AA-provider/image.png" alt="《Tau Agent 源码解析》3.1 自定义一个 provider">
+              </a>
+            </div>
+          
+          <div class="post-body">
+            <div class="post-header">
+              
+                <div class="post-categories">
+                  
+                    <span class="category-badge">Tau</span>
+                  
+                    <span class="category-badge">agent 解决方案</span>
+                  
+                </div>
+              
+              <span class="post-date">2026-08-05</span>
+            </div>
+            <h2 class="post-title">
+              <a href="/2026/08/05/%E3%80%8ATau-Agent-%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E3%80%8B3-1-%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%80%E4%B8%AA-provider/">《Tau Agent 源码解析》3.1 自定义一个 provider</a>
+            </h2>
+            <p class="post-excerpt">
+              一、自定义一个 provider因为 TAU 里边是没有 DeepSeek 的，所以我们需要自己去实现一个。大体实现我就不讲了，可以让 AI 来帮你实现。下面这份示例代码（examples/deepseek_tau_tools.py）是核心，看懂它就懂了「怎么把一个 OpenAI 兼容的模型接进 Tau」。
+123456789101112131415161718192021222324252627...
+            </p>
+            
+              <div class="post-tags">
+                
+                  <a href="/tags/AI/" class="tag-link">#AI</a>
+                
+              </div>
+            
+            <div class="post-footer">
+              <a href="/2026/08/05/%E3%80%8ATau-Agent-%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E3%80%8B3-1-%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%80%E4%B8%AA-provider/" class="read-more">阅读更多 →</a>
+            </div>
+          </div>
+        </div>
+      </article>
+    
+      <article class="archive-post" data-categories="Tau,agent 解决方案">
+        <div class="archive-post-inner">
+          
+            <div class="post-thumbnail">
+              <a href="/2026/08/05/%E3%80%8ATau-Agent-%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E3%80%8Bprovider/">
+                <img src="/2026/08/05/%E3%80%8ATau-Agent-%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E3%80%8Bprovider/image.png" alt="《Tau Agent 源码解析》3.provider">
+              </a>
+            </div>
+          
+          <div class="post-body">
+            <div class="post-header">
+              
+                <div class="post-categories">
+                  
+                    <span class="category-badge">Tau</span>
+                  
+                    <span class="category-badge">agent 解决方案</span>
+                  
+                </div>
+              
+              <span class="post-date">2026-08-05</span>
+            </div>
+            <h2 class="post-title">
+              <a href="/2026/08/05/%E3%80%8ATau-Agent-%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E3%80%8Bprovider/">《Tau Agent 源码解析》3.provider</a>
+            </h2>
+            <p class="post-excerpt">
+              本来今天想的是写tools.py这个文件，但是心血来潮，突然想先了解一下provider.py这个文件，隐隐感觉知道大模型怎么返回 tools 以后，再去看 tools 会更加清晰一点。而且通过今天的了解，对于 Codex、Claude Code 这种编码工具调用大模型，有了更深的一些理解。那么，现在就开始吧。
+一、provider 文件全貌：它到底在做什么provider 这一层（对应第一篇说的...
+            </p>
+            
+              <div class="post-tags">
+                
+                  <a href="/tags/AI/" class="tag-link">#AI</a>
+                
+              </div>
+            
+            <div class="post-footer">
+              <a href="/2026/08/05/%E3%80%8ATau-Agent-%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E3%80%8Bprovider/" class="read-more">阅读更多 →</a>
+            </div>
+          </div>
+        </div>
+      </article>
     
       <article class="archive-post" data-categories="Tau,agent 解决方案">
         <div class="archive-post-inner">
@@ -206,6 +294,49 @@
             
             <div class="post-footer">
               <a href="/2026/08/04/%E3%80%8ATau-Agent-%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E3%80%8Bagent-loop/" class="read-more">阅读更多 →</a>
+            </div>
+          </div>
+        </div>
+      </article>
+    
+      <article class="archive-post" data-categories="AI">
+        <div class="archive-post-inner">
+          
+            <div class="post-thumbnail">
+              <a href="/2026/08/04/%E3%80%8ATau-Agent-%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E3%80%8Bloop-%E8%AF%A6%E8%A7%A3/">
+                <img src="/2026/08/04/%E3%80%8ATau-Agent-%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E3%80%8Bloop-%E8%AF%A6%E8%A7%A3/cover.jpg" alt="《Tau Agent 源码解析》loop.py 详解">
+              </a>
+            </div>
+          
+          <div class="post-body">
+            <div class="post-header">
+              
+                <div class="post-categories">
+                  
+                    <span class="category-badge">AI</span>
+                  
+                </div>
+              
+              <span class="post-date">2026-08-04</span>
+            </div>
+            <h2 class="post-title">
+              <a href="/2026/08/04/%E3%80%8ATau-Agent-%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E3%80%8Bloop-%E8%AF%A6%E8%A7%A3/">《Tau Agent 源码解析》loop.py 详解</a>
+            </h2>
+            <p class="post-excerpt">
+              在第一篇里，我们建立了 Tau 的整体心智模型：一次请求从 CodingSession.prompt() 一路走到 run_agent_loop()，再靠 AgentEvent 事件流把结果甩回前端。但 run_agent_loop() 内部到底是怎么一轮一轮跑的，我们留了个坑。
+这一篇就专门把 tau_agent/loop.py 拆开讲。这个文件不大，注释里写得很直白——“Pure Pi-com...
+            </p>
+            
+              <div class="post-tags">
+                
+                  <a href="/tags/Tau/" class="tag-link">#Tau</a>
+                
+                  <a href="/tags/agent-%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" class="tag-link">#agent 解决方案</a>
+                
+              </div>
+            
+            <div class="post-footer">
+              <a href="/2026/08/04/%E3%80%8ATau-Agent-%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E3%80%8Bloop-%E8%AF%A6%E8%A7%A3/" class="read-more">阅读更多 →</a>
             </div>
           </div>
         </div>

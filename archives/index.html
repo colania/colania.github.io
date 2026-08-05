@@ -65,7 +65,7 @@
       <div class="site-brand-container">
         <a href="/">
           
-            Colania
+            LEO
           
         </a>
       </div>
@@ -145,6 +145,8 @@
       
         <button class="filter-btn" data-filter="事故复盘">事故复盘</button>
       
+        <button class="filter-btn" data-filter="工具">工具</button>
+      
         <button class="filter-btn" data-filter="年终总结">年终总结</button>
       
         <button class="filter-btn" data-filter="抄录">抄录</button>
@@ -167,6 +169,92 @@
   </div>
 
   <div class="archive-content">
+    
+      <article class="archive-post" data-categories="Tau,agent 解决方案">
+        <div class="archive-post-inner">
+          
+            <div class="post-thumbnail">
+              <a href="/2026/08/05/%E3%80%8ATau-Agent-%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E3%80%8B3-1-%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%80%E4%B8%AA-provider/">
+                <img src="/2026/08/05/%E3%80%8ATau-Agent-%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E3%80%8B3-1-%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%80%E4%B8%AA-provider/image.png" alt="《Tau Agent 源码解析》3.1 自定义一个 provider">
+              </a>
+            </div>
+          
+          <div class="post-body">
+            <div class="post-header">
+              
+                <div class="post-categories">
+                  
+                    <span class="category-badge">Tau</span>
+                  
+                    <span class="category-badge">agent 解决方案</span>
+                  
+                </div>
+              
+              <span class="post-date">2026-08-05</span>
+            </div>
+            <h2 class="post-title">
+              <a href="/2026/08/05/%E3%80%8ATau-Agent-%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E3%80%8B3-1-%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%80%E4%B8%AA-provider/">《Tau Agent 源码解析》3.1 自定义一个 provider</a>
+            </h2>
+            <p class="post-excerpt">
+              一、自定义一个 provider因为 TAU 里边是没有 DeepSeek 的，所以我们需要自己去实现一个。大体实现我就不讲了，可以让 AI 来帮你实现。下面这份示例代码（examples/deepseek_tau_tools.py）是核心，看懂它就懂了「怎么把一个 OpenAI 兼容的模型接进 Tau」。
+123456789101112131415161718192021222324252627...
+            </p>
+            
+              <div class="post-tags">
+                
+                  <a href="/tags/AI/" class="tag-link">#AI</a>
+                
+              </div>
+            
+            <div class="post-footer">
+              <a href="/2026/08/05/%E3%80%8ATau-Agent-%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E3%80%8B3-1-%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%80%E4%B8%AA-provider/" class="read-more">阅读更多 →</a>
+            </div>
+          </div>
+        </div>
+      </article>
+    
+      <article class="archive-post" data-categories="Tau,agent 解决方案">
+        <div class="archive-post-inner">
+          
+            <div class="post-thumbnail">
+              <a href="/2026/08/05/%E3%80%8ATau-Agent-%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E3%80%8Bprovider/">
+                <img src="/2026/08/05/%E3%80%8ATau-Agent-%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E3%80%8Bprovider/image.png" alt="《Tau Agent 源码解析》3.provider">
+              </a>
+            </div>
+          
+          <div class="post-body">
+            <div class="post-header">
+              
+                <div class="post-categories">
+                  
+                    <span class="category-badge">Tau</span>
+                  
+                    <span class="category-badge">agent 解决方案</span>
+                  
+                </div>
+              
+              <span class="post-date">2026-08-05</span>
+            </div>
+            <h2 class="post-title">
+              <a href="/2026/08/05/%E3%80%8ATau-Agent-%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E3%80%8Bprovider/">《Tau Agent 源码解析》3.provider</a>
+            </h2>
+            <p class="post-excerpt">
+              本来今天想的是写tools.py这个文件，但是心血来潮，突然想先了解一下provider.py这个文件，隐隐感觉知道大模型怎么返回 tools 以后，再去看 tools 会更加清晰一点。而且通过今天的了解，对于 Codex、Claude Code 这种编码工具调用大模型，有了更深的一些理解。那么，现在就开始吧。
+一、provider 文件全貌：它到底在做什么provider 这一层（对应第一篇说的...
+            </p>
+            
+              <div class="post-tags">
+                
+                  <a href="/tags/AI/" class="tag-link">#AI</a>
+                
+              </div>
+            
+            <div class="post-footer">
+              <a href="/2026/08/05/%E3%80%8ATau-Agent-%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E3%80%8Bprovider/" class="read-more">阅读更多 →</a>
+            </div>
+          </div>
+        </div>
+      </article>
     
       <article class="archive-post" data-categories="Tau,agent 解决方案">
         <div class="archive-post-inner">
@@ -206,6 +294,49 @@
             
             <div class="post-footer">
               <a href="/2026/08/04/%E3%80%8ATau-Agent-%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E3%80%8Bagent-loop/" class="read-more">阅读更多 →</a>
+            </div>
+          </div>
+        </div>
+      </article>
+    
+      <article class="archive-post" data-categories="AI">
+        <div class="archive-post-inner">
+          
+            <div class="post-thumbnail">
+              <a href="/2026/08/04/%E3%80%8ATau-Agent-%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E3%80%8Bloop-%E8%AF%A6%E8%A7%A3/">
+                <img src="/2026/08/04/%E3%80%8ATau-Agent-%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E3%80%8Bloop-%E8%AF%A6%E8%A7%A3/cover.jpg" alt="《Tau Agent 源码解析》loop.py 详解">
+              </a>
+            </div>
+          
+          <div class="post-body">
+            <div class="post-header">
+              
+                <div class="post-categories">
+                  
+                    <span class="category-badge">AI</span>
+                  
+                </div>
+              
+              <span class="post-date">2026-08-04</span>
+            </div>
+            <h2 class="post-title">
+              <a href="/2026/08/04/%E3%80%8ATau-Agent-%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E3%80%8Bloop-%E8%AF%A6%E8%A7%A3/">《Tau Agent 源码解析》loop.py 详解</a>
+            </h2>
+            <p class="post-excerpt">
+              在第一篇里，我们建立了 Tau 的整体心智模型：一次请求从 CodingSession.prompt() 一路走到 run_agent_loop()，再靠 AgentEvent 事件流把结果甩回前端。但 run_agent_loop() 内部到底是怎么一轮一轮跑的，我们留了个坑。
+这一篇就专门把 tau_agent/loop.py 拆开讲。这个文件不大，注释里写得很直白——“Pure Pi-com...
+            </p>
+            
+              <div class="post-tags">
+                
+                  <a href="/tags/Tau/" class="tag-link">#Tau</a>
+                
+                  <a href="/tags/agent-%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" class="tag-link">#agent 解决方案</a>
+                
+              </div>
+            
+            <div class="post-footer">
+              <a href="/2026/08/04/%E3%80%8ATau-Agent-%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E3%80%8Bloop-%E8%AF%A6%E8%A7%A3/" class="read-more">阅读更多 →</a>
             </div>
           </div>
         </div>
@@ -421,203 +552,46 @@
         </div>
       </article>
     
-      <article class="archive-post" data-categories="AI方法论">
+      <article class="archive-post" data-categories="工具">
         <div class="archive-post-inner">
-          
-            <div class="post-thumbnail">
-              <a href="/2026/03/29/Harness-Engineering-%E5%8F%AF%E9%9D%A0%E5%81%9A%E4%BA%8B/">
-                <img src="/2026/03/29/Harness-Engineering-%E5%8F%AF%E9%9D%A0%E5%81%9A%E4%BA%8B/%E6%A0%B8%E5%BF%83%E7%BB%84%E6%88%90%E9%83%A8%E5%88%86.png" alt="Harness Engineering:可靠做事">
-              </a>
-            </div>
           
           <div class="post-body">
             <div class="post-header">
               
                 <div class="post-categories">
                   
-                    <span class="category-badge">AI方法论</span>
+                    <span class="category-badge">工具</span>
                   
                 </div>
               
               <span class="post-date">2026-03-29</span>
             </div>
             <h2 class="post-title">
-              <a href="/2026/03/29/Harness-Engineering-%E5%8F%AF%E9%9D%A0%E5%81%9A%E4%BA%8B/">Harness Engineering:可靠做事</a>
+              <a href="/2026/03/29/claude-code-%E9%80%9F%E6%9F%A5%E8%A1%A8/">Claude Code 速查表</a>
             </h2>
             <p class="post-excerpt">
-              什么是 Harness Engineering ？AI进化的实在是太快了，配套的各种工程学方法也层出不穷。最近又突然爆火一个新词： Harness Engineering 。 它最早由 OpenAI 在 2026 年 2 月的官方博客中正式提出（文章标题：《Harness engineering: leveraging Codex in an agent-first world》），随后被 Mit...
+              
+.cc-container {
+  font-family: -apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Roboto, &#39;Helvetica Neue&#39;, Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #333;
+  max-width: 1600px;
+ ...
             </p>
             
               <div class="post-tags">
                 
-                  <a href="/tags/%E5%B7%A5%E4%BD%9C/" class="tag-link">#工作</a>
+                  <a href="/tags/Claude/" class="tag-link">#Claude</a>
                 
-                  <a href="/tags/AI/" class="tag-link">#AI</a>
+                  <a href="/tags/AI%E5%B7%A5%E5%85%B7/" class="tag-link">#AI工具</a>
                 
-              </div>
-            
-            <div class="post-footer">
-              <a href="/2026/03/29/Harness-Engineering-%E5%8F%AF%E9%9D%A0%E5%81%9A%E4%BA%8B/" class="read-more">阅读更多 →</a>
-            </div>
-          </div>
-        </div>
-      </article>
-    
-      <article class="archive-post" data-categories="claude code">
-        <div class="archive-post-inner">
-          
-            <div class="post-thumbnail">
-              <a href="/2026/03/16/Claude-Code%EF%BC%9A%E6%9E%B6%E6%9E%84%E3%80%81%E6%B2%BB%E7%90%86%E4%B8%8E%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/">
-                <img src="/2026/03/16/Claude-Code%EF%BC%9A%E6%9E%B6%E6%9E%84%E3%80%81%E6%B2%BB%E7%90%86%E4%B8%8E%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/cover.png" alt="Claude Code：架构、治理与工程实践">
-              </a>
-            </div>
-          
-          <div class="post-body">
-            <div class="post-header">
-              
-                <div class="post-categories">
-                  
-                    <span class="category-badge">claude code</span>
-                  
-                </div>
-              
-              <span class="post-date">2026-03-16</span>
-            </div>
-            <h2 class="post-title">
-              <a href="/2026/03/16/Claude-Code%EF%BC%9A%E6%9E%B6%E6%9E%84%E3%80%81%E6%B2%BB%E7%90%86%E4%B8%8E%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/">Claude Code：架构、治理与工程实践</a>
-            </h2>
-            <p class="post-excerpt">
-              导读刚开始我也把它当 ChatBot 用，后来很快发现不对劲：上下文越来越乱、工具越来越多但效果越来越差、规则越写越长却越不遵守，折腾了一段时间，研究了 Claude Code 本身之后才意识到，这不是 Prompt 问题，而是这套系统的设计就是这样的。这篇文章想和大伙聊聊这几个事：Claude Code 底层怎么运作、上下文为什么会乱以及怎么治理、Skills 和 Hooks 应该怎么设计、Su...
-            </p>
-            
-              <div class="post-tags">
-                
-                  <a href="/tags/AI/" class="tag-link">#AI</a>
+                  <a href="/tags/%E9%80%9F%E6%9F%A5%E8%A1%A8/" class="tag-link">#速查表</a>
                 
               </div>
             
             <div class="post-footer">
-              <a href="/2026/03/16/Claude-Code%EF%BC%9A%E6%9E%B6%E6%9E%84%E3%80%81%E6%B2%BB%E7%90%86%E4%B8%8E%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/" class="read-more">阅读更多 →</a>
-            </div>
-          </div>
-        </div>
-      </article>
-    
-      <article class="archive-post" data-categories="中东局势,投资建议">
-        <div class="archive-post-inner">
-          
-            <div class="post-thumbnail">
-              <a href="/2026/03/11/%E6%BB%9E%E6%B6%A8%E6%97%B6%E4%BB%A3-%E7%BE%8E%E4%BB%A5%E4%BC%8A%E6%88%98%E4%BA%89/">
-                <img src="/2026/03/11/%E6%BB%9E%E6%B6%A8%E6%97%B6%E4%BB%A3-%E7%BE%8E%E4%BB%A5%E4%BC%8A%E6%88%98%E4%BA%89/cover.png" alt="滞涨时代:美以伊战争的影响">
-              </a>
-            </div>
-          
-          <div class="post-body">
-            <div class="post-header">
-              
-                <div class="post-categories">
-                  
-                    <span class="category-badge">中东局势</span>
-                  
-                    <span class="category-badge">投资建议</span>
-                  
-                </div>
-              
-              <span class="post-date">2026-03-11</span>
-            </div>
-            <h2 class="post-title">
-              <a href="/2026/03/11/%E6%BB%9E%E6%B6%A8%E6%97%B6%E4%BB%A3-%E7%BE%8E%E4%BB%A5%E4%BC%8A%E6%88%98%E4%BA%89/">滞涨时代:美以伊战争的影响</a>
-            </h2>
-            <p class="post-excerpt">
-              
-      
-        
-          💡
-          重点板块
-        
-        
-          
-战略安全
-科技自主
-
-
-        
-      
-    
-
-
-      
-        
-          ⚠️
-          风险控制策略
-        
-        
-          
-当前阶段切忌all in原油
-保...
-            </p>
-            
-              <div class="post-tags">
-                
-                  <a href="/tags/%E4%B8%8B%E5%A4%A7%E6%A3%8B/" class="tag-link">#下大棋</a>
-                
-              </div>
-            
-            <div class="post-footer">
-              <a href="/2026/03/11/%E6%BB%9E%E6%B6%A8%E6%97%B6%E4%BB%A3-%E7%BE%8E%E4%BB%A5%E4%BC%8A%E6%88%98%E4%BA%89/" class="read-more">阅读更多 →</a>
-            </div>
-          </div>
-        </div>
-      </article>
-    
-      <article class="archive-post" data-categories="skills,OpenClaw">
-        <div class="archive-post-inner">
-          
-            <div class="post-thumbnail">
-              <a href="/2026/03/06/%E5%BD%93%E8%B5%9B%E5%8D%9A%E7%9A%87%E5%B8%9D%EF%BC%8C%E4%BA%ABAI%E4%BA%BA%E7%94%9F%EF%BC%9F/">
-                <img src="/2026/03/06/%E5%BD%93%E8%B5%9B%E5%8D%9A%E7%9A%87%E5%B8%9D%EF%BC%8C%E4%BA%ABAI%E4%BA%BA%E7%94%9F%EF%BC%9F/cover.png" alt="当赛博皇帝，享AI人生？">
-              </a>
-            </div>
-          
-          <div class="post-body">
-            <div class="post-header">
-              
-                <div class="post-categories">
-                  
-                    <span class="category-badge">skills</span>
-                  
-                    <span class="category-badge">OpenClaw</span>
-                  
-                </div>
-              
-              <span class="post-date">2026-03-06</span>
-            </div>
-            <h2 class="post-title">
-              <a href="/2026/03/06/%E5%BD%93%E8%B5%9B%E5%8D%9A%E7%9A%87%E5%B8%9D%EF%BC%8C%E4%BA%ABAI%E4%BA%BA%E7%94%9F%EF%BC%9F/">当赛博皇帝，享AI人生？</a>
-            </h2>
-            <p class="post-excerpt">
-              当赛博皇帝，享AI人生？自从装了OpenClaw，事没让它干过几件，Skill倒是装了一大堆，新时代的奇迹暖暖。
-今天又看到个有趣的Skill。
-三省六部制Skill。直接让你体验赛博皇帝。
-采用中国古代三省六部制设计的多智能体编排系统，由开发者cft0808创建，旨在通过分权制衡机制实现AI Agent的高效协作。
-
-
-  
-  
-    ⚔️ 三省六部 · Edict
-    github.c...
-            </p>
-            
-              <div class="post-tags">
-                
-                  <a href="/tags/AI/" class="tag-link">#AI</a>
-                
-                  <a href="/tags/%E9%A1%B9%E7%9B%AE/" class="tag-link">#项目</a>
-                
-              </div>
-            
-            <div class="post-footer">
-              <a href="/2026/03/06/%E5%BD%93%E8%B5%9B%E5%8D%9A%E7%9A%87%E5%B8%9D%EF%BC%8C%E4%BA%ABAI%E4%BA%BA%E7%94%9F%EF%BC%9F/" class="read-more">阅读更多 →</a>
+              <a href="/2026/03/29/claude-code-%E9%80%9F%E6%9F%A5%E8%A1%A8/" class="read-more">阅读更多 →</a>
             </div>
           </div>
         </div>

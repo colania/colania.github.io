@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="John Doe">
+
+
+
+
+
+
+
+<title>《Tau Agent 源码解析》loop.py 详解 | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/menu.js"></script>
+    
+    <script src="/js/format.js"></script>
+    
+
+
+
+
+
+
+
+
+
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/">
+          
+            LEO
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/">主页</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/archives/">文章</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/projects/">项目</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/tags/">合集</a>
+              </li> 
+                   
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+<script src="/js/menu.js"></script>
+
+
+      <div class="main">
+        
+          <div class="flex-container">
+            <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+                
+                    <span class="post-tag">
+                        <a href="/tags/Tau/">
+                            Tau
+                        </a>
+                    </span>    
+                
+                    <span class="post-tag">
+                        <a href="/tags/agent-%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">
+                            agent 解决方案
+                        </a>
+                    </span>    
+                           
+            
+        </div>
+        <div class="post-title">
+            
+            
+                《Tau Agent 源码解析》loop.py 详解
+            
+            
+        </div>
+        <span class="post-date">
+            Aug 4, 2026
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <img src="/2026/08/04/%E3%80%8ATau-Agent-%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E3%80%8Bloop-%E8%AF%A6%E8%A7%A3/cover.jpg" alt="featured_image">
+              
+    </div>
+</div>
+    <div class="post-content">
+    <p>在<a href="/2026/08/03/%E3%80%8ATau-Agent-%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E3%80%8B%E8%AE%A4%E8%AF%86-Tau/">第一篇</a>里，我们建立了 Tau 的整体心智模型：一次请求从 <code>CodingSession.prompt()</code> 一路走到 <code>run_agent_loop()</code>，再靠 <code>AgentEvent</code> 事件流把结果甩回前端。但 <code>run_agent_loop()</code> 内部到底是怎么一轮一轮跑的，我们留了个坑。</p>
+<p>这一篇就专门把 <code>tau_agent/loop.py</code> 拆开讲。这个文件不大，注释里写得很直白——<strong>“Pure Pi-compatible provider&#x2F;tool agent loop”</strong>（一个纯正的、和 Pi 兼容的 provider&#x2F;tool 主循环）。它不依赖任何 CLI 或 TUI，是核心层 <code>tau_agent</code> 里最纯粹的一段逻辑。</p>
+<hr>
+<h2 id="一、文件全貌：它到底在做什么"><a href="#一、文件全貌：它到底在做什么" class="headerlink" title="一、文件全貌：它到底在做什么"></a>一、文件全貌：它到底在做什么</h2><p>一句话：<code>loop.py</code> 实现了一个**「模型说话 → 工具执行 → 再把结果喂回模型」的无限循环**，并且在每一小步都向外抛 <code>AgentEvent</code>，让前端去渲染。</p>
+<p>整个文件导出的核心就是一个异步生成器函数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">run_agent_loop</span>(<span class="params">...</span>) -&gt; AsyncIterator[AgentEvent]:</span><br></pre></td></tr></table></figure>
+
+<p>注意它的返回类型是 <code>AsyncIterator[AgentEvent]</code>——这正好呼应第一篇讲的「<strong>Events are the Contract</strong>」。调用方不需要知道里面发生了什么，只要 <code>async for event in run_agent_loop(...)</code> 不断消费事件就行。</p>
+<p>先看一下它吃进来的关键参数：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>provider</code></td>
+<td><code>ModelProvider</code></td>
+<td>tau_ai 层的模型供应商（OpenAI&#x2F;Anthropic&#x2F;…）</td>
+</tr>
+<tr>
+<td><code>model</code></td>
+<td><code>str</code></td>
+<td>具体模型名</td>
+</tr>
+<tr>
+<td><code>system</code></td>
+<td><code>str</code></td>
+<td>系统提示词</td>
+</tr>
+<tr>
+<td><code>messages</code></td>
+<td><code>list[AgentMessage]</code></td>
+<td>历史对话（会被持续追加）</td>
+</tr>
+<tr>
+<td><code>tools</code></td>
+<td><code>list[AgentTool]</code></td>
+<td>可用工具定义</td>
+</tr>
+<tr>
+<td><code>prompts</code></td>
+<td><code>Sequence[AgentMessage]</code></td>
+<td>本次新注入的提示（初始用户请求）</td>
+</tr>
+<tr>
+<td><code>max_turns</code></td>
+<td><code>int | None</code></td>
+<td>最多跑几轮，防止死循环</td>
+</tr>
+<tr>
+<td><code>signal</code></td>
+<td><code>CancellationToken | None</code></td>
+<td>取消令牌，用于中断</td>
+</tr>
+<tr>
+<td><code>get_steering_messages</code></td>
+<td><code>Callable</code></td>
+<td>每轮开始前注入的「转向」消息（相当于外部指挥）</td>
+</tr>
+<tr>
+<td><code>get_follow_up_messages</code></td>
+<td><code>Callable</code></td>
+<td>工具都跑完后注入的「后续」消息</td>
+</tr>
+<tr>
+<td><code>before_tool_call</code> &#x2F; <code>after_tool_call</code></td>
+<td><code>Callable</code></td>
+<td>工具调用前后的钩子（可拦截&#x2F;改写）</td>
+</tr>
+</tbody></table>
+<p>钩子这点很有意思：<code>before_tool_call</code> 可以返回一个 <code>(blocked, reason)</code>，直接把这次工具调用拦下来——这就是 Tau 做权限&#x2F;安全拦截的扩展点。</p>
+<hr>
+<h2 id="二、入口与骨架：两层-while-套娃"><a href="#二、入口与骨架：两层-while-套娃" class="headerlink" title="二、入口与骨架：两层 while 套娃"></a>二、入口与骨架：两层 while 套娃</h2><p><code>run_agent_loop</code> 的主体是<strong>两层嵌套循环</strong>，这是理解整个文件的关键：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:                      <span class="comment"># 外层：是否要再起一轮「对话回合」</span></span><br><span class="line">    has_more_tools = <span class="literal">True</span></span><br><span class="line">    <span class="keyword">while</span> has_more_tools <span class="keyword">or</span> pending:   <span class="comment"># 内层：本轮内把工具调用跑完</span></span><br><span class="line">        ...</span><br><span class="line">    follow_ups = <span class="built_in">tuple</span>(get_follow_up_messages() ...)</span><br><span class="line">    <span class="keyword">if</span> follow_ups:</span><br><span class="line">        pending = follow_ups</span><br><span class="line">        <span class="keyword">continue</span></span><br><span class="line">    <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>外层 while</strong>：处理「follow-up 消息」。当工具全部跑完、模型也不再要调工具时，如果外部通过 <code>get_follow_up_messages</code> 又塞了新指令，就 <code>continue</code> 再开一轮；否则 <code>break</code> 结束整个 Agent。</li>
+<li><strong>内层 while</strong>：处理「一轮 turn 内可能连续多次调工具」。只要还有工具要跑（<code>has_more_tools</code>）或者有外部注入的 <code>pending</code> 消息，就继续。</li>
+</ul>
+<p>所以一整个生命周期发出的事件顺序是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">AgentStartEvent</span><br><span class="line">  TurnStartEvent</span><br><span class="line">    MessageStartEvent / MessageEndEvent   (prompts 初始提示)</span><br><span class="line">    ── 内层每轮：</span><br><span class="line">    MessageStartEvent / MessageEndEvent   (模型回复)</span><br><span class="line">    ToolExecutionStartEvent</span><br><span class="line">    ToolExecutionUpdateEvent*</span><br><span class="line">    ToolExecutionEndEvent</span><br><span class="line">    MessageStartEvent / MessageEndEvent   (工具结果)</span><br><span class="line">  TurnEndEvent</span><br><span class="line">AgentEndEvent</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="三、初始化与边界检查"><a href="#三、初始化与边界检查" class="headerlink" title="三、初始化与边界检查"></a>三、初始化与边界检查</h2><p>进循环之前，先做一些准备和防御：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">new_messages = <span class="built_in">list</span>(prompts)</span><br><span class="line"><span class="keyword">if</span> prompts:</span><br><span class="line">    messages.extend(prompts)</span><br><span class="line"></span><br><span class="line"><span class="keyword">yield</span> AgentStartEvent()</span><br><span class="line"><span class="keyword">yield</span> TurnStartEvent()</span><br><span class="line"><span class="keyword">for</span> prompt <span class="keyword">in</span> prompts:</span><br><span class="line">    <span class="keyword">yield</span> MessageStartEvent(message=prompt)</span><br><span class="line">    <span class="keyword">yield</span> MessageEndEvent(message=prompt)</span><br></pre></td></tr></table></figure>
+
+<p>这里有个细节：<code>messages</code> 是<strong>历史累积列表</strong>，会被一直追加；而 <code>new_messages</code> 是从 <code>prompts</code> 开始单独维护的一份——最后 <code>AgentEndEvent(messages=new_messages)</code> 返回的就是「本次 Agent 运行新产生的消息」，调用方可以据此做持久化，不会把整段历史重复存一遍。</p>
+<p>然后是 <code>max_turns</code> 的边界保护：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> max_turns <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">and</span> max_turns &lt; <span class="number">1</span>:</span><br><span class="line">    error = _error_message(model, <span class="string">&quot;max_turns must be at least 1&quot;</span>)</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">yield</span> AgentEndEvent(messages=new_messages)</span><br><span class="line">    <span class="keyword">return</span></span><br></pre></td></tr></table></figure>
+
+<p>如果外部传入 <code>max_turns &lt; 1</code>，直接构造一个 <code>stop_reason=&quot;error&quot;</code> 的 <code>AssistantMessage</code>，发完事件就退出。这种「用一条错误消息优雅收场」的写法在文件里反复出现，是 Tau 处理异常的统一风格。</p>
+<hr>
+<h2 id="四、内层主循环：一轮-turn-的三段式"><a href="#四、内层主循环：一轮-turn-的三段式" class="headerlink" title="四、内层主循环：一轮 turn 的三段式"></a>四、内层主循环：一轮 turn 的三段式</h2><p>内层循环是重头戏，每一轮 turn 大致分三段：<strong>注入转向消息 → 调模型 → 执行工具</strong>。</p>
+<h3 id="4-1-注入-steering-消息"><a href="#4-1-注入-steering-消息" class="headerlink" title="4.1 注入 steering 消息"></a>4.1 注入 steering 消息</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">pending = <span class="built_in">tuple</span>(get_steering_messages() <span class="keyword">if</span> get_steering_messages <span class="keyword">else</span> ())</span><br><span class="line">...</span><br><span class="line"><span class="keyword">for</span> message <span class="keyword">in</span> pending:</span><br><span class="line">    messages.append(message)</span><br><span class="line">    new_messages.append(message)</span><br><span class="line">    <span class="keyword">yield</span> MessageStartEvent(message=message)</span><br><span class="line">    <span class="keyword">yield</span> MessageEndEvent(message=message)</span><br><span class="line">pending = ()</span><br></pre></td></tr></table></figure>
+
+<p><code>get_steering_messages</code> 在<strong>每一轮开始前</strong>都会被调用一次。它返回的「转向消息」会被追加进历史并发出去。这给了外部一个「在 Agent 每轮思考前悄悄塞指令」的能力——比如注入最新的代码上下文、或者人工干预方向。<code>pending</code> 用完即清空，避免重复注入。</p>
+<p>接着是第二轮 <code>max_turns</code> 检查（这次是运行时检查）：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> max_turns <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">and</span> turn &gt; max_turns:</span><br><span class="line">    error = _error_message(model, <span class="string">f&quot;Agent stopped after max_turns=<span class="subst">&#123;max_turns&#125;</span>&quot;</span>)</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">return</span></span><br></pre></td></tr></table></figure>
+
+<p>注意它和开头的检查不同：开头是防止你乱传参数，这里是运行中真正达到上限时停手。</p>
+<h3 id="4-2-调模型：-assistant-events"><a href="#4-2-调模型：-assistant-events" class="headerlink" title="4.2 调模型：_assistant_events"></a>4.2 调模型：<code>_assistant_events</code></h3><p>模型调用被包在 <code>_assistant_events</code> 这个辅助生成器里：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">assistant = <span class="literal">None</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">for</span> event <span class="keyword">in</span> _assistant_events(</span><br><span class="line">    provider=provider, model=model, system=system,</span><br><span class="line">    messages=_provider_context(messages), tools=tools, signal=signal,</span><br><span class="line">):</span><br><span class="line">    <span class="keyword">yield</span> event</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">isinstance</span>(event, MessageEndEvent) <span class="keyword">and</span> <span class="built_in">isinstance</span>(event.message, AssistantMessage):</span><br><span class="line">        assistant = event.message</span><br></pre></td></tr></table></figure>
+
+<p>这里有一个<strong>异步生成器的小技巧</strong>，注释里专门解释了：Python 的 async generator 没法把一个「会 yield 的回调」干净地穿过普通 <code>await</code>，所以这里的做法是——一边 <code>yield event</code> 把模型流式事件转发出去，一边在循环结束时把最终的 <code>AssistantMessage</code> 抓住存到 <code>assistant</code> 变量里。这样外层既拿到了流式事件，又拿到了最终要写进历史的消息。</p>
+<p><code>_assistant_events</code> 内部做的事很简单：把 <code>provider.stream_response()</code> 吐出来的 <code>AssistantStartEvent / AssistantMessageEvent / AssistantDoneEvent / AssistantErrorEvent</code> 翻译成 Tau 自己的 <code>MessageStartEvent / MessageUpdateEvent / MessageEndEvent</code>。<strong>这就是 tau_ai 层和 tau_agent 层之间的「翻译层」</strong>——核心层只认自己的事件，不关心供应商原生事件长什么样。</p>
+<p>拿到 <code>assistant</code> 后：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">messages.append(assistant)</span><br><span class="line">new_messages.append(assistant)</span><br><span class="line"><span class="keyword">if</span> assistant.stop_reason <span class="keyword">in</span> &#123;<span class="string">&quot;error&quot;</span>, <span class="string">&quot;aborted&quot;</span>&#125;:</span><br><span class="line">    <span class="keyword">yield</span> TurnEndEvent(message=assistant)</span><br><span class="line">    <span class="keyword">yield</span> AgentEndEvent(messages=new_messages)</span><br><span class="line">    <span class="keyword">return</span></span><br></pre></td></tr></table></figure>
+
+<p>如果模型这轮直接出错或被取消，整个 Agent 立即结束。</p>
+<p>同时有个防御分支：万一 <code>_assistant_events</code> 什么都没返回（<code>assistant is None</code>，理论上不该发生），就构造一条错误消息兜底，保证循环总能终止。</p>
+<h3 id="4-3-执行工具：-execute-tool-call"><a href="#4-3-执行工具：-execute-tool-call" class="headerlink" title="4.3 执行工具：_execute_tool_call"></a>4.3 执行工具：<code>_execute_tool_call</code></h3><p>模型回复里可能带若干个 <code>tool_calls</code>，逐个跑：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">calls = <span class="built_in">list</span>(assistant.tool_calls)</span><br><span class="line">has_more_tools = <span class="built_in">bool</span>(calls)</span><br><span class="line"><span class="keyword">for</span> call <span class="keyword">in</span> calls:</span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">for</span> event <span class="keyword">in</span> _execute_tool_call(call, tool_by_name, signal, before_tool_call, after_tool_call):</span><br><span class="line">        <span class="keyword">yield</span> event</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">isinstance</span>(event, MessageEndEvent) <span class="keyword">and</span> <span class="built_in">isinstance</span>(event.message, ToolResultMessage):</span><br><span class="line">            tool_results.append(event.message)</span><br><span class="line">            messages.append(event.message)</span><br><span class="line">            new_messages.append(event.message)</span><br></pre></td></tr></table></figure>
+
+<p><code>has_more_tools</code> 在循环开头被设置，它直接决定了<strong>内层 while 要不要继续</strong>——只要这轮模型要调工具，内层就不会退出，会接着跑下一轮工具处理。</p>
+<p>每个工具调用的事件序列是：<code>ToolExecutionStartEvent</code> →（可能有若干个）<code>ToolExecutionUpdateEvent</code> → <code>ToolExecutionEndEvent</code> → <code>MessageStartEvent / MessageEndEvent</code>（工具结果消息）。工具结果消息会被追加进 <code>messages</code>，这样下一轮模型就能看到工具的输出。</p>
+<p>一轮 turn 跑完，发 <code>TurnEndEvent</code> 并 <code>turn += 1</code>。</p>
+<hr>
+<h2 id="五、工具执行的内幕：-execute-tool-call-与-run-tool"><a href="#五、工具执行的内幕：-execute-tool-call-与-run-tool" class="headerlink" title="五、工具执行的内幕：_execute_tool_call 与 _run_tool"></a>五、工具执行的内幕：<code>_execute_tool_call</code> 与 <code>_run_tool</code></h2><p>看 <code>_execute_tool_call</code>，它的职责是把「一次工具调用」完整执行并转成事件：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">yield</span> ToolExecutionStartEvent(tool_call_id=call.<span class="built_in">id</span>, tool_name=call.name, args=call.arguments)</span><br><span class="line"></span><br><span class="line">blocked = <span class="literal">False</span></span><br><span class="line">block_reason = <span class="literal">None</span></span><br><span class="line"><span class="keyword">if</span> before_tool_call <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">    blocked, block_reason = <span class="keyword">await</span> before_tool_call(call)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> blocked:</span><br><span class="line">    result = _error_result(block_reason <span class="keyword">or</span> <span class="string">&quot;Tool execution was blocked&quot;</span>)</span><br><span class="line">    is_error = <span class="literal">True</span></span><br><span class="line"><span class="keyword">elif</span> signal <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">and</span> signal.is_cancelled():</span><br><span class="line">    result = _error_result(<span class="string">&quot;Operation aborted&quot;</span>)</span><br><span class="line">    is_error = <span class="literal">True</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    tool = tools.get(call.name)</span><br><span class="line">    <span class="keyword">if</span> tool <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">        result = _error_result(<span class="string">f&quot;Tool <span class="subst">&#123;call.name&#125;</span> not found&quot;</span>)</span><br><span class="line">        is_error = <span class="literal">True</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        result, is_error, updates = <span class="keyword">await</span> _run_tool(tool, call, signal)</span><br><span class="line">        <span class="keyword">for</span> update <span class="keyword">in</span> updates:</span><br><span class="line">            <span class="keyword">yield</span> ToolExecutionUpdateEvent(...)</span><br></pre></td></tr></table></figure>
+
+<p>这段逻辑非常「防御性」，把所有可能失败的点都列出来了：</p>
+<ol>
+<li><strong><code>before_tool_call</code> 拦截</strong>：外部钩子说不行，就直接返回错误结果，工具根本不执行。这是权限&#x2F;安全闸门。</li>
+<li><strong>取消令牌</strong>：如果 <code>signal.is_cancelled()</code>，返回「Operation aborted」。</li>
+<li><strong>工具不存在</strong>：<code>tools.get(call.name)</code> 找不到就报「Tool xxx not found」。</li>
+<li><strong>正常执行</strong>：交给 <code>_run_tool</code>。</li>
+</ol>
+<p>注意 <code>before_tool_call</code> &#x2F; <code>after_tool_call</code> 这两个扩展点：一个在工具跑<strong>前</strong>决定要不要拦，一个在跑<strong>后</strong>还能改写结果（<code>result, is_error = await after_tool_call(call, result, is_error)</code>）。Tau 的权限系统、日志审计基本都是挂在这俩钩子上。</p>
+<p>再看 <code>_run_tool</code>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">_run_tool</span>(<span class="params">tool, call, signal</span>):</span><br><span class="line">    updates = []</span><br><span class="line">    accepting = <span class="literal">True</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">on_update</span>(<span class="params">partial</span>):</span><br><span class="line">        <span class="keyword">if</span> accepting:</span><br><span class="line">            updates.append(partial.model_copy(deep=<span class="literal">True</span>))</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        result = <span class="keyword">await</span> tool.execute(call.<span class="built_in">id</span>, call.arguments, signal, on_update)</span><br><span class="line">        <span class="keyword">return</span> result, <span class="literal">False</span>, updates</span><br><span class="line">    <span class="keyword">except</span> asyncio.CancelledError:</span><br><span class="line">        <span class="keyword">raise</span></span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> exc:</span><br><span class="line">        <span class="keyword">return</span> _error_result(<span class="built_in">str</span>(exc)), <span class="literal">True</span>, updates</span><br><span class="line">    <span class="keyword">finally</span>:</span><br><span class="line">        accepting = <span class="literal">False</span></span><br></pre></td></tr></table></figure>
+
+<p>几个值得说的点：</p>
+<ul>
+<li><strong>工具是隔离边界</strong>：注释里写了 <code># noqa: BLE001 - tools are an isolation boundary</code>。任何工具抛出的异常都被捕获，转成 <code>_error_result</code>，<strong>绝不会让一个烂工具把整个 Agent 搞崩</strong>。这正是「工具即隔离边界」的工程实践。</li>
+<li><strong><code>CancelledError</code> 单独 <code>raise</code></strong>：取消信号必须向上传播，不能被吞掉，否则无法真正中断。</li>
+<li><strong><code>on_update</code> 回调 + <code>accepting</code> 标志</strong>：工具执行过程中可以多次回调 <code>on_update</code> 推送部分进度（流式更新），但这些 update 只在 <code>accepting=True</code>（即没结束）时才被收集。工具返回后 <code>finally</code> 里把 <code>accepting</code> 置 False，防止工具在返回后还异步回调导致竞态。这个细节很体现写代码的人功力。</li>
+</ul>
+<p>最后 <code>_execute_tool_call</code> 把 <code>AgentToolResult</code> 包成 <code>ToolResultMessage</code> 发出去，完成一轮工具调用。</p>
+<hr>
+<h2 id="六、容易被忽略的两个细节"><a href="#六、容易被忽略的两个细节" class="headerlink" title="六、容易被忽略的两个细节"></a>六、容易被忽略的两个细节</h2><h3 id="6-1-provider-context：别把空失败回合喂给模型"><a href="#6-1-provider-context：别把空失败回合喂给模型" class="headerlink" title="6.1 _provider_context：别把空失败回合喂给模型"></a>6.1 <code>_provider_context</code>：别把空失败回合喂给模型</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">_provider_context</span>(<span class="params">messages</span>):</span><br><span class="line">    <span class="keyword">return</span> [</span><br><span class="line">        m <span class="keyword">for</span> m <span class="keyword">in</span> messages</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> (</span><br><span class="line">            <span class="built_in">isinstance</span>(m, AssistantMessage)</span><br><span class="line">            <span class="keyword">and</span> m.stop_reason <span class="keyword">in</span> &#123;<span class="string">&quot;error&quot;</span>, <span class="string">&quot;aborted&quot;</span>&#125;</span><br><span class="line">            <span class="keyword">and</span> <span class="keyword">not</span> m.content</span><br><span class="line">        )</span><br><span class="line">    ]</span><br></pre></td></tr></table></figure>
+
+<p>看注释就懂：Provider 不一定能接受「一个没有任何内容的 assistant 回合」。Tau 会把终态失败（error&#x2F;aborted）且没内容的消息<strong>从历史里过滤掉</strong>，不污染下一次请求。而<strong>有内容的失败消息仍然保留</strong>——因为它可能是诊断需要的信息。这是一个很务实的取舍。</p>
+<h3 id="6-2-为什么用-new-messages-而不是全程-messages"><a href="#6-2-为什么用-new-messages-而不是全程-messages" class="headerlink" title="6.2 为什么用 new_messages 而不是全程 messages"></a>6.2 为什么用 <code>new_messages</code> 而不是全程 <code>messages</code></h3><p>前面提过，<code>messages</code> 是贯穿整个会话的累积历史（包括进 loop 之前就有的），而 <code>new_messages</code> 只记录<strong>本次 loop 运行产出的消息</strong>。最后 <code>AgentEndEvent(messages=new_messages)</code> 返回的就是「这次 Agent 干了啥」，调用方（比如 <code>CodingSession</code>）可以精准地把新增部分持久化到 JSONL，而不是每次都重写全量历史。</p>
+<hr>
+<h2 id="七、把-loop-py-串回整体"><a href="#七、把-loop-py-串回整体" class="headerlink" title="七、把 loop.py 串回整体"></a>七、把 loop.py 串回整体</h2><p>回到第一篇那张链路图，现在 <code>run_agent_loop()</code> 的内部我们就看清了：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">run_agent_loop()</span><br><span class="line">  └─ 外层 while（处理 follow_up）</span><br><span class="line">       └─ 内层 while（处理 pending + 工具链）</span><br><span class="line">            ├─ 注入 steering 消息</span><br><span class="line">            ├─ _assistant_events()  ← 翻译 tau_ai 的事件 → tau_agent 的事件</span><br><span class="line">            │     └─ provider.stream_response()</span><br><span class="line">            ├─ 把 AssistantMessage 写入历史</span><br><span class="line">            └─ for each tool_call:</span><br><span class="line">                  _execute_tool_call()  ← before_tool_call 钩子</span><br><span class="line">                       └─ _run_tool()   ← 隔离边界，吞异常</span><br><span class="line">                  after_tool_call 钩子</span><br><span class="line">                  → 工具结果写回历史</span><br><span class="line">       → 没有更多工具 &amp; 没有 follow_up → AgentEndEvent</span><br></pre></td></tr></table></figure>
+
+<p>你会发现 <code>loop.py</code> 几乎没有「业务逻辑」——它不关心读文件怎么读、写代码怎么写，只负责<strong>把 provider、tool、session 三者用一套事件协议编排起来</strong>。这正好印证了第一篇的结论：核心层是「干净的大脑」，所有脏活（文件系统、CLI、UI）都在别处。</p>
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><code>loop.py</code> 虽然叫「loop」，但它真正牛的地方不在循环本身，而在几处克制的设计：</p>
+<ol>
+<li><strong>纯事件流输出</strong>：<code>AsyncIterator[AgentEvent]</code>，前端只管消费，零耦合。</li>
+<li><strong>两层 while</strong>：外层管 follow-up 续命，内层管单轮工具链，分工清晰。</li>
+<li><strong>工具即隔离边界</strong>：异常全吞，取消信号必传，绝不让一个烂工具拖垮 Agent。</li>
+<li><strong>钩子即扩展点</strong>：<code>before/after_tool_call</code> 承载权限与审计，<code>steering/follow_up</code> 承载外部指挥。</li>
+<li><strong>防御性收尾</strong>：空失败回合过滤、错误兜底消息、双层 <code>max_turns</code> 检查——保证循环<strong>任何情况下都能终止</strong>。</li>
+</ol>
+<p>下一篇可以挑 <code>provider.py</code> &#x2F; <code>tools.py</code> 继续往深里挖，看看 <code>ModelProvider</code> 的接口契约和 <code>AgentTool</code> 是怎么定义的。</p>
+<hr>
+<p><em>参考资料：<a target="_blank" rel="noopener" href="https://github.com/huggingface/tau">huggingface&#x2F;tau (GitHub)</a> | 本文代码来自 <code>tau_agent/loop.py</code></em></p>
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+                <div class="icon arrow-left"></div>
+                <div class="post-link">
+                    <a href="/2026/08/04/%E3%80%8ATau-Agent-%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E3%80%8Bagent-loop/">Prev</a>
+                </div>
+            
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/2026/08/03/%E3%80%8ATau-Agent-%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E3%80%8B%E8%AE%A4%E8%AF%86-Tau/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+     
+
+     
+    
+    
+
+</div>
+     
+  
+</article>
+          </div>
+        
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+            
+                Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> & <a target="_blank" rel="noopener" href="https://github.com/zoeingwingkei/frame/">Frame</a>
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+    
+
+  </body>
+</html>

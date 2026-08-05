@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="John Doe">
+
+
+
+
+
+
+
+<title>《Tau Agent 源码解析》3.1 自定义一个 provider | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/menu.js"></script>
+    
+    <script src="/js/format.js"></script>
+    
+
+
+
+
+
+
+
+
+
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/">
+          
+            LEO
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/">主页</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/archives/">文章</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/projects/">项目</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/tags/">合集</a>
+              </li> 
+                   
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+<script src="/js/menu.js"></script>
+
+
+      <div class="main">
+        
+          <div class="flex-container">
+            <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+                
+                    <span class="post-tag">
+                        <a href="/tags/AI/">
+                            AI
+                        </a>
+                    </span>    
+                           
+            
+        </div>
+        <div class="post-title">
+            
+            
+                《Tau Agent 源码解析》3.1 自定义一个 provider
+            
+            
+        </div>
+        <span class="post-date">
+            Aug 5, 2026
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <img src="/2026/08/05/%E3%80%8ATau-Agent-%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E3%80%8B3-1-%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%80%E4%B8%AA-provider/image.png" alt="featured_image">
+              
+    </div>
+</div>
+    <div class="post-content">
+    <h1 id="一、自定义一个-provider"><a href="#一、自定义一个-provider" class="headerlink" title="一、自定义一个 provider"></a>一、自定义一个 provider</h1><p>因为 TAU 里边是没有 DeepSeek 的，所以我们需要自己去实现一个。大体实现我就不讲了，可以让 AI 来帮你实现。下面这份示例代码（<code>examples/deepseek_tau_tools.py</code>）是核心，看懂它就懂了「怎么把一个 OpenAI 兼容的模型接进 Tau」。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">print_event</span>(<span class="params">event: <span class="built_in">object</span></span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;以教学友好的方式打印 Tau 产生的每一个事件。&quot;&quot;&quot;</span></span><br><span class="line">    event_type = <span class="built_in">getattr</span>(event, <span class="string">&quot;type&quot;</span>, <span class="built_in">type</span>(event).__name__)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;\n\n========== Tau Event: <span class="subst">&#123;event_type&#125;</span> ==========&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">isinstance</span>(event, MessageUpdateEvent):</span><br><span class="line">        <span class="comment"># MessageUpdateEvent 包含 provider 产生的细粒度事件，例如：</span></span><br><span class="line">        <span class="comment"># text_delta、thinking_delta、tool_call_start、tool_call_end。</span></span><br><span class="line">        provider_event = event.assistant_message_event</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;provider_event.type = <span class="subst">&#123;provider_event.<span class="built_in">type</span>&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(pformat(provider_event.model_dump(mode=<span class="string">&quot;json&quot;</span>), sort_dicts=<span class="literal">False</span>))</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">isinstance</span>(event, ToolExecutionEndEvent):</span><br><span class="line">        <span class="comment"># 这里表示 Tau 已经根据模型返回的 ToolCall 找到并执行了工具。</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;tool_name = <span class="subst">&#123;event.tool_name&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;is_error = <span class="subst">&#123;event.is_error&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(pformat(event.result.model_dump(mode=<span class="string">&quot;json&quot;</span>), sort_dicts=<span class="literal">False</span>))</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">isinstance</span>(event, MessageEndEvent):</span><br><span class="line">        <span class="comment"># MessageEndEvent 表示一条完整消息已经结束。</span></span><br><span class="line">        message = event.message</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;message.role = <span class="subst">&#123;message.role&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(pformat(message.model_dump(mode=<span class="string">&quot;json&quot;</span>), sort_dicts=<span class="literal">False</span>))</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 对 AgentStartEvent、TurnStartEvent、TurnEndEvent、AgentEndEvent 等</span></span><br><span class="line">    <span class="comment"># 生命周期事件，直接打印完整结构。</span></span><br><span class="line">    model_dump = <span class="built_in">getattr</span>(event, <span class="string">&quot;model_dump&quot;</span>, <span class="literal">None</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">callable</span>(model_dump):</span><br><span class="line">        <span class="built_in">print</span>(pformat(model_dump(mode=<span class="string">&quot;json&quot;</span>), sort_dicts=<span class="literal">False</span>))</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="built_in">repr</span>(event))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@dataclass(<span class="params">frozen=<span class="literal">True</span>, slots=<span class="literal">True</span></span>)</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">McpToolSpec</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;MCP 工具定义中本示例需要使用的字段。&quot;&quot;&quot;</span></span><br><span class="line">    name: <span class="built_in">str</span></span><br><span class="line">    description: <span class="built_in">str</span></span><br><span class="line">    input_schema: Mapping[<span class="built_in">str</span>, <span class="type">Any</span>]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">McpToolRegistry</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;模拟外部 MCP Server 的本地工具注册表。&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">        <span class="variable language_">self</span>.tools = &#123;</span><br><span class="line">            <span class="string">&quot;lookup_project_fact&quot;</span>: McpToolSpec(</span><br><span class="line">                name=<span class="string">&quot;lookup_project_fact&quot;</span>,</span><br><span class="line">                description=(</span><br><span class="line">                    <span class="string">&quot;Look up a fact from the demo project&#x27;s external knowledge &quot;</span></span><br><span class="line">                    <span class="string">&quot;service. Use this when the user asks about the project owner &quot;</span></span><br><span class="line">                    <span class="string">&quot;or release channel.&quot;</span></span><br><span class="line">                ),</span><br><span class="line">                input_schema=&#123;</span><br><span class="line">                    <span class="string">&quot;type&quot;</span>: <span class="string">&quot;object&quot;</span>,</span><br><span class="line">                    <span class="string">&quot;properties&quot;</span>: &#123;</span><br><span class="line">                        <span class="string">&quot;key&quot;</span>: &#123;<span class="string">&quot;type&quot;</span>: <span class="string">&quot;string&quot;</span>, <span class="string">&quot;enum&quot;</span>: [<span class="string">&quot;owner&quot;</span>, <span class="string">&quot;release_channel&quot;</span>]&#125;</span><br><span class="line">                    &#125;,</span><br><span class="line">                    <span class="string">&quot;required&quot;</span>: [<span class="string">&quot;key&quot;</span>],</span><br><span class="line">                    <span class="string">&quot;additionalProperties&quot;</span>: <span class="literal">False</span>,</span><br><span class="line">                &#125;,</span><br><span class="line">            )</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">call_tool</span>(<span class="params">self, name: <span class="built_in">str</span>, arguments: Mapping[<span class="built_in">str</span>, <span class="type">Any</span>]</span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        <span class="keyword">if</span> name != <span class="string">&quot;lookup_project_fact&quot;</span>:</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">f&quot;Unknown MCP tool: <span class="subst">&#123;name&#125;</span>&quot;</span>)</span><br><span class="line">        facts = &#123;<span class="string">&quot;owner&quot;</span>: <span class="string">&quot;Tau maintainers&quot;</span>, <span class="string">&quot;release_channel&quot;</span>: <span class="string">&quot;stable&quot;</span>&#125;</span><br><span class="line">        key = <span class="built_in">str</span>(arguments.get(<span class="string">&quot;key&quot;</span>, <span class="string">&quot;&quot;</span>))</span><br><span class="line">        <span class="keyword">if</span> key <span class="keyword">not</span> <span class="keyword">in</span> facts:</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">f&quot;Unsupported fact key: <span class="subst">&#123;key&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> facts[key]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">mcp_tools_as_tau_tools</span>(<span class="params">registry: McpToolRegistry</span>) -&gt; <span class="built_in">list</span>[AgentTool]:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;把 MCP 风格工具转换成 Tau 的通用 AgentTool。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    关键适配层：</span></span><br><span class="line"><span class="string">        MCP 工具定义 → Tau AgentTool → 发送给 DeepSeek 作为 function tool</span></span><br><span class="line"><span class="string">        → 模型返回 ToolCall → Tau 执行 execute_fn → 桥接回 MCP registry</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    result: <span class="built_in">list</span>[AgentTool] = []</span><br><span class="line">    <span class="keyword">for</span> spec <span class="keyword">in</span> registry.tools.values():</span><br><span class="line">        <span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">execute</span>(<span class="params"></span></span><br><span class="line"><span class="params">            tool_call_id: <span class="built_in">str</span>,</span></span><br><span class="line"><span class="params">            arguments: Mapping[<span class="built_in">str</span>, <span class="type">Any</span>],</span></span><br><span class="line"><span class="params">            signal=<span class="literal">None</span>,  <span class="comment"># noqa: ANN001</span></span></span><br><span class="line"><span class="params">            on_update=<span class="literal">None</span>,  <span class="comment"># noqa: ANN001</span></span></span><br><span class="line"><span class="params">            *,</span></span><br><span class="line"><span class="params">            tool_name: <span class="built_in">str</span> = spec.name,</span></span><br><span class="line"><span class="params">        </span>) -&gt; AgentToolResult:</span><br><span class="line">            <span class="keyword">del</span> tool_call_id, signal, on_update</span><br><span class="line">            value = <span class="keyword">await</span> registry.call_tool(tool_name, arguments)</span><br><span class="line">            <span class="keyword">return</span> AgentToolResult(content=[TextContent(text=value)])</span><br><span class="line"></span><br><span class="line">        result.append(</span><br><span class="line">            AgentTool(</span><br><span class="line">                name=spec.name,</span><br><span class="line">                label=<span class="string">f&quot;MCP: <span class="subst">&#123;spec.name&#125;</span>&quot;</span>,</span><br><span class="line">                description=spec.description,</span><br><span class="line">                parameters=spec.input_schema,</span><br><span class="line">                execute_fn=execute,</span><br><span class="line">            )</span><br><span class="line">        )</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">main</span>() -&gt; <span class="literal">None</span>:</span><br><span class="line">    api_key = os.environ.get(<span class="string">&quot;DEEPSEEK_API_KEY&quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> api_key:</span><br><span class="line">        <span class="keyword">raise</span> SystemExit(<span class="string">&quot;Set DEEPSEEK_API_KEY before running this demo.&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># DeepSeek 提供 OpenAI-compatible API，复用 OpenAICompatibleProvider 即可。</span></span><br><span class="line">    provider = OpenAICompatibleProvider(</span><br><span class="line">        OpenAICompatibleConfig(</span><br><span class="line">            api_key=api_key,</span><br><span class="line">            base_url=<span class="string">&quot;https://api.deepseek.com/v1&quot;</span>,</span><br><span class="line">            provider_name=<span class="string">&quot;deepseek&quot;</span>,</span><br><span class="line">            api=<span class="string">&quot;openai-completions&quot;</span>,</span><br><span class="line">            reasoning_effort=<span class="literal">None</span>,</span><br><span class="line">            max_retries=<span class="number">2</span>,</span><br><span class="line">            debug_sse=<span class="literal">True</span>,  <span class="comment"># 打印原始 SSE 行 / SSE JSON / ProviderEvent 三层调试信息</span></span><br><span class="line">        )</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    registry = McpToolRegistry()</span><br><span class="line">    tools = mcp_tools_as_tau_tools(registry)</span><br><span class="line"></span><br><span class="line">    harness = AgentHarness(</span><br><span class="line">        AgentHarnessConfig(</span><br><span class="line">            provider=provider,</span><br><span class="line">            model=os.environ.get(<span class="string">&quot;DEEPSEEK_MODEL&quot;</span>, <span class="string">&quot;deepseek-chat&quot;</span>),</span><br><span class="line">            system=(</span><br><span class="line">                <span class="string">&quot;You are a small Tau teaching agent. Use tools when they provide &quot;</span></span><br><span class="line">                <span class="string">&quot;the requested fact. Explain briefly which tool you used.&quot;</span></span><br><span class="line">            ),</span><br><span class="line">            tools=tools,</span><br><span class="line">            max_turns=<span class="number">4</span>,</span><br><span class="line">        )</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">async</span> <span class="keyword">for</span> event <span class="keyword">in</span> harness.prompt(</span><br><span class="line">            <span class="string">&quot;Use the external tool to find the project owner and release channel.&quot;</span></span><br><span class="line">        ):</span><br><span class="line">            print_event(event)</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">isinstance</span>(event, MessageUpdateEvent):</span><br><span class="line">                update = event.assistant_message_event</span><br><span class="line">                <span class="keyword">if</span> <span class="built_in">getattr</span>(update, <span class="string">&quot;type&quot;</span>, <span class="string">&quot;&quot;</span>) == <span class="string">&quot;text_delta&quot;</span>:</span><br><span class="line">                    <span class="built_in">print</span>(<span class="string">f&quot;\n[assistant-text-delta] <span class="subst">&#123;update.delta!r&#125;</span>&quot;</span>)</span><br><span class="line">            <span class="keyword">elif</span> <span class="built_in">isinstance</span>(event, ToolExecutionEndEvent):</span><br><span class="line">                <span class="built_in">print</span>(</span><br><span class="line">                    <span class="string">f&quot;\n[tool-result-summary] <span class="subst">&#123;event.tool_name&#125;</span>: <span class="subst">&#123;event.result.text&#125;</span>&quot;</span>,</span><br><span class="line">                    flush=<span class="literal">True</span>,</span><br><span class="line">                )</span><br><span class="line">            <span class="keyword">elif</span> <span class="built_in">isinstance</span>(event, AgentEndEvent):</span><br><span class="line">                assistant = <span class="built_in">next</span>(</span><br><span class="line">                    (m <span class="keyword">for</span> m <span class="keyword">in</span> <span class="built_in">reversed</span>(event.messages) <span class="keyword">if</span> <span class="built_in">isinstance</span>(m, AssistantMessage)),</span><br><span class="line">                    <span class="literal">None</span>,</span><br><span class="line">                )</span><br><span class="line">                <span class="keyword">if</span> assistant <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">and</span> assistant.text:</span><br><span class="line">                    <span class="built_in">print</span>(<span class="string">f&quot;\n[final-summary] <span class="subst">&#123;assistant.text&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="keyword">finally</span>:</span><br><span class="line">        <span class="keyword">await</span> provider.aclose()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    asyncio.run(main())</span><br></pre></td></tr></table></figure>
+
+<p>几个关键点：</p>
+<ul>
+<li><strong>复用 <code>OpenAICompatibleProvider</code></strong>：DeepSeek 是 OpenAI 兼容接口，所以不用从零写 Provider，只要配 <code>base_url</code> 和 <code>api=&quot;openai-completions&quot;</code>。</li>
+<li><strong><code>mcp_tools_as_tau_tools</code> 是适配层</strong>：把 MCP 风格工具定义包成 Tau 的 <code>AgentTool</code>，<code>execute_fn</code> 内部再桥接回本地 <code>registry</code>。闭包里用 <code>tool_name=spec.name</code> 默认参数避免循环变量陷阱。</li>
+<li><strong><code>debug_sse=True</code></strong> 会打印三层调试信息：原始 SSE 行 → 去掉 <code>data:</code> 的 JSON → Tau parser 生成的 <code>ProviderEvent</code>，这正是下面分析流程用的素材。</li>
+</ul>
+<hr>
+<h1 id="二、根据日志分析流程"><a href="#二、根据日志分析流程" class="headerlink" title="二、根据日志分析流程"></a>二、根据日志分析流程</h1><p>下面不再贴全部 3500 行原始日志（那是噪声），而是挑出<strong>最能体现一次完整 agent 循环的几个关键事件</strong>，配合文字讲解流程。运行命令是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python examples/deepseek_tau_tools.py</span><br></pre></td></tr></table></figure>
+
+<h2 id="1-起点：用户输入与首轮-assistant-占位"><a href="#1-起点：用户输入与首轮-assistant-占位" class="headerlink" title="1. 起点：用户输入与首轮 assistant 占位"></a>1. 起点：用户输入与首轮 assistant 占位</h2><p>Agent 启动后，<code>agent_start</code> &#x2F; <code>turn_start</code> 先到，然后是用户消息 <code>message_start/end</code>，紧接着一个 <code>role=assistant</code> 的<strong>空占位消息</strong>（模型还没开始输出，仅标记本轮由哪个 provider&#x2F;model 处理）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">========== Tau Event: message_start ==========</span><br><span class="line">&#x27;message&#x27;: &#123;&#x27;role&#x27;: &#x27;assistant&#x27;, &#x27;content&#x27;: [],</span><br><span class="line">            &#x27;provider&#x27;: &#x27;deepseek&#x27;, &#x27;model&#x27;: &#x27;deepseek-chat&#x27;,</span><br><span class="line">            &#x27;stopReason&#x27;: &#x27;stop&#x27;, ...&#125;</span><br></pre></td></tr></table></figure>
+
+<p>之后才是真正的 SSE 文本增量（<code>text_delta</code> → <code>MessageUpdateEvent</code>），和上一篇讲的「provider 用 <code>_content_parts</code> 累加、边到边 yield」完全对上。</p>
+<h2 id="2-模型决定调工具：tool-execution-start-end"><a href="#2-模型决定调工具：tool-execution-start-end" class="headerlink" title="2. 模型决定调工具：tool_execution_start &#x2F; end"></a>2. 模型决定调工具：tool_execution_start &#x2F; end</h2><p>模型读完后，发现需要外部事实，发出两个 <code>toolCall</code>。Tau 找到对应 <code>AgentTool</code> 执行，并打印：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[sse-data] &#123;&quot;id&quot;:&quot;8262d916-08ba-4652-a0a8-3782a3be498f&quot;,&quot;object&quot;:&quot;chat.completion.chunk&quot;,&quot;created&quot;:1785938226,&quot;model&quot;:&quot;deepseek-v4-flash&quot;,&quot;system_fingerprint&quot;:&quot;fp_a18b46594c_prod0820_fp8_kvcache_20260402&quot;,&quot;choices&quot;:[&#123;&quot;index&quot;:0,&quot;delta&quot;:&#123;&quot;content&quot;:&quot;&quot;&#125;,&quot;logprobs&quot;:null,&quot;finish_reason&quot;:&quot;tool_calls&quot;&#125;],&quot;usage&quot;:&#123;&quot;prompt_tokens&quot;:348,&quot;completion_tokens&quot;:94,&quot;total_tokens&quot;:442,&quot;prompt_tokens_details&quot;:&#123;&quot;cached_tokens&quot;:256&#125;,&quot;prompt_cache_hit_tokens&quot;:256,&quot;prompt_cache_miss_tokens&quot;:92&#125;&#125;</span><br><span class="line"></span><br><span class="line">========== Tau Event: tool_execution_start ==========</span><br><span class="line">&#123;&#x27;toolCallId&#x27;: &#x27;call_00_...&#x27;, &#x27;toolName&#x27;: &#x27;lookup_project_fact&#x27;, &#x27;args&#x27;: &#123;&#x27;key&#x27;: &#x27;owner&#x27;&#125;&#125;</span><br><span class="line"></span><br><span class="line">========== Tau Event: tool_execution_end ==========</span><br><span class="line">tool_name = lookup_project_fact</span><br><span class="line">is_error = False</span><br><span class="line">&#123;&#x27;content&#x27;: [&#123;&#x27;type&#x27;: &#x27;text&#x27;, &#x27;text&#x27;: &#x27;Tau maintainers&#x27;, ...&#125;]&#125;</span><br><span class="line"></span><br><span class="line">[tool-result-summary] lookup_project_fact: Tau maintainers</span><br></pre></td></tr></table></figure>
+
+<p>同一轮里模型并行要了两个事实，于是又来一次 <code>tool_execution_start/end</code>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#x27;toolCallId&#x27;: &#x27;call_01_...&#x27;, &#x27;toolName&#x27;: &#x27;lookup_project_fact&#x27;, &#x27;args&#x27;: &#123;&#x27;key&#x27;: &#x27;release_channel&#x27;&#125;&#125;</span><br><span class="line">→ [tool-result-summary] lookup_project_fact: stable</span><br></pre></td></tr></table></figure>
+
+<p>注意每个工具结果都会变成一条 <code>role=toolResult</code> 的 <code>message_start/end</code>，<strong>追加进 <code>messages</code></strong>——这正是第二篇 loop 里 <code>messages.append(...)</code> 的实时来源，也是下一轮把工具结果喂回模型的关键。</p>
+<h2 id="3-一轮结束：turn-end"><a href="#3-一轮结束：turn-end" class="headerlink" title="3. 一轮结束：turn_end"></a>3. 一轮结束：turn_end</h2><p>两个工具都执行完，本轮结束，发 <code>turn_end</code>，并带本轮 assistant 消息的快照（此时 <code>stopReason</code> 还是 <code>toolUse</code>）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">========== Tau Event: turn_end ==========</span><br><span class="line">&#123;&#x27;type&#x27;: &#x27;turn_end&#x27;, &#x27;message&#x27;: &#123;&#x27;role&#x27;: &#x27;assistant&#x27;, ... &#x27;stopReason&#x27;: &#x27;toolUse&#x27;&#125;, &#x27;toolResults&#x27;: [...]&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-第二轮：模型汇总并收尾"><a href="#4-第二轮：模型汇总并收尾" class="headerlink" title="4. 第二轮：模型汇总并收尾"></a>4. 第二轮：模型汇总并收尾</h2><p>下一轮模型拿到工具结果，直接生成自然语言总结，不再调工具（<code>stopReason</code> 变为 <code>stop</code>）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">========== Tau Event: turn_end ==========</span><br><span class="line">&#x27;message&#x27;: &#123;&#x27;role&#x27;: &#x27;assistant&#x27;,</span><br><span class="line">  &#x27;content&#x27;: [&#123;&#x27;type&#x27;: &#x27;text&#x27;,</span><br><span class="line">    &#x27;text&#x27;: &#x27;I used the **lookup_project_fact** tool to retrieve both facts...</span><br><span class="line">             - **Project owner:** Tau maintainers</span><br><span class="line">             - **Release channel:** stable&#x27;&#125;],</span><br><span class="line">  &#x27;stopReason&#x27;: &#x27;stop&#x27;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最后 <code>agent_end</code> 携带<strong>完整消息列表</strong>（user → assistant[含两个 toolCall] → 两个 toolResult → assistant[总结]），整个循环结束：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">========== Tau Event: agent_end ==========</span><br><span class="line">&#x27;messages&#x27;: [user, assistant(toolCall×2), toolResult×2, assistant(总结)]</span><br><span class="line"></span><br><span class="line">[final-summary] I used the **lookup_project_fact** tool to retrieve both facts...</span><br><span class="line">- **Project owner:** Tau maintainers</span><br><span class="line">- **Release channel:** stable</span><br></pre></td></tr></table></figure>
+
+<h2 id="5-一次运行的事件生命周期（总结）"><a href="#5-一次运行的事件生命周期（总结）" class="headerlink" title="5. 一次运行的事件生命周期（总结）"></a>5. 一次运行的事件生命周期（总结）</h2><p>把上面串起来，一次自定义 provider + DeepSeek 的运行，事件流是这样一条线：</p>
+<table>
+<thead>
+<tr>
+<th>顺序</th>
+<th>事件</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td><code>agent_start</code></td>
+<td>Agent 启动</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>turn_start</code></td>
+<td>第一轮开始</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>message_start/end</code> (user)</td>
+<td>用户提示入上下文</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>message_start/end</code> (assistant 空占位)</td>
+<td>标记本轮 provider&#x2F;model</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>message_update</code> (text_delta ×N)</td>
+<td>模型文本流式返回</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>tool_execution_start</code> &#x2F; <code>tool_execution_end</code> ×2</td>
+<td>模型调工具，Tau 执行并返回</td>
+</tr>
+<tr>
+<td>7</td>
+<td><code>message_start/end</code> (toolResult ×2)</td>
+<td>工具结果写回 <code>messages</code></td>
+</tr>
+<tr>
+<td>8</td>
+<td><code>turn_end</code></td>
+<td>第一轮结束（stopReason&#x3D;toolUse）</td>
+</tr>
+<tr>
+<td>9</td>
+<td><code>turn_start</code> → <code>message_update</code> → <code>turn_end</code></td>
+<td>第二轮：模型汇总（stopReason&#x3D;stop）</td>
+</tr>
+<tr>
+<td>10</td>
+<td><code>agent_end</code></td>
+<td>携带完整消息列表，循环结束</td>
+</tr>
+</tbody></table>
+<p>这套事件序列，和你在第一篇看到的「Events are the Contract」、第二篇 <code>run_agent_loop</code> 的两层 while、第三篇 provider 把 SSE 解析成 <code>AssistantMessage/ToolCall</code> 完全吻合——<strong>自定义 provider 接入后，上游所有机制一字未改，只是 <code>openai-completions</code> 后面跑的模型从 GPT 换成了 DeepSeek。</strong></p>
+<hr>
+<p><em>参考资料：<a target="_blank" rel="noopener" href="https://github.com/huggingface/tau">huggingface&#x2F;tau (GitHub)</a> | 示例来自 <code>examples/deepseek_tau_tools.py</code></em></p>
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/2026/08/05/%E3%80%8ATau-Agent-%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E3%80%8Bprovider/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+     
+
+     
+    
+    
+
+</div>
+     
+  
+</article>
+          </div>
+        
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+            
+                Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> & <a target="_blank" rel="noopener" href="https://github.com/zoeingwingkei/frame/">Frame</a>
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+    
+
+  </body>
+</html>

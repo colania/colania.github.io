@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="John Doe">
+
+
+
+
+
+
+
+<title>Claude Code 速查表 | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/menu.js"></script>
+    
+    <script src="/js/format.js"></script>
+    
+
+
+
+
+
+
+
+
+
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/">
+          
+            LEO
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/">主页</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/archives/">文章</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/projects/">项目</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/tags/">合集</a>
+              </li> 
+                   
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+<script src="/js/menu.js"></script>
+
+
+      <div class="main">
+        
+          <div class="flex-container">
+            <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+                
+                    <span class="post-tag">
+                        <a href="/tags/Claude/">
+                            Claude
+                        </a>
+                    </span>    
+                
+                    <span class="post-tag">
+                        <a href="/tags/AI%E5%B7%A5%E5%85%B7/">
+                            AI工具
+                        </a>
+                    </span>    
+                
+                    <span class="post-tag">
+                        <a href="/tags/%E9%80%9F%E6%9F%A5%E8%A1%A8/">
+                            速查表
+                        </a>
+                    </span>    
+                           
+            
+        </div>
+        <div class="post-title">
+            
+            
+                Claude Code 速查表
+            
+            
+        </div>
+        <span class="post-date">
+            Mar 29, 2026
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <div class="h-line-primary"></div>
+              
+    </div>
+</div>
+    <div class="post-content">
+    <style>
+.cc-container {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #333;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+.cc-header {
+  background: linear-gradient(135deg, #f5f0e8 0%, #e8e0d5 100%);
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+  border-left: 4px solid #c9a86c;
+}
+.cc-header h1 {
+  margin: 0 0 8px 0;
+  font-size: 24px;
+  color: #5a4a3a;
+}
+.cc-header .meta {
+  color: #888;
+  font-size: 12px;
+}
+.cc-updates {
+  background: #fff8e7;
+  border: 1px solid #f0e0c0;
+  border-radius: 6px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+}
+.cc-updates-title {
+  font-weight: bold;
+  color: #8b7355;
+  margin-bottom: 8px;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+.cc-updates ul {
+  margin: 0;
+  padding-left: 18px;
+}
+.cc-updates li {
+  margin: 4px 0;
+  color: #666;
+}
+.cc-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+@media (max-width: 1200px) {
+  .cc-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 900px) {
+  .cc-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 600px) {
+  .cc-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.cc-card {
+  background: #fafafa;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e8e8e8;
+  min-width: 0;
+}
+.cc-card-header {
+  padding: 10px 14px;
+  font-weight: 600;
+  font-size: 13px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.cc-card-header.blue { background: #4a90d9; }
+.cc-card-header.green { background: #5a9a5a; }
+.cc-card-header.orange { background: #d4a574; }
+.cc-card-header.purple { background: #8b7cb3; }
+.cc-card-header.red { background: #c97b7b; }
+.cc-card-header.teal { background: #5a9a9a; }
+.cc-card-content {
+  padding: 12px 14px;
+  overflow-x: auto;
+}
+.cc-section-title {
+  font-weight: 600;
+  color: #555;
+  font-size: 11px;
+  text-transform: uppercase;
+  margin: 12px 0 6px 0;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #eee;
+}
+.cc-section-title:first-child {
+  margin-top: 0;
+}
+.cc-table {
+  width: 100%;
+  font-size: 12px;
+  border-collapse: collapse;
+}
+.cc-table td {
+  padding: 4px 0;
+  vertical-align: top;
+}
+.cc-table td:first-child {
+  color: #666;
+  width: 45%;
+  font-family: 'Monaco', 'Menlo', monospace;
+  font-size: 11px;
+  word-break: break-all;
+}
+.cc-table td:last-child {
+  word-break: break-word;
+}
+.cc-table td:last-child {
+  color: #444;
+}
+.cc-code {
+  background: #f0f0f0;
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-family: 'Monaco', 'Menlo', monospace;
+  font-size: 11px;
+  color: #555;
+}
+.cc-badge {
+  display: inline-block;
+  background: #e74c3c;
+  color: #fff;
+  font-size: 9px;
+  padding: 1px 4px;
+  border-radius: 3px;
+  margin-left: 4px;
+  font-weight: bold;
+}
+.cc-note {
+  color: #888;
+  font-size: 11px;
+  font-style: italic;
+}
+</style>
+
+<div class="cc-container">
+
+<div class="cc-header">
+  <h1>⌨️ Claude Code 速查表</h1>
+  <div class="meta">版本: v2.1.81 | 来源: <a target="_blank" rel="noopener" href="https://cc.jiangrzc.cn/">cc.jiangrzc.cn</a> | 最后更新: 2026年3月24日</div>
+</div>
+
+<div class="cc-updates">
+  <div class="cc-updates-title">🆕 最近更新</div>
+  <ul>
+    <li><code>--bare</code> 参数 - 极简无头模式（无 hooks/LSP/插件）</li>
+    <li><code>--channels</code> - 权限转发与 MCP 推送消息</li>
+    <li>effort frontmatter 已支持 skills 与 slash commands</li>
+    <li><code>/fork</code> 已重命名为 <code>/branch</code>（保留别名）</li>
+    <li>SendMessage 可自动恢复已停止的 agents</li>
+  </ul>
+</div>
+
+<div class="cc-grid">
+
+<div class="cc-card">
+  <div class="cc-card-header blue">⌨️ 键盘快捷键</div>
+  <div class="cc-card-content">
+    <div class="cc-section-title">通用控制</div>
+    <table class="cc-table">
+      <tr><td>Ctrl + C</td><td>取消输入/生成</td></tr>
+      <tr><td>Ctrl + D</td><td>退出会话</td></tr>
+      <tr><td>Ctrl + L</td><td>清屏</td></tr>
+      <tr><td>Ctrl + O</td><td>切换详细输出</td></tr>
+      <tr><td>Ctrl + R</td><td>反向搜索历史</td></tr>
+      <tr><td>Ctrl + G</td><td>在编辑器中打开提示词</td></tr>
+      <tr><td>Ctrl + B</td><td>后台运行任务</td></tr>
+      <tr><td>Ctrl + T</td><td>切换任务列表</td></tr>
+      <tr><td>Ctrl + V</td><td>粘贴图片</td></tr>
+      <tr><td>Ctrl + F</td><td>杀死后台 agents（连按2次）</td></tr>
+      <tr><td>Esc + Esc</td><td>回退/撤销</td></tr>
+    </table>
+    <div class="cc-section-title">模式切换</div>
+    <table class="cc-table">
+      <tr><td>⇧ Tab</td><td>循环切换权限模式</td></tr>
+      <tr><td>⌥ P</td><td>切换模型</td></tr>
+      <tr><td>⌥ T</td><td>切换思考模式</td></tr>
+    </table>
+    <div class="cc-section-title">输入</div>
+    <table class="cc-table">
+      <tr><td>\ Enter</td><td>换行（快捷）</td></tr>
+      <tr><td>Ctrl + J</td><td>换行（控制序列）</td></tr>
+    </table>
+    <div class="cc-section-title">前缀</div>
+    <table class="cc-table">
+      <tr><td>/</td><td>Slash 命令</td></tr>
+      <tr><td>!</td><td>直接执行 bash</td></tr>
+      <tr><td>@</td><td>文件提及 + 自动补全</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="cc-card">
+  <div class="cc-card-header orange">⚡ Slash 命令</div>
+  <div class="cc-card-content">
+    <div class="cc-section-title">会话</div>
+    <table class="cc-table">
+      <tr><td>/clear</td><td>清空对话</td></tr>
+      <tr><td>/compact [focus]</td><td>压缩上下文</td></tr>
+      <tr><td>/resume</td><td>恢复/切换会话</td></tr>
+      <tr><td>/rename [name]</td><td>为当前会话命名</td></tr>
+      <tr><td>/branch [name]</td><td>分叉对话（/fork 别名）</td></tr>
+      <tr><td>/cost</td><td>Token 使用统计</td></tr>
+      <tr><td>/context</td><td>可视化上下文（网格）</td></tr>
+      <tr><td>/diff</td><td>交互式 diff 查看器</td></tr>
+      <tr><td>/copy</td><td>复制上一条回复</td></tr>
+      <tr><td>/export</td><td>导出对话</td></tr>
+    </table>
+    <div class="cc-section-title">配置</div>
+    <table class="cc-table">
+      <tr><td>/config</td><td>打开设置</td></tr>
+      <tr><td>/model [model]</td><td>切换模型（←→ 调节 effort）</td></tr>
+      <tr><td>/fast [on|off]</td><td>切换快速模式</td></tr>
+      <tr><td>/vim</td><td>切换 vim 模式</td></tr>
+      <tr><td>/theme</td><td>更改颜色主题</td></tr>
+      <tr><td>/permissions</td><td>查看/更新权限</td></tr>
+      <tr><td>/effort [level]</td><td>设置 effort <span class="cc-badge">NEW</span></td></tr>
+      <tr><td>/color [color]</td><td>设置提示栏颜色</td></tr>
+      <tr><td>/keybindings</td><td>自定义键盘快捷键</td></tr>
+      <tr><td>/terminal-setup</td><td>配置终端快捷键</td></tr>
+    </table>
+    <div class="cc-section-title">工具</div>
+    <table class="cc-table">
+      <tr><td>/init</td><td>创建 CLAUDE.md</td></tr>
+      <tr><td>/memory</td><td>编辑 CLAUDE.md 文件</td></tr>
+      <tr><td>/mcp</td><td>管理 MCP 服务器</td></tr>
+      <tr><td>/hooks</td><td>管理 hooks</td></tr>
+      <tr><td>/skills</td><td>列出可用 skills</td></tr>
+      <tr><td>/agents</td><td>管理 agents</td></tr>
+      <tr><td>/chrome</td><td>Chrome 集成</td></tr>
+      <tr><td>/reload-plugins</td><td>热重载插件</td></tr>
+      <tr><td>/add-dir &lt;path&gt;</td><td>添加工作目录</td></tr>
+    </table>
+    <div class="cc-section-title">特殊功能</div>
+    <table class="cc-table">
+      <tr><td>/btw &lt;question&gt;</td><td>侧边问题（不带上下文）</td></tr>
+      <tr><td>/plan [desc]</td><td>Plan 模式（+ 自动开始）</td></tr>
+      <tr><td>/loop [interval]</td><td>安排周期任务</td></tr>
+      <tr><td>/voice</td><td>按住说话语音（20 种语言）</td></tr>
+      <tr><td>/doctor</td><td>诊断安装</td></tr>
+      <tr><td>/pr-comments [PR]</td><td>获取 GitHub PR 评论</td></tr>
+      <tr><td>/stats</td><td>使用 streak 和偏好</td></tr>
+      <tr><td>/insights</td><td>分析会话报告</td></tr>
+      <tr><td>/desktop</td><td>继续到 Desktop 应用</td></tr>
+      <tr><td>/remote-control</td><td>连接 claude.ai/code <span class="cc-badge">NEW</span></td></tr>
+      <tr><td>/usage</td><td>套餐限额与速率状态</td></tr>
+      <tr><td>/schedule</td><td>云端计划任务</td></tr>
+      <tr><td>/security-review</td><td>变更的安全分析</td></tr>
+      <tr><td>/help</td><td>显示帮助 + 命令</td></tr>
+      <tr><td>/feedback</td><td>提交反馈（别名：/bug）</td></tr>
+      <tr><td>/release-notes</td><td>查看完整更新日志</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="cc-card">
+  <div class="cc-card-header teal">🔌 MCP 服务器</div>
+  <div class="cc-card-content">
+    <div class="cc-section-title">添加服务器</div>
+    <table class="cc-table">
+      <tr><td>--transport http</td><td>远程 HTTP（推荐）</td></tr>
+      <tr><td>--transport stdio</td><td>本地进程</td></tr>
+      <tr><td>--transport sse</td><td>远程 SSE</td></tr>
+    </table>
+    <div class="cc-section-title">作用域</div>
+    <table class="cc-table">
+      <tr><td>Local</td><td>.claude.json（单项目）</td></tr>
+      <tr><td>Project</td><td>.mcp.json（共享/VCS）</td></tr>
+      <tr><td>User</td><td>~/.claude.json（全局）</td></tr>
+    </table>
+    <div class="cc-section-title">管理</div>
+    <table class="cc-table">
+      <tr><td>/mcp</td><td>交互式界面</td></tr>
+      <tr><td>claude mcp list</td><td>列出所有服务器</td></tr>
+      <tr><td>claude mcp serve</td><td>将 CC 作为 MCP 服务器</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="cc-card">
+  <div class="cc-card-header purple">🧠 Skills 与 Agents</div>
+  <div class="cc-card-content">
+    <div class="cc-section-title">内置 Skills</div>
+    <table class="cc-table">
+      <tr><td>/simplify</td><td>代码审查（3 个并行 agents）</td></tr>
+      <tr><td>/batch</td><td>大规模并行修改（5-30 个 worktrees）</td></tr>
+      <tr><td>/debug [desc]</td><td>根据调试日志排障</td></tr>
+      <tr><td>/loop [interval]</td><td>周期性计划任务</td></tr>
+      <tr><td>/claude-api</td><td>加载 API + SDK 参考</td></tr>
+    </table>
+    <div class="cc-section-title">自定义 Skill 位置</div>
+    <table class="cc-table">
+      <tr><td>.claude/skills/&lt;name&gt;/</td><td>项目 skills</td></tr>
+      <tr><td>~/.claude/skills/&lt;name&gt;/</td><td>个人 skills</td></tr>
+    </table>
+    <div class="cc-section-title">Skill Frontmatter</div>
+    <table class="cc-table">
+      <tr><td>description</td><td>自动触发说明</td></tr>
+      <tr><td>allowed-tools</td><td>跳过权限提示</td></tr>
+      <tr><td>model</td><td>为 skill 覆盖模型</td></tr>
+      <tr><td>effort</td><td>覆盖 effort 等级 <span class="cc-badge">NEW</span></td></tr>
+      <tr><td>context: fork</td><td>在 subagent 中运行</td></tr>
+      <tr><td>$ARGUMENTS</td><td>用户输入占位符</td></tr>
+      <tr><td>${CLAUDE_SKILL_DIR}</td><td>Skill 自身目录</td></tr>
+      <tr><td>!`cmd`</td><td>动态上下文注入</td></tr>
+    </table>
+    <div class="cc-section-title">内置 Agents</div>
+    <table class="cc-table">
+      <tr><td>Explore</td><td>快速只读（Haiku）</td></tr>
+      <tr><td>Plan</td><td>为 plan 模式调研</td></tr>
+      <tr><td>General</td><td>完整工具，复杂任务</td></tr>
+      <tr><td>Bash</td><td>独立上下文终端</td></tr>
+    </table>
+    <div class="cc-section-title">Agent Frontmatter</div>
+    <table class="cc-table">
+      <tr><td>permissionMode</td><td>default/acceptEdits/plan/dontAsk/bypass</td></tr>
+      <tr><td>isolation: worktree</td><td>在 git worktree 中运行</td></tr>
+      <tr><td>memory: user|project</td><td>持久记忆</td></tr>
+      <tr><td>background: true</td><td>后台任务</td></tr>
+      <tr><td>maxTurns</td><td>限制 agentic 轮数</td></tr>
+      <tr><td>SendMessage</td><td>恢复 agents（替代 resume）<span class="cc-badge">NEW</span></td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="cc-card">
+  <div class="cc-card-header green">📁 记忆与文件</div>
+  <div class="cc-card-content">
+    <div class="cc-section-title">CLAUDE.md 位置</div>
+    <table class="cc-table">
+      <tr><td>./CLAUDE.md</td><td>项目级（团队共享）</td></tr>
+      <tr><td>~/.claude/CLAUDE.md</td><td>个人级（所有项目）</td></tr>
+      <tr><td>/etc/claude-code/</td><td>托管级（组织范围）</td></tr>
+    </table>
+    <div class="cc-section-title">规则与导入</div>
+    <table class="cc-table">
+      <tr><td>.claude/rules/*.md</td><td>项目规则</td></tr>
+      <tr><td>~/.claude/rules/*.md</td><td>用户规则</td></tr>
+      <tr><td>paths:</td><td>frontmatter 路径专用规则</td></tr>
+      <tr><td>@path/to/file</td><td>在 CLAUDE.md 中导入</td></tr>
+    </table>
+    <div class="cc-section-title">自动记忆</div>
+    <table class="cc-table">
+      <tr><td>~/.claude/projects/&lt;proj&gt;/memory/</td><td>自动加载目录</td></tr>
+      <tr><td>MEMORY.md + topic 文件</td><td>自动加载</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="cc-card">
+  <div class="cc-card-header red">⚙️ 工作流与技巧</div>
+  <div class="cc-card-content">
+    <div class="cc-section-title">Plan 模式</div>
+    <table class="cc-table">
+      <tr><td>⇧ Tab</td><td>普通 → 自动接受 → Plan</td></tr>
+      <tr><td>--permission-mode plan</td><td>以 plan 模式启动</td></tr>
+    </table>
+    <div class="cc-section-title">思考与 Effort</div>
+    <table class="cc-table">
+      <tr><td>⌥ T</td><td>开关思考模式</td></tr>
+      <tr><td>"ultrathink"</td><td>本轮最高 effort</td></tr>
+      <tr><td>Ctrl + O</td><td>查看思考过程（详细）</td></tr>
+      <tr><td>/effort</td><td>○ 低 · ◐ 中 · ● 高 <span class="cc-badge">NEW</span></td></tr>
+    </table>
+    <div class="cc-section-title">Git Worktrees</div>
+    <table class="cc-table">
+      <tr><td>--worktree name</td><td>每个功能独立分支工作区</td></tr>
+      <tr><td>isolation: worktree</td><td>Agent 在独立 worktree 中运行</td></tr>
+      <tr><td>sparsePaths</td><td>仅 checkout 所需目录 <span class="cc-badge">NEW</span></td></tr>
+      <tr><td>/batch</td><td>自动创建 worktrees</td></tr>
+    </table>
+    <div class="cc-section-title">语音模式</div>
+    <table class="cc-table">
+      <tr><td>/voice</td><td>启用按住说话</td></tr>
+      <tr><td>Space (hold)</td><td>按住录音，松开发送</td></tr>
+      <tr><td>20 languages</td><td>英/西/法/德/捷/波…</td></tr>
+    </table>
+    <div class="cc-section-title">上下文管理</div>
+    <table class="cc-table">
+      <tr><td>/context</td><td>使用情况 + 优化建议</td></tr>
+      <tr><td>/compact [focus]</td><td>带焦点压缩</td></tr>
+      <tr><td>Auto-compact</td><td>约 95% 容量自动压缩</td></tr>
+      <tr><td>1M context</td><td>Opus 4.6（Max/Team/Ent）</td></tr>
+      <tr><td>CLAUDE.md</td><td>压缩后仍保留！</td></tr>
+    </table>
+    <div class="cc-section-title">会话高阶技巧</div>
+    <table class="cc-table">
+      <tr><td>claude -c</td><td>继续最近一次对话</td></tr>
+      <tr><td>claude -r "name"</td><td>按名称恢复</td></tr>
+      <tr><td>/btw question</td><td>侧边问题，不占上下文</td></tr>
+    </table>
+    <div class="cc-section-title">SDK / 无头模式</div>
+    <table class="cc-table">
+      <tr><td>claude -p "query"</td><td>非交互运行</td></tr>
+      <tr><td>--output-format json</td><td>结构化输出</td></tr>
+      <tr><td>--max-budget-usd 5</td><td>成本上限</td></tr>
+      <tr><td>cat file | claude -p</td><td>管道输入</td></tr>
+    </table>
+    <div class="cc-section-title">调度与远程</div>
+    <table class="cc-table">
+      <tr><td>/loop 5m msg</td><td>周期任务</td></tr>
+      <tr><td>/rc</td><td>远程控制</td></tr>
+      <tr><td>--remote</td><td>claude.ai 上的网页会话</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="cc-card">
+  <div class="cc-card-header" style="background: #6b8e9f;">💻 CLI 与 Flags</div>
+  <div class="cc-card-content">
+    <div class="cc-section-title">核心命令</div>
+    <table class="cc-table">
+      <tr><td>claude</td><td>交互式</td></tr>
+      <tr><td>claude "q"</td><td>携带提示词</td></tr>
+      <tr><td>claude -p "q"</td><td>无头</td></tr>
+      <tr><td>claude -c</td><td>继续最近一次</td></tr>
+      <tr><td>claude -r "n"</td><td>恢复</td></tr>
+      <tr><td>claude update</td><td>更新</td></tr>
+    </table>
+    <div class="cc-section-title">关键 Flags</div>
+    <table class="cc-table">
+      <tr><td>--model</td><td>设置模型</td></tr>
+      <tr><td>-w</td><td>Git worktree</td></tr>
+      <tr><td>-n / --name</td><td>会话名</td></tr>
+      <tr><td>--add-dir</td><td>添加目录</td></tr>
+      <tr><td>--agent</td><td>使用 agent</td></tr>
+      <tr><td>--allowedTools</td><td>预批准</td></tr>
+      <tr><td>--output-format</td><td>json/stream</td></tr>
+      <tr><td>--json-schema</td><td>结构化</td></tr>
+      <tr><td>--max-turns</td><td>限制轮数</td></tr>
+      <tr><td>--max-budget-usd</td><td>成本上限</td></tr>
+      <tr><td>--console</td><td>通过 Anthropic Console 认证</td></tr>
+      <tr><td>--verbose</td><td>详细输出</td></tr>
+      <tr><td>--bare</td><td>极简无头模式（无 hooks/LSP）<span class="cc-badge">NEW</span></td></tr>
+      <tr><td>--channels</td><td>权限转发 / MCP 推送 <span class="cc-badge">NEW</span></td></tr>
+      <tr><td>--remote</td><td>网页会话</td></tr>
+      <tr><td>--effort</td><td>low/med/high/max</td></tr>
+      <tr><td>--permission-mode</td><td>plan/default/…</td></tr>
+      <tr><td>--dangerously-skip-permissions</td><td>跳过所有提示 ⚠️</td></tr>
+      <tr><td>--chrome</td><td>Chrome</td></tr>
+    </table>
+    <div class="cc-section-title">权限模式</div>
+    <table class="cc-table">
+      <tr><td>default</td><td>询问</td></tr>
+      <tr><td>acceptEdits</td><td>自动接受编辑</td></tr>
+      <tr><td>plan</td><td>只读</td></tr>
+      <tr><td>dontAsk</td><td>除允许外全部拒绝</td></tr>
+      <tr><td>bypassPermissions</td><td>跳过全部</td></tr>
+      <tr><td>--dangerously-skip-permissions</td><td>CLI 参数</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="cc-card">
+  <div class="cc-card-header" style="background: #9a8a7a;">⚙️ 配置与环境变量</div>
+  <div class="cc-card-content">
+    <div class="cc-section-title">配置文件</div>
+    <table class="cc-table">
+      <tr><td>~/.claude/settings.json</td><td>用户设置</td></tr>
+      <tr><td>.claude/settings.json</td><td>项目（共享）</td></tr>
+      <tr><td>.claude/settings.local.json</td><td>仅本地</td></tr>
+      <tr><td>~/.claude.json</td><td>OAuth、MCP、状态</td></tr>
+      <tr><td>.mcp.json</td><td>项目 MCP 服务器</td></tr>
+    </table>
+    <div class="cc-section-title">关键设置</div>
+    <table class="cc-table">
+      <tr><td>modelOverrides</td><td>将模型选择器映射到自定义 ID</td></tr>
+      <tr><td>autoMemoryDirectory</td><td>自定义记忆目录</td></tr>
+      <tr><td>worktree.sparsePaths</td><td>Sparse checkout 目录 <span class="cc-badge">NEW</span></td></tr>
+    </table>
+    <div class="cc-section-title">关键环境变量</div>
+    <table class="cc-table">
+      <tr><td>ANTHROPIC_API_KEY</td><td>API 密钥</td></tr>
+      <tr><td>ANTHROPIC_MODEL</td><td>默认模型</td></tr>
+      <tr><td>CLAUDE_CODE_EFFORT_LEVEL</td><td>低/中/高</td></tr>
+      <tr><td>MAX_THINKING_TOKENS</td><td>0 = 关闭思考</td></tr>
+      <tr><td>CLAUDE_CODE_MAX_OUTPUT_TOKENS</td><td>默认 32K</td></tr>
+      <tr><td>ANTHROPIC_CUSTOM_MODEL_OPTION</td><td>自定义 /model 条目</td></tr>
+      <tr><td>CLAUDE_CODE_PLUGIN_SEED_DIR</td><td>多个插件种子目录</td></tr>
+      <tr><td>CLAUDECODE</td><td>检测 CC shell（=1）</td></tr>
+      <tr><td>IS_DEMO</td><td>演示模式（隐藏邮箱/组织）</td></tr>
+      <tr><td>CLAUDE_CODE_DISABLE_CRON</td><td>禁用定时任务</td></tr>
+    </table>
+  </div>
+</div>
+
+</div>
+
+</div>
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+                <div class="icon arrow-left"></div>
+                <div class="post-link">
+                    <a href="/2026/05/13/Spec-Workflow/">Prev</a>
+                </div>
+            
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/2026/03/29/Harness-Engineering-%E5%8F%AF%E9%9D%A0%E5%81%9A%E4%BA%8B/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+     
+
+     
+    
+    
+
+</div>
+     
+  
+</article>
+          </div>
+        
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+            
+                Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> & <a target="_blank" rel="noopener" href="https://github.com/zoeingwingkei/frame/">Frame</a>
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+    
+
+  </body>
+</html>
