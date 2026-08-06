@@ -146,7 +146,7 @@
     </div>
     <div class="post-img">
         
-            <img src="/2026/08/04/%E3%80%8ATau-Agent-%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E3%80%8Bloop-%E8%AF%A6%E8%A7%A3/cover.jpg" alt="featured_image">
+            <img src="/2026/08/04/%E3%80%8ATau-Agent-%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E3%80%8Bloop-%E8%AF%A6%E8%A7%A3/image.png" alt="featured_image">
               
     </div>
 </div>
@@ -156,10 +156,10 @@
 <hr>
 <h2 id="一、文件全貌：它到底在做什么"><a href="#一、文件全貌：它到底在做什么" class="headerlink" title="一、文件全貌：它到底在做什么"></a>一、文件全貌：它到底在做什么</h2><p>一句话：<code>loop.py</code> 实现了一个**「模型说话 → 工具执行 → 再把结果喂回模型」的无限循环**，并且在每一小步都向外抛 <code>AgentEvent</code>，让前端去渲染。</p>
 <p>整个文件导出的核心就是一个异步生成器函数：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">run_agent_loop</span>(<span class="params">...</span>) -&gt; AsyncIterator[AgentEvent]:</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">run_agent_loop</span>(<span class="params">... </span>) -&gt; AsyncIterator[AgentEvent]:</span><br></pre></td></tr></table></figure>
 
 <p>注意它的返回类型是 <code>AsyncIterator[AgentEvent]</code>——这正好呼应第一篇讲的「<strong>Events are the Contract</strong>」。调用方不需要知道里面发生了什么，只要 <code>async for event in run_agent_loop(...)</code> 不断消费事件就行。</p>
-<p>先看一下它吃进来的关键参数：</p>
+<p>先看一下它吃进来的关键参数： </p>
 <table>
 <thead>
 <tr>
