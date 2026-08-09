@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="John Doe">
+
+
+
+
+
+
+
+<title>《Tau Agent 源码解析》4.harness | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/menu.js"></script>
+    
+    <script src="/js/format.js"></script>
+    
+
+
+
+
+
+
+
+
+
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <div class="site-brand-container">
+        <a href="/">
+          
+            LEO
+          
+        </a>
+      </div>
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()">
+        Menu
+      </div>
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+            
+              <li class="menu-item">
+                <a href="/">主页</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/archives/">文章</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/projects/">项目</a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/tags/">合集</a>
+              </li> 
+                   
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+<script src="/js/menu.js"></script>
+
+
+      <div class="main">
+        
+          <div class="flex-container">
+            <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+                
+                    <span class="post-tag">
+                        <a href="/tags/AI/">
+                            AI
+                        </a>
+                    </span>    
+                           
+            
+        </div>
+        <div class="post-title">
+            
+            
+                《Tau Agent 源码解析》4.harness
+            
+            
+        </div>
+        <span class="post-date">
+            Aug 9, 2026
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <img src="/2026/08/09/%E3%80%8ATau-Agent-%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E3%80%8B4-harness/image.png" alt="featured_image">
+              
+    </div>
+</div>
+    <div class="post-content">
+    <h1 id="从Tau-harness-理解harness-工程"><a href="#从Tau-harness-理解harness-工程" class="headerlink" title="从Tau harness 理解harness 工程"></a>从Tau harness 理解harness 工程</h1><p>什么是 harness。harness 的概念是这样子：Harness 工程（Harness Engineering，又译驾驭工程）是 AI 智能体（AI Agent）时代的系统工程范式。它指为大模型或 Agent 提供并构建运行环境、安全沙箱、约束机制、工具权限与反馈回路的底层基础设施。<br>Harness 就是马鞍，顾名思义，它就是为了限制马的自由发挥，让马来按照人的想法来行动。但是，套上马鞍以后，你是让马赛跑还是让马耕地，这就是工具的事情了。<br>AI 的 Harness 可以理解为<strong>一个小型的 Agent Runtime 工程，它不是模型 Provider，也不是工具实现，而是负责把这些组件组织起来。</strong></p>
+<h1 id="tau-harness"><a href="#tau-harness" class="headerlink" title="tau harness"></a>tau harness</h1><h2 id="tau-Harness-是什么"><a href="#tau-Harness-是什么" class="headerlink" title="tau Harness 是什么"></a>tau Harness 是什么</h2><p>Tau 的结构可以画成：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">┌────────────────────────────┐</span><br><span class="line">│ tau_coding                 │</span><br><span class="line">│ CLI / TUI / CodingSession  │</span><br><span class="line">└──────────────┬─────────────┘</span><br><span class="line">               │ 使用</span><br><span class="line">┌──────────────▼─────────────┐</span><br><span class="line">│ AgentHarness               │</span><br><span class="line">│ 状态、生命周期、事件、队列 │</span><br><span class="line">└──────────────┬─────────────┘</span><br><span class="line">               │ 调用</span><br><span class="line">┌──────────────▼─────────────┐</span><br><span class="line">│ run_agent_loop             │</span><br><span class="line">│ 模型响应和工具调用循环     │</span><br><span class="line">└───────┬─────────────┬──────┘</span><br><span class="line">        │             │</span><br><span class="line">┌───────▼──────┐ ┌────▼───────┐</span><br><span class="line">│ ModelProvider │ │ AgentTool │</span><br><span class="line">│ 调用模型      │ │ 执行动作   │</span><br><span class="line">└───────────────┘ └────────────┘</span><br></pre></td></tr></table></figure>
+
+<p>在 tau 里，整个体系就是这么设计的：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ModelProvider = 大脑的模型通信能力  ：负责“思考”</span><br><span class="line">AgentTool      = 手脚，执行具体动作：负责“行动”</span><br><span class="line">run_agent_loop = 一次任务的执行流程：负责“思考-做事-再思考”</span><br><span class="line">AgentHarness   = 管理整个 Agent 生命周期的运行容器：负责“管理”</span><br></pre></td></tr></table></figure>
+<p>它的设计目标就是：<strong>提供一个与 CLI、TUI、CodingSession 无关的、可以重复使用的 Agent 核心对象。</strong></p>
+<h2 id="Harness-管理哪些内容"><a href="#Harness-管理哪些内容" class="headerlink" title="Harness 管理哪些内容"></a>Harness 管理哪些内容</h2><p>Harness 不把配置散在构造参数里，而是先收进一个 <code>AgentHarnessConfig</code> 数据类：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@dataclass(<span class="params">slots=<span class="literal">True</span></span>)</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">AgentHarnessConfig</span>:</span><br><span class="line">    provider: ModelProvider          <span class="comment"># 大脑（来自 tau_ai，负责思考）</span></span><br><span class="line">    model: <span class="built_in">str</span>                       <span class="comment"># 用哪个模型</span></span><br><span class="line">    system: <span class="built_in">str</span>                      <span class="comment"># 系统提示词</span></span><br><span class="line">    tools: <span class="built_in">list</span>[AgentTool] = field(default_factory=<span class="built_in">list</span>)   <span class="comment"># 手脚（来自 tau_coding，负责行动）</span></span><br><span class="line">    max_turns: <span class="built_in">int</span> | <span class="literal">None</span> = <span class="literal">None</span>     <span class="comment"># 一轮会话最多跑多少 turn，None = 不限</span></span><br><span class="line">    queue_mode: QueueMode = <span class="string">&quot;one_at_a_time&quot;</span>   <span class="comment"># 队列消费模式</span></span><br><span class="line">    before_tool_call: BeforeToolCall | <span class="literal">None</span> = <span class="literal">None</span>  <span class="comment"># 工具执行前钩子</span></span><br><span class="line">    after_tool_call: AfterToolCall | <span class="literal">None</span> = <span class="literal">None</span>    <span class="comment"># 工具执行后钩子</span></span><br></pre></td></tr></table></figure>
+<p>然后在构造方法里，引用到了这个配置对象。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">AgentHarness</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">...</span>):</span><br><span class="line">        <span class="comment">#  provider、model、system、tools</span></span><br><span class="line">        <span class="variable language_">self</span>._config = config</span><br><span class="line">        <span class="comment"># 历史对话</span></span><br><span class="line">        <span class="variable language_">self</span>._messages = <span class="built_in">list</span>(messages)</span><br><span class="line">        <span class="comment"># 谁订阅了 Agent 事件</span></span><br><span class="line">        <span class="variable language_">self</span>._listeners = []</span><br><span class="line">        <span class="comment"># 任务中断信号</span></span><br><span class="line">        <span class="variable language_">self</span>._current_signal = <span class="literal">None</span></span><br><span class="line">        <span class="comment"># 是否在运行中</span></span><br><span class="line">        <span class="variable language_">self</span>._running = <span class="literal">False</span></span><br><span class="line">        <span class="comment"># 插入下一轮工具执行前，优先执行的消息队列</span></span><br><span class="line">        <span class="variable language_">self</span>._steering_queue = deque()</span><br><span class="line">        <span class="comment"># 排队到当前会话的工具执行后，当前会话的所有链路走完，再执行的消息队列</span></span><br><span class="line">        <span class="variable language_">self</span>._follow_up_queue = deque()</span><br></pre></td></tr></table></figure>
+<p>Harness 是餐饮店，Config 是店内配置，比如说厨师、菜单、座位这些信息， Provider&#x2F;Tools 是厨师和锅铲。</p>
+<h2 id="一次任务如何运行"><a href="#一次任务如何运行" class="headerlink" title="一次任务如何运行"></a>一次任务如何运行</h2><p>用户调用：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">for</span> event <span class="keyword">in</span> harness.prompt(<span class="string">&quot;读取 README.md&quot;</span>):</span><br><span class="line">    <span class="built_in">print</span>(event)</span><br></pre></td></tr></table></figure>
+<p>内部流程是：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">prompt()</span><br><span class="line">  ↓</span><br><span class="line">prompt_message()</span><br><span class="line">  ↓</span><br><span class="line">检查是否已经运行</span><br><span class="line">  ↓</span><br><span class="line">修复中断的工具调用</span><br><span class="line">  ↓</span><br><span class="line">设置 _running = <span class="literal">True</span></span><br><span class="line">  ↓</span><br><span class="line">_run()</span><br><span class="line">  ↓</span><br><span class="line">创建取消信号</span><br><span class="line">  ↓</span><br><span class="line">run_agent_loop()</span><br><span class="line">  ↓</span><br><span class="line">持续接收 AgentEvent</span><br><span class="line">  ↓</span><br><span class="line">通知监听器</span><br><span class="line">  ↓</span><br><span class="line">继续 <span class="keyword">yield</span> 给外部</span><br><span class="line">  ↓</span><br><span class="line">任务结束后清理状态</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="运行入口：prompt-continue-run"><a href="#运行入口：prompt-continue-run" class="headerlink" title="运行入口：prompt &#x2F; continue_ &#x2F; _run"></a>运行入口：prompt &#x2F; continue_ &#x2F; _run</h3><p>Harness 对外暴露两种「启动一轮」的方式：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">prompt_message</span>(<span class="params">self, message: AgentMessage</span>) -&gt; AsyncIterator[AgentEvent]:</span><br><span class="line">    <span class="variable language_">self</span>._ensure_not_running()</span><br><span class="line">    <span class="variable language_">self</span>._append_interrupted_tool_results()</span><br><span class="line">    <span class="variable language_">self</span>._running = <span class="literal">True</span></span><br><span class="line">    <span class="keyword">return</span> <span class="variable language_">self</span>._run(prompts=(message,))</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">continue_</span>(<span class="params">self</span>) -&gt; AsyncIterator[AgentEvent]:</span><br><span class="line">    <span class="variable language_">self</span>._ensure_not_running()</span><br><span class="line">    <span class="variable language_">self</span>._append_interrupted_tool_results()</span><br><span class="line">    <span class="variable language_">self</span>._running = <span class="literal">True</span></span><br><span class="line">    <span class="keyword">return</span> <span class="variable language_">self</span>._run()</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong><code>prompt</code> &#x2F; <code>prompt_message</code></strong>：带一条新用户消息启动。</li>
+<li><strong><code>continue_</code></strong>：不带新消息，纯粹让 Agent「接着把刚才没干完的活继续干」。比如你 cancel 了，想让它从断点继续，就调 <code>continue_</code>。</li>
+</ul>
+<p>两者都先调 <code>_ensure_not_running()</code> 防止重入——Harness 是单线运行的（<strong>他是个 code agent，只用单线程来跑</strong>），跑着的时候不能再跑：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">_ensure_not_running</span>(<span class="params">self</span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">    <span class="keyword">if</span> <span class="variable language_">self</span>._running:</span><br><span class="line">        <span class="keyword">raise</span> RuntimeError(</span><br><span class="line">            <span class="string">&quot;AgentHarness is already running; use steer() or follow_up() to queue messages.&quot;</span></span><br><span class="line">        )</span><br></pre></td></tr></table></figure>
+
+<p>这里抛的报错信息本身就是最好的文档：<strong>想中途插话请用 steer &#x2F; follow_up，别直接再开一轮</strong>。这跟前面讲的两条队列设计严丝合缝。</p>
+<p>真正的循环在 <code>_run</code> 里，它本质就是一个 <code>async generator</code>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">_run</span>(<span class="params">self, *, prompts: <span class="type">Sequence</span>[AgentMessage] = (<span class="params"></span>)</span>) -&gt; AsyncIterator[AgentEvent]:</span><br><span class="line">    signal = SimpleCancellationToken()</span><br><span class="line">    <span class="variable language_">self</span>._current_signal = signal</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">async</span> <span class="keyword">for</span> event <span class="keyword">in</span> run_agent_loop(</span><br><span class="line">            provider=<span class="variable language_">self</span>._config.provider,</span><br><span class="line">            model=<span class="variable language_">self</span>._config.model,</span><br><span class="line">            system=<span class="variable language_">self</span>._config.system,</span><br><span class="line">            messages=<span class="variable language_">self</span>._messages,</span><br><span class="line">            prompts=prompts,</span><br><span class="line">            tools=<span class="variable language_">self</span>._config.tools,</span><br><span class="line">            max_turns=<span class="variable language_">self</span>._config.max_turns,</span><br><span class="line">            signal=signal,</span><br><span class="line">            get_steering_messages=<span class="variable language_">self</span>._drain_steering_messages,</span><br><span class="line">            get_follow_up_messages=<span class="variable language_">self</span>._drain_follow_up_messages,</span><br><span class="line">            before_tool_call=<span class="variable language_">self</span>._config.before_tool_call,</span><br><span class="line">            after_tool_call=<span class="variable language_">self</span>._config.after_tool_call,</span><br><span class="line">        ):</span><br><span class="line">            <span class="keyword">await</span> <span class="variable language_">self</span>._notify(event)   <span class="comment"># 先通知订阅者</span></span><br><span class="line">            <span class="keyword">yield</span> event                  <span class="comment"># 再往外抛</span></span><br><span class="line">    <span class="keyword">finally</span>:</span><br><span class="line">        <span class="keyword">if</span> signal.is_cancelled():</span><br><span class="line">            <span class="variable language_">self</span>._append_interrupted_tool_results()</span><br><span class="line">        <span class="keyword">if</span> <span class="variable language_">self</span>._current_signal <span class="keyword">is</span> signal:</span><br><span class="line">            <span class="variable language_">self</span>._current_signal = <span class="literal">None</span></span><br><span class="line">        <span class="variable language_">self</span>._running = <span class="literal">False</span></span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><strong>新建一个 <code>signal</code> 令牌</strong>并挂到 <code>self._current_signal</code>，这样 <code>cancel()</code> 才能在这个生命周期内生效。</li>
+<li><strong>把配置、历史消息、队列、钩子一股脑交给 <code>run_agent_loop</code></strong>（就是你在 <code>agent-loop.md</code> 里详解的那个主循环）。注意 <code>get_steering_messages</code> &#x2F; <code>get_follow_up_messages</code> 传的是两个 drain 方法——循环每需要新指令时就来 drain 队列，queue_mode 在这里生效。</li>
+<li><strong><code>await self._notify(event)</code> 在前，<code>yield event</code> 在后</strong>：每产生一个 <code>AgentEvent</code>，先广播给所有订阅者（TUI 渲染、日志），再 yield 给外部调用方。所谓「事件即契约」，在这里就是一行 <code>notify</code> + 一行 <code>yield</code>。</li>
+<li><strong><code>finally</code> 里的清理</strong>最关键：<ul>
+<li>如果这一轮是<strong>被取消的</strong>（<code>signal.is_cancelled()</code>），调 <code>_append_interrupted_tool_results()</code> 把「没来得及返回结果的工具调用」补成一条错误结果——否则会话历史里会出现「调了工具但没结果」的残缺记录，下次续跑就乱套了（详见下一节）。</li>
+<li>清掉 <code>_current_signal</code>、<code>_running = False</code>，让 Harness 回到可再次启动的状态。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="两条消息队列：steering-与-follow-up"><a href="#两条消息队列：steering-与-follow-up" class="headerlink" title="两条消息队列：steering 与 follow_up"></a>两条消息队列：steering 与 follow_up</h2><p>这是 Harness 最有意思的设计之一。它区分了<strong>两种「插话」意图</strong>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">steer</span>(<span class="params">self, content: <span class="built_in">str</span></span>) -&gt; QueuedMessages:</span><br><span class="line">    <span class="keyword">return</span> <span class="variable language_">self</span>.steer_message(UserMessage(content=content))</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">follow_up</span>(<span class="params">self, content: <span class="built_in">str</span></span>) -&gt; QueuedMessages:</span><br><span class="line">    <span class="keyword">return</span> <span class="variable language_">self</span>.follow_up_message(UserMessage(content=content))</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong><code>steer</code>（掌舵）</strong>：优先级高，会在<strong>下一轮工具执行之前</strong>被插进去。比喻一下——Agent 正要动手拧水管，你喊「先别动，换个扳手」，这就是 steer。</li>
+<li><strong><code>follow_up</code>（跟进）</strong>：优先级低，等<strong>当前这一轮会话的完整链路走完</strong>之后才会被消费。比如 Agent 正在跑一连串工具，你说「跑完这批顺手把日志也清了」，它就等这波结束再处理。</li>
+</ul>
+<p>队列怎么被消费，由 <code>queue_mode</code> 决定：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">_drain_queue</span>(<span class="params">self, queue: deque[AgentMessage]</span>) -&gt; <span class="built_in">tuple</span>[AgentMessage, ...]:</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> queue:</span><br><span class="line">        <span class="keyword">return</span> ()</span><br><span class="line">    <span class="keyword">if</span> <span class="variable language_">self</span>._config.queue_mode == <span class="string">&quot;all&quot;</span>:</span><br><span class="line">        messages = <span class="built_in">tuple</span>(queue)</span><br><span class="line">        queue.clear()</span><br><span class="line">        <span class="keyword">return</span> messages</span><br><span class="line">    <span class="keyword">return</span> (queue.popleft(),)   <span class="comment"># one_at_a_time：一次只取一条</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>&quot;one_at_a_time&quot;</code>：每轮只取队首一条，剩下的留着下一轮再说——适合「逐条引导」，避免一次性塞太多指令冲垮上下文。</li>
+<li><code>&quot;all&quot;</code>：一把全取空——适合「我不管中间过程，把这些要求全带上」的场景。</li>
+</ul>
+<p><code>QueuedMessages</code> 这个只读快照把 <code>steering</code> 和 <code>follow_up</code> 分开放，还提供 <code>count</code> 属性，方便前端展示「当前还有几条待处理消息」：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@dataclass(<span class="params">frozen=<span class="literal">True</span>, slots=<span class="literal">True</span></span>)</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">QueuedMessages</span>:</span><br><span class="line">    steering: <span class="built_in">tuple</span>[AgentMessage, ...] = ()</span><br><span class="line">    follow_up: <span class="built_in">tuple</span>[AgentMessage, ...] = ()</span><br><span class="line"></span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">count</span>(<span class="params">self</span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">len</span>(<span class="variable language_">self</span>.steering) + <span class="built_in">len</span>(<span class="variable language_">self</span>.follow_up)</span><br></pre></td></tr></table></figure>
+
+<p>另外还有 <code>clear_queues()</code>、<code>pop_latest_steering()</code>、<code>pop_latest_follow_up()</code> 这些管理接口——后者用 <code>pop()</code>（从队尾取），意味着「最新插的话优先撤回」，符合直觉。</p>
+<hr>
+<h2 id="取消信号：SimpleCancellationToken"><a href="#取消信号：SimpleCancellationToken" class="headerlink" title="取消信号：SimpleCancellationToken"></a>取消信号：SimpleCancellationToken</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SimpleCancellationToken</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">        <span class="variable language_">self</span>._cancelled = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">cancel</span>(<span class="params">self</span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">        <span class="variable language_">self</span>._cancelled = <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">is_cancelled</span>(<span class="params">self</span>) -&gt; <span class="built_in">bool</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span>._cancelled</span><br></pre></td></tr></table></figure>
+
+<p>这是一个极简的「协作式取消」令牌。它<strong>不是线程中断、也不是异常强杀</strong>，而只是一个布尔标志。循环里的每一步（模型调用、工具执行）会去检查这个标志，发现被置位就主动停下来——这就是「协作式」的含义：礼貌地请求 Agent 收工，而不是暴力打断。</p>
+<p><code>AgentHarness.cancel()</code> 只是把当前这一轮的信号置位：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">cancel</span>(<span class="params">self</span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">    <span class="keyword">if</span> <span class="variable language_">self</span>._current_signal <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">        <span class="variable language_">self</span>._current_signal.cancel()</span><br></pre></td></tr></table></figure>
+
+<p>这对应 Harness Engineering 里的「人类监督」——骑手随时能拉缰绳，但马是按自己的步调优雅停下，不会原地翻车。</p>
+<hr>
+<h2 id="事件订阅：subscribe-notify"><a href="#事件订阅：subscribe-notify" class="headerlink" title="事件订阅：subscribe &#x2F; _notify"></a>事件订阅：subscribe &#x2F; _notify</h2><p>核心层「事件即契约」的落地，靠的就是订阅机制：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">EventListener = <span class="type">Callable</span>[[AgentEvent], Awaitable[<span class="literal">None</span>] | <span class="literal">None</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">subscribe</span>(<span class="params">self, listener: EventListener</span>) -&gt; <span class="type">Callable</span>[[], <span class="literal">None</span>]:</span><br><span class="line">    <span class="variable language_">self</span>._listeners.append(listener)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">unsubscribe</span>() -&gt; <span class="literal">None</span>:</span><br><span class="line">        <span class="keyword">with</span> suppress(ValueError):</span><br><span class="line">            <span class="variable language_">self</span>._listeners.remove(listener)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> unsubscribe</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">_notify</span>(<span class="params">self, event: AgentEvent</span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">    <span class="keyword">for</span> listener <span class="keyword">in</span> <span class="built_in">list</span>(<span class="variable language_">self</span>._listeners):</span><br><span class="line">        result = listener(event)</span><br><span class="line">        <span class="keyword">if</span> isawaitable(result):</span><br><span class="line">            <span class="keyword">await</span> result</span><br></pre></td></tr></table></figure>
+
+<p>几个关键点：</p>
+<ul>
+<li><strong><code>EventListener</code> 可以是普通函数，也可以是 <code>async</code> 函数</strong>。<code>_notify</code> 用 <code>isawaitable</code> 判断，如果是协程就 <code>await</code>，否则直接调用。这样 TUI 的渲染器（可能要 <code>await</code> 更新界面）和普通日志回调都能挂上来。</li>
+<li><strong><code>subscribe</code> 返回一个 <code>unsubscribe</code> 闭包</strong>：订阅者拿到的不是什么神秘的句柄，就是一个能把自己摘掉的函数。<code>with suppress(ValueError)</code> 保证重复取消也不报错。</li>
+<li><strong><code>list(self._listeners)</code> 复制一遍再遍历</strong>：防止监听器在回调里又 <code>unsubscribe</code> 导致迭代时列表长度变化报错。这是写异步事件系统时很常见的防御手段。</li>
+<li>**<code>Harness 自己不消费事件**——它只负责把 </code>AgentEvent&#96; 转发出去。渲染、打印、落盘全是订阅者的事。这正是第一篇说的「Events are the Contract」。</li>
+</ul>
+<hr>
+<h2 id="中断恢复：-append-interrupted-tool-results"><a href="#中断恢复：-append-interrupted-tool-results" class="headerlink" title="中断恢复：_append_interrupted_tool_results"></a>中断恢复：_append_interrupted_tool_results</h2><p>这是「让 Agent 跑得稳、不会翻车」的具体体现。当用户 <code>cancel()</code> 时，很可能 Agent 刚发出一个工具调用、但工具还没返回。如果不处理，历史消息里就会留下一个「悬空」的 <code>AssistantMessage.tool_calls</code> 没有对应的 <code>ToolResultMessage</code>。模型下次看到这段历史会困惑。</p>
+<p>Harness 的做法是<strong>自动补一条错误结果</strong>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">_append_interrupted_tool_results</span>(<span class="params">self</span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">    returned_ids = &#123;</span><br><span class="line">        message.tool_call_id</span><br><span class="line">        <span class="keyword">for</span> message <span class="keyword">in</span> <span class="variable language_">self</span>._messages</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">isinstance</span>(message, ToolResultMessage)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> message <span class="keyword">in</span> <span class="built_in">tuple</span>(<span class="variable language_">self</span>._messages):</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> <span class="built_in">isinstance</span>(message, AssistantMessage):</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        <span class="keyword">for</span> call <span class="keyword">in</span> message.tool_calls:</span><br><span class="line">            <span class="keyword">if</span> call.<span class="built_in">id</span> <span class="keyword">in</span> returned_ids:</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            returned_ids.add(call.<span class="built_in">id</span>)</span><br><span class="line">            <span class="variable language_">self</span>._messages.append(</span><br><span class="line">                ToolResultMessage(</span><br><span class="line">                    tool_call_id=call.<span class="built_in">id</span>,</span><br><span class="line">                    tool_name=call.name,</span><br><span class="line">                    content=[TextContent(text=<span class="string">&quot;Tool call interrupted by user&quot;</span>)],</span><br><span class="line">                    is_error=<span class="literal">True</span>,</span><br><span class="line">                )</span><br><span class="line">            )</span><br></pre></td></tr></table></figure>
+
+<p>逻辑拆解：</p>
+<ul>
+<li>先扫一遍已有的 <code>ToolResultMessage</code>，收集「已经正常返回过结果的 <code>tool_call_id</code>」到 <code>returned_ids</code>。</li>
+<li>再遍历所有 <code>AssistantMessage</code> 里的 <code>tool_calls</code>，凡是 id 不在 <code>returned_ids</code> 里的，说明「调了但没回音」——就补一条 <code>ToolResultMessage</code>，内容是 <code>&quot;Tool call interrupted by user&quot;</code>，并标 <code>is_error=True</code>。</li>
+<li>用 <code>tuple(self._messages)</code> 复制一遍再遍历，避免遍历时 <code>append</code> 修改原列表导致无限循环。</li>
+<li>用 <code>returned_ids</code> 集合做去重，保证同一条 call 只补一次。</li>
+</ul>
+<p>这一手很「Harness Engineering」：<strong>用确定性的规则（补错误结果）代替对模型的软建议</strong>，保证会话历史永远是「工具调用必有结果」的自洽状态，下次 <code>continue_()</code> 续跑时模型不会踩坑。</p>
+<hr>
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/2026/08/05/%E3%80%8ATau-Agent-%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E3%80%8B3-1-%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%80%E4%B8%AA-provider/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+     
+
+     
+    
+    
+
+</div>
+     
+  
+</article>
+          </div>
+        
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+            
+                Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> & <a target="_blank" rel="noopener" href="https://github.com/zoeingwingkei/frame/">Frame</a>
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+    
+
+  </body>
+</html>
