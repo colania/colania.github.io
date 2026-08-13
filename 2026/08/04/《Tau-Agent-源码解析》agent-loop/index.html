@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
   <head>
     <meta charset="UTF-8">
 <meta name="viewport"
@@ -135,7 +135,7 @@
             
         </div>
         <span class="post-date">
-            Aug 4, 2026
+            8月 4, 2026
         </span>
     </div>
     <div class="post-img">
@@ -144,6 +144,7 @@
               
     </div>
 </div>
+
     <div class="post-content">
     <p>在<a href="/2026/08/03/%E3%80%8ATau-Agent-%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E3%80%8B%E8%AE%A4%E8%AF%86-Tau/">第一篇《认识 Tau》</a>里，我们建立了 Tau 的整体心智模型：一次请求从 <code>CodingSession.prompt()</code> 一路走到 <code>run_agent_loop()</code>，再靠 <code>AgentEvent</code> 事件流把结果甩回前端。但 <code>run_agent_loop()</code> 内部到底是怎么一轮一轮跑的，我们留了个坑。</p>
 <p>这一篇就专门把 <code>tau_agent/loop.py</code> 拆开讲。这个文件不大，注释里写得很直白——<strong>“Pure Pi-compatible provider&#x2F;tool agent loop”</strong>（一个纯正的、和 Pi 兼容的 provider&#x2F;tool 主循环）。它不依赖任何 CLI 或 TUI，是核心层 <code>tau_agent</code> 里最纯粹的一段逻辑。</p>

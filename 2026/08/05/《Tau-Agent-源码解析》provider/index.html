@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
   <head>
     <meta charset="UTF-8">
 <meta name="viewport"
@@ -135,7 +135,7 @@
             
         </div>
         <span class="post-date">
-            Aug 5, 2026
+            8月 5, 2026
         </span>
     </div>
     <div class="post-img">
@@ -144,6 +144,7 @@
               
     </div>
 </div>
+
     <div class="post-content">
     <p>本来今天想的是写<code>tools.py</code>这个文件，但是心血来潮，突然想先了解一下<code>provider.py</code>这个文件，隐隐感觉知道大模型怎么返回 <code>tools</code> 以后，再去看 <code>tools</code> 会更加清晰一点。而且通过今天的了解，对于 Codex、Claude Code 这种编码工具调用大模型，有了更深的一些理解。那么，现在就开始吧。</p>
 <h2 id="一、provider-文件全貌：它到底在做什么"><a href="#一、provider-文件全貌：它到底在做什么" class="headerlink" title="一、provider 文件全貌：它到底在做什么"></a>一、provider 文件全貌：它到底在做什么</h2><p>provider 这一层（对应第一篇说的 <code>tau_ai</code>）做的事，和「封装成 <code>AgentTool</code>」正好相反——它<strong>不生产工具</strong>，而是把 <code>tau_coding</code> 层注册进来的 <code>AgentTool</code> 和 <code>AgentMessage</code> <strong>翻译</strong>成各家 API 的请求格式，再把模型流式返回的原始 chunk <strong>解析封装</strong>回 Tau 统一的 <code>AssistantMessage</code> &#x2F; <code>ToolCall</code>。一句话：<strong>它是 Tau 和不同大模型之间的翻译官。</strong></p>
