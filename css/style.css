@@ -2557,109 +2557,16 @@ body {
 .site-nav .menu-item:hover a {
   color: var(--menu-color, #30433a);
 }
-.site-nav .menu-item:hover .menu-symbol {
-  color: var(--menu-color, currentColor);
+.site-nav .menu-item:hover .menu-image {
+  transform: translateY(-1px) rotate(-4deg) scale(1.1);
 }
-.menu-symbol {
-  width: 0.76rem;
-  height: 0.76rem;
-  color: currentColor;
-}
-.menu-symbol-home {
-  margin-top: 0.08rem;
-  border-radius: 0.12rem;
-  background: currentColor;
-}
-.menu-symbol-home::before {
-  content: '';
-  position: absolute;
-  top: -0.15rem;
-  left: 0.1rem;
-  width: 0.52rem;
-  height: 0.52rem;
-  border-radius: 0.12rem;
-  background: currentColor;
-  transform: rotate(45deg);
-}
-.menu-symbol-home::after {
-  content: '';
-  position: absolute;
-  z-index: 1;
-  bottom: 0;
-  left: 0.29rem;
-  width: 0.18rem;
-  height: 0.33rem;
-  border-radius: 0.06rem 0.06rem 0 0;
-  background: rgba(255,255,255,0.85);
-}
-.menu-symbol-calendar {
-  border: 1.4px solid currentColor;
-  border-radius: 0.16rem;
-}
-.menu-symbol-calendar::before {
-  content: '';
-  position: absolute;
-  top: 0.16rem;
-  left: 0.08rem;
-  right: 0.08rem;
-  height: 1.3px;
-  background: currentColor;
-}
-.menu-symbol-calendar::after {
-  content: '';
-  position: absolute;
-  top: -0.12rem;
-  left: 0.15rem;
-  width: 0.13rem;
-  height: 0.2rem;
-  border-radius: 999px;
-  background: currentColor;
-  box-shadow: 0.32rem 0 currentColor;
-}
-.menu-symbol-note {
-  border: 1.4px solid currentColor;
-  border-radius: 0.13rem;
-}
-.menu-symbol-note::after {
-  content: '';
-  position: absolute;
-  top: 0.2rem;
-  left: 0.13rem;
-  width: 0.47rem;
-  height: 1.3px;
-  background: currentColor;
-  box-shadow: 0 0.17rem 0 currentColor;
-}
-.menu-symbol-spark {
-  width: 0.62rem;
-  height: 0.62rem;
-  margin: 0.07rem;
-  border-radius: 0.1rem;
-  background: currentColor;
-  transform: rotate(45deg) scale(0.78);
-}
-.menu-symbol-folder {
-  height: 0.54rem;
-  margin-top: 0.18rem;
-  border-radius: 0.1rem;
-  background: currentColor;
-}
-.menu-symbol-folder::before {
-  content: '';
-  position: absolute;
-  top: -0.16rem;
-  left: 0.08rem;
-  width: 0.36rem;
-  height: 0.2rem;
-  border-radius: 0.08rem 0.08rem 0 0;
-  background: currentColor;
-}
-.menu-symbol-dot {
-  width: 0.46rem;
-  height: 0.46rem;
-  margin: 0.15rem;
-  border-radius: 50%;
-  background: currentColor;
+.menu-image {
+  display: block;
+  width: 1.35rem;
+  height: 1.35rem;
+  flex: 0 0 1.35rem;
+  object-fit: contain;
+  transition: transform 180ms ease;
 }
 .header-contact {
   display: flex;
