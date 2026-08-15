@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="John Doe">
+
+
+
+
+
+
+
+<title>AI 时代业务编程，为什么 DDD 是最好的选择 | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/menu.js"></script>
+    
+    <script src="/js/format.js"></script>
+    
+
+
+
+
+
+
+
+
+
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+          
+            
+              <li class="menu-item">
+                <a href="/"><img class="menu-image" src="/nav-icons/cat.png" alt="" aria-hidden="true"><span>主页</span></a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/weekly/"><img class="menu-image" src="/nav-icons/tea.png" alt="" aria-hidden="true"><span>周报</span></a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/archives/"><img class="menu-image" src="/nav-icons/record-player.png" alt="" aria-hidden="true"><span>文章</span></a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/projects/"><img class="menu-image" src="/nav-icons/lamp.png" alt="" aria-hidden="true"><span>项目</span></a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/tags/"><img class="menu-image" src="/nav-icons/plant.png" alt="" aria-hidden="true"><span>合集</span></a>
+              </li> 
+                   
+          
+          
+        </ul>
+      </nav>
+      
+      <div class="header-contact">
+        <a href="https://github.com/colania" target="_blank" rel="noopener" aria-label="GitHub：colania" title="GitHub">
+          <img class="contact-image" src="/github-fill.png" alt="" aria-hidden="true">
+        </a>
+      </div>
+      
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()" aria-label="展开导航" role="button" tabindex="0">
+        <span class="menu-toggle-symbol" aria-hidden="true"></span>
+        <span>菜单</span>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="/js/menu.js"></script>
+
+
+      <div class="main">
+        
+          <div class="flex-container">
+            <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+                
+                    <span class="post-tag">
+                        <a href="/tags/AI/">
+                            AI
+                        </a>
+                    </span>    
+                           
+            
+        </div>
+        <div class="post-title">
+            
+            
+                AI 时代业务编程，为什么 DDD 是最好的选择
+            
+            
+        </div>
+        <span class="post-date">
+            8月 12, 2026
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <img src="/2026/08/12/AI-%E6%97%B6%E4%BB%A3%E4%B8%9A%E5%8A%A1%E7%BC%96%E7%A8%8B%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88-DDD-%E6%98%AF%E6%9C%80%E5%A5%BD%E7%9A%84%E9%80%89%E6%8B%A9/image.png" alt="featured_image">
+              
+    </div>
+</div>
+
+    <div class="post-content">
+    <h2 id="一、先说我的核心观点"><a href="#一、先说我的核心观点" class="headerlink" title="一、先说我的核心观点"></a>一、先说我的核心观点</h2><p>AI 时代大规模写业务代码，我越来越确信一件事：<strong>DDD（领域驱动设计）不是”过度设计”，而是给 AI 套上的最好的一道边界。</strong></p>
+<p>这个判断不是从理论推出来的，是从我们实际用 AI 写代码的痛点里长出来的。它其实可以拆成三层：</p>
+<ol>
+<li><strong>领域模型限制边界</strong>——AI 写的代码必须落在领域里，人也能基于领域去读设计，可读性强；</li>
+<li><strong>“固定的人”模糊了，散漫才会失控</strong>——以前代码散归散，但有人兜底；AI 时代谁都能用任意 AI 写一块，可维护性才真正崩；</li>
+<li><strong>通用语言是上下文的锚</strong>——AI 不主动用统一语言，术语就分裂、业务就分散；而<strong>人对业务上下文的思考与总结，才是 AI 时代最值钱的东西</strong>。</li>
+</ol>
+<p>下面一条条展开。</p>
+<hr>
+<h2 id="二、第一层：领域模型限制边界，可读性是副产品"><a href="#二、第一层：领域模型限制边界，可读性是副产品" class="headerlink" title="二、第一层：领域模型限制边界，可读性是副产品"></a>二、第一层：领域模型限制边界，可读性是副产品</h2><p>DDD 最朴素的作用，是用<strong>领域模型</strong>把系统的边界划出来。一个订单就是订单，一个库存就是库存，谁拥有什么、谁不能碰什么，在模型里写死。</p>
+<p>这件事在 AI 时代特别重要，因为<strong>AI 写代码最需要的是”知道该写在哪里”</strong>。</p>
+<p>当项目预先定义好了领域模型和分层骨架，Agent 拿到的上下文就是一个有形的”格子”：订单逻辑放 <code>Order</code> 聚合根、库存变更走 <code>Inventory.deduct()</code>。AI 没有”决定结构”的自由，它只能往已有的格子里填肉。</p>
+<p>带来的直接好处是<strong>可读性</strong>——这点我反而觉得比”防 AI 写错”更值得说。</p>
+<p>以前我们 review 一段业务代码，是去翻 <code>Controller</code>、翻 <code>Service</code>、翻某个 <code>util</code> 里是不是又藏了一段逻辑。但如果有领域模型，你<strong>直接基于领域去看设计</strong>就行：想理解”下单”就看 <code>Order</code> 和 <code>Inventory</code> 这两个领域对象怎么协作。AI 生成的代码落在这个结构里，人读起来也是顺着领域走的，不是顺着文件层级走的。</p>
+<p>一句话：<strong>领域模型既是给 AI 的边界，也是给人看的地图。</strong></p>
+<hr>
+<h2 id="三、第二层：真正的问题不是-AI-不会写，而是”固定的人”没了"><a href="#三、第二层：真正的问题不是-AI-不会写，而是”固定的人”没了" class="headerlink" title="三、第二层：真正的问题不是 AI 不会写，而是”固定的人”没了"></a>三、第二层：真正的问题不是 AI 不会写，而是”固定的人”没了</h2><p>很多人对 AI 写代码的担忧是”它写不对”。我的观察恰恰相反——</p>
+<blockquote>
+<p><strong>AI 写代码最主要的问题，不是它不会写，而是它写得太过散漫，没有边界。</strong></p>
+</blockquote>
+<p>正常情况下，你让 AI 写一段带业务的前端功能，它很可能直接在 <code>Controller</code>、<code>Service</code> 里把这一串逻辑一口气完成了。就像我们日常最熟悉的那套”三层结构”：表现层、业务层、数据层，但它根本不守层，逻辑随手塞。</p>
+<p>这种散漫，在过去其实<strong>没那么致命</strong>。为什么？因为那时候每一块功能，背后是<strong>固定的人</strong>在维护。张三写的订单模块，张三自己清楚那坨 SQL 藏在哪个 Controller 里，下次需求来了他还知道往哪加。散是散，但有”owner 记忆”兜底，系统不至于乱到不可收拾。</p>
+<p>但 AI 时代，这个”固定的人”开始变得模糊了。</p>
+<p>现在的情况是：<strong>不同的人，用不同的 AI，去实现同一个系统的不同功能。</strong> 你用 Claude Code 加了个下单，他用 Codex 改了库存，她又用 Tau 补了退货。每个 AI 都”正确地”完成了自己那次功能，但没有任何一个 AI（也没有任何一个人）对整个代码库保持连贯的记忆。</p>
+<p>于是可维护性从”有人兜底但乱”退化成”没人兜底且乱”。这才是 AI 时代真正的危机——不是某次写得差，而是<strong>散漫被无限复制、且无人收敛</strong>。</p>
+<p>所以我的解法很直接：<strong>用边界、用领域去限制 AI 的自由。</strong> DDD 提供的分层、聚合根、限界上下文，本质就是一套”不允许你乱写”的硬约束。AI 可以在格子里自由发挥，但不能跨格子。</p>
+<hr>
+<h2 id="四、第三层：通用语言是上下文的锚，而人负责提供上下文"><a href="#四、第三层：通用语言是上下文的锚，而人负责提供上下文" class="headerlink" title="四、第三层：通用语言是上下文的锚，而人负责提供上下文"></a>四、第三层：通用语言是上下文的锚，而人负责提供上下文</h2><p>第二点里还有一个更深的隐患，跟 DDD 的”通用语言（Ubiquitous Language）”直接相关。</p>
+<h3 id="4-1-AI-不会主动用通用语言，术语就分裂了"><a href="#4-1-AI-不会主动用通用语言，术语就分裂了" class="headerlink" title="4.1 AI 不会主动用通用语言，术语就分裂了"></a>4.1 AI 不会主动用通用语言，术语就分裂了</h3><p>AI 的本能是”帮你把功能实现出来”，但它<strong>不会用通用语言去构建自己的上下文</strong>。</p>
+<p>举个最典型的例子：你让 AI 写一个”订单”，但不同 AI 接触到的上下文不一样——有的看过电商文档，有的只听过口头需求，有的从历史代码里学到一个旧命名——结果它们生成的”订单实体”根本不是同一个东西：有的叫 <code>Order</code>，有的叫 <code>PurchaseOrder</code>，有的叫 <code>TradeRecord</code>，还有的叫 <code>Bill</code>。</p>
+<p>这会带来两个后果：</p>
+<p><strong>（1）术语分裂，代码读不懂也重构不动。</strong><br>就像 <code>order</code>、<code>purchase order</code>、<code>trade records</code>、<code>bill</code> 这些词会同时存在于一个项目里。新人（包括未来的 AI）根本分不清谁是谁；你想做个重命名或统一，发现要改的地方散在五个文件，还不敢全改——因为你可能改错了那个其实不是一回事的 <code>Bill</code>。</p>
+<p><strong>（2）业务分散，维护时漏项。</strong><br>功能上它们可能都”实现了下单”，但逻辑是分散的。比如你想让”订单状态流转”统一加一个节点，AI 给了你三四个不同的 <code>Order</code> 实体，你只改了其中一个，另外两个 <code>order</code> 实体就被漏掉了。这种 bug 不报错、不崩溃，但悄悄地把业务一致性吃掉了。</p>
+<h3 id="4-2-在-AI-时代，人对业务的总结才是最重要的"><a href="#4-2-在-AI-时代，人对业务的总结才是最重要的" class="headerlink" title="4.2 在 AI 时代，人对业务的总结才是最重要的"></a>4.2 在 AI 时代，人对业务的总结才是最重要的</h3><p>这一层再往下挖，其实触到了一个更本质的判断：</p>
+<blockquote>
+<p><strong>AI 时代，人的思考和对于业务的总结，才是最重要的。</strong></p>
+</blockquote>
+<p>现在给你一个功能，你直接丢给 AI，它能实现，而且实现得不错。但是——这个功能<strong>之前的业务历史是什么、上下文是什么、之后要往哪个方向拓展</strong>——AI 并不关心，它只关心”眼前这次功能怎么完成”。</p>
+<p>这里必须关心的人，是你。</p>
+<p>换句话说：<strong>AI 擅长在给定边界内把事做完，但不擅长定义边界本身，也不擅长维护边界背后的业务脉络。</strong> 通用语言、领域模型、上下文背景，这些”让边界有意义”的东西，得由人来提供。</p>
+<p>所以我的结论是：</p>
+<blockquote>
+<p><strong>在 AI 大规模写业务代码的情况下，我们需要通过衔接上下文、通过业务背景，来规范 AI 写代码的边界能力。</strong></p>
+</blockquote>
+<p>DDD 恰好是做这件事最成熟的方法论：领域模型划出结构边界，通用语言提供上下文锚点。你把它们写进项目里（比如 <code>AGENTS.md</code>、领域术语表、Spec Workflow 的 spec），AI 写出来的代码就不再是”各写各的散沙”，而是”落在同一张地图上的模块”。</p>
+<hr>
+<h2 id="五、串回整个方法论体系"><a href="#五、串回整个方法论体系" class="headerlink" title="五、串回整个方法论体系"></a>五、串回整个方法论体系</h2><p>如果你读过这个博客之前的文章，会发现这条线和它们严丝合缝：</p>
+<ul>
+<li><strong>《Harness Engineering》</strong> 讲 Agent 需要受控环境——本文讲的”领域边界”就是业务层面的受控环境；</li>
+<li><strong>《Spec Workflow》&#x2F; AGENTS.md</strong> 讲用 spec 和项目约定约束 AI——通用语言就是写进这些约定里的”领域词典”；</li>
+<li><strong>《Tau 源码解析》系列</strong> 里 <code>AgentHarness</code> 解耦的哲学——“Harness 管住 Agent 的行为边界，DDD 管住 Agent 的产出边界”。</li>
+</ul>
+<p>一句话收束：<strong>Harness 是 Agent 的缰绳，DDD 是 Agent 产出的缰绳。前者防它乱跑，后者防它写乱——而握缰绳的手，始终是人。</strong></p>
+<hr>
+<h2 id="六、给技术管理者的落地下法"><a href="#六、给技术管理者的落地下法" class="headerlink" title="六、给技术管理者的落地下法"></a>六、给技术管理者的落地下法</h2><p>不是喊一句”上 DDD”就完事，结合上面三层，我给管理者三条可操作的建议：</p>
+<ol>
+<li><strong>先画领域，再让 AI 写</strong>：在 Agent 动手前，由人（架构&#x2F;老手）定好聚合根、限界上下文、分层骨架。这一步省不掉，因为它本来就是”人的业务总结”。</li>
+<li><strong>把通用语言写进 AI 看得见的地方</strong>：维护一份 <code>glossary.md</code> &#x2F; <code>AGENTS.md</code>，明确”订单就叫 Order，不叫其他”，让每个 AI 都从同一份词典起步。</li>
+<li><strong>用”领域 owner”代替”文件 owner”</strong>：AI 时代别再按模块分人，而是按领域分人——每个领域有一个人对业务上下文负责，AI 只是这个人在领域内的执行者。</li>
+</ol>
+<p>ROI 方面有个关键判断：<strong>传统人工开发里，结构债是线性累积的；AI 开发里，结构债是指数累积的</strong>——因为每个 Agent 都在复制前一个 Agent 的散漫。DDD 这道防火墙，在 AI 时代边际收益比人工时代高得多。</p>
+<hr>
+<h2 id="七、总结"><a href="#七、总结" class="headerlink" title="七、总结"></a>七、总结</h2><p>回到标题那个断言——“AI 时代业务编程，DDD 是最好的选择”。</p>
+<p>严谨一点说，不是”DDD 最好”，而是：<strong>在 AI 大规模写业务代码的背景下，任何能给 Agent 提供”领域边界 + 统一语言”的架构，都会比”自由分层”活得久。而 DDD 恰好是这方面最成熟、工具链最全的方法论。</strong></p>
+<p>最后把三层论点压成一句话给管理者：</p>
+<blockquote>
+<p>AI 不是不会写，是写得太散；散本身不可怕，可怕的是”固定的人”没了、散漫无人收敛。用领域模型限制它的边界，用通用语言锚定它的上下文——而定义边界和提供上下文这件事，永远得由懂业务的人来做。</p>
+</blockquote>
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+                <div class="icon arrow-left"></div>
+                <div class="post-link">
+                    <a href="/2026/08/14/DeepSeek-Harness-%E4%BD%BF%E7%94%A8/">Prev</a>
+                </div>
+            
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/2026/08/09/%E3%80%8ATau-Agent-%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E3%80%8B4-harness/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+     
+
+     
+    
+    
+
+</div>
+     
+  
+</article>
+          </div>
+        
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+            
+                Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> & <a target="_blank" rel="noopener" href="https://github.com/zoeingwingkei/frame/">Frame</a>
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+    
+
+  </body>
+</html>

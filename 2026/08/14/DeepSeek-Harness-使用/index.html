@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="John Doe">
+
+
+
+
+
+
+
+<title>DeepSeek Harness 使用 | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/menu.js"></script>
+    
+    <script src="/js/format.js"></script>
+    
+
+
+
+
+
+
+
+
+
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+          
+            
+              <li class="menu-item">
+                <a href="/"><img class="menu-image" src="/nav-icons/cat.png" alt="" aria-hidden="true"><span>主页</span></a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/weekly/"><img class="menu-image" src="/nav-icons/tea.png" alt="" aria-hidden="true"><span>周报</span></a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/archives/"><img class="menu-image" src="/nav-icons/record-player.png" alt="" aria-hidden="true"><span>文章</span></a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/projects/"><img class="menu-image" src="/nav-icons/lamp.png" alt="" aria-hidden="true"><span>项目</span></a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/tags/"><img class="menu-image" src="/nav-icons/plant.png" alt="" aria-hidden="true"><span>合集</span></a>
+              </li> 
+                   
+          
+          
+        </ul>
+      </nav>
+      
+      <div class="header-contact">
+        <a href="https://github.com/colania" target="_blank" rel="noopener" aria-label="GitHub：colania" title="GitHub">
+          <img class="contact-image" src="/github-fill.png" alt="" aria-hidden="true">
+        </a>
+      </div>
+      
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()" aria-label="展开导航" role="button" tabindex="0">
+        <span class="menu-toggle-symbol" aria-hidden="true"></span>
+        <span>菜单</span>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="/js/menu.js"></script>
+
+
+      <div class="main">
+        
+          <div class="flex-container">
+            <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+                
+                    <span class="post-tag">
+                        <a href="/tags/AI/">
+                            AI
+                        </a>
+                    </span>    
+                           
+            
+        </div>
+        <div class="post-title">
+            
+            
+                DeepSeek Harness 使用
+            
+            
+        </div>
+        <span class="post-date">
+            8月 14, 2026
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <img src="/2026/08/14/DeepSeek-Harness-%E4%BD%BF%E7%94%A8/cover.png" alt="featured_image">
+              
+    </div>
+</div>
+
+    <div class="post-content">
+    <p>昨天 DeepSeek 一口气放了两记大招：V4 Pro 正式版上线，紧接着万众瞩目的 DeepSeek Harness 开源。开源仓库上线不到一天就冲到 8 万多 Star，”AI 界的顶流”果然名不虚传。咱也是吃上了梁圣的热饭，那么抓紧开始吧。本来我以为他就是这一个web端的页面，随着时间的推移，越来越多的强悍插件发布了出来，今天就来给大家分享一下。</p>
+<h2 id="一、先搞懂：Harness-到底是什么？"><a href="#一、先搞懂：Harness-到底是什么？" class="headerlink" title="一、先搞懂：Harness 到底是什么？"></a>一、先搞懂：Harness 到底是什么？</h2><img src="/2026/08/14/DeepSeek-Harness-%E4%BD%BF%E7%94%A8/harness.png" class="" title="harness">
+<p>“Harness” 翻译过来是”驾驭”。如果把 AI 模型比作一匹马，那 Harness 就是你驾驭这匹马所需的一整套装备：</p>
+<ul>
+<li>你给 AI 写的项目规则文件</li>
+<li>配置的各种工具</li>
+<li>安排的任务拆分与执行顺序</li>
+<li>设计的测试与检查流程<br>这些统统都算 Harness。</li>
+</ul>
+<p>DeepSeek Harness 有一个很精妙的公式：</p>
+<blockquote>
+<p>Agent &#x3D; Model + Harness</p>
+</blockquote>
+<p>模型负责思考和生成，Harness 负责把这些能力接入文件系统、终端、网页和工具链，让 AI 真正能在现实环境里干活。</p>
+<p>过去 DeepSeek 只开源了模型，这”另一半”迟迟没有动静；这次终于补齐了。你可以把它对标 Claude Code、Codex——但它的野心更大：不只是一个编程 Agent，而是一套可配置、可重组的 Agent 运行环境，官方口号是”一切皆插件”。</p>
+<img src="/2026/08/14/DeepSeek-Harness-%E4%BD%BF%E7%94%A8/AICode.png" class="" title="AICode">
+<h2 id="二、一分钟安装"><a href="#二、一分钟安装" class="headerlink" title="二、一分钟安装"></a>二、一分钟安装</h2><h3 id="2-1-环境要求"><a href="#2-1-环境要求" class="headerlink" title="2.1 环境要求"></a>2.1 环境要求</h3><p>执行安装命令前，先确认电脑已安装 Node.js。没装的话去 Node.js 官网下载安装包，傻瓜式安装即可。</p>
+<h3 id="2-2-安装命令"><a href="#2-2-安装命令" class="headerlink" title="2.2 安装命令"></a>2.2 安装命令</h3><img src="/2026/08/14/DeepSeek-Harness-%E4%BD%BF%E7%94%A8/install.png" class="" title="install">
+<p>打开终端，执行官网给出的一行命令：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npx @deepseek-ai/dsh web</span><br></pre></td></tr></table></figure>
+<p>稍等片刻，终端会输出一个网址，打开它即可进入 DeepSeek Harness 的 Web 界面。</p>
+<h3 id="2-3-配置-API-Key"><a href="#2-3-配置-API-Key" class="headerlink" title="2.3 配置 API Key"></a>2.3 配置 API Key</h3><p>第一次使用需要填入 DeepSeek API Key——到 DeepSeek 开放平台创建一个，注意不要泄露。把 Key 复制粘贴进界面，Harness 就安装成功了。</p>
+<blockquote>
+<p>💡 小贴士：想以后免去 npx，可以全局安装一次：npm install -g @deepseek-ai&#x2F;dsh，之后任意终端直接 dsh web。</p>
+</blockquote>
+<h2 id="三、Web-界面基础操作"><a href="#三、Web-界面基础操作" class="headerlink" title="三、Web 界面基础操作"></a>三、Web 界面基础操作</h2><img src="/2026/08/14/DeepSeek-Harness-%E4%BD%BF%E7%94%A8/%E9%A6%96%E9%A1%B5.png" class="" title="首页">
+<p>进入 Web 界面后：</p>
+<ol>
+<li>选择一个项目文件夹，让 AI 操作你想让它干活的工作目录；</li>
+<li>选择模型与推理等级（在对话框中选择，支持深度思考等模式）；</li>
+<li>设置操作权限——AI 对文件系统和终端的操作权限可按需调整；</li>
+<li>默认使用标准模式，它具备一个 AI 编程工具应有的全部能力，大多数场景够用。<br>界面风格和 Codex 很像——没错，你就把它当成国产版 Codex 来用就行。AI 编程、自动化办公这些任务都能搞定。</li>
+</ol>
+<h2 id="四、实战案例：四个任务看能力"><a href="#四、实战案例：四个任务看能力" class="headerlink" title="四、实战案例：四个任务看能力"></a>四、实战案例：四个任务看能力</h2><h3 id="任务一：让-AI-分析自己的源码仓库，画一张架构图"><a href="#任务一：让-AI-分析自己的源码仓库，画一张架构图" class="headerlink" title="任务一：让 AI 分析自己的源码仓库，画一张架构图"></a>任务一：让 AI 分析自己的源码仓库，画一张架构图</h3><p>让 Harness 分析它自己的代码仓库——仓库很大、模块多，正好测试代码理解能力。</p>
+<p>执行时能看到 <strong>AI 自动读取文件、分析项目结构</strong>，速度很快，而且每一步在做什么都清晰地展示在界面上。任务完成后输出 Mermaid 绘图语法，复制到 Mermaid 渲染工具即可看到完整架构图。</p>
+<p>界面下方能看到<strong>任务消耗的 tokens、当前上下文占用</strong>；进入上方轨迹面板，还能查看整个对话中每一次的对话与工具调用记录——这是 Harness 的特色：让每一次运行都有迹可循。</p>
+<h3 id="任务二：开发一个交互式动画讲解知识的网站"><a href="#任务二：开发一个交互式动画讲解知识的网站" class="headerlink" title="任务二：开发一个交互式动画讲解知识的网站"></a>任务二：开发一个交互式动画讲解知识的网站</h3><p>让 AI 用交互式动画讲解一个枯燥的知识点，约 20 分钟完成。速度不算快，时间主要花在 AI 的自我检查上。亮点：</p>
+<ol>
+<li>缓存命中率 99%——绝大多数费用按缓存计算，实际花费极低；</li>
+<li>效果出色：动画生动、点线连接准确，还自带总结和小测验功能。</li>
+<li>对比之前用 Claude Code 开发的版本，这次 DeepSeek 版的效果毫不逊色，连线对得更齐——“V4 Pro 可以对标 Claude”的感觉由此而来。</li>
+</ol>
+<h3 id="任务四：让他自己给自己安装插件"><a href="#任务四：让他自己给自己安装插件" class="headerlink" title="任务四：让他自己给自己安装插件"></a>任务四：让他自己给自己安装插件</h3><p>用户粘贴插件代码，后端调用 DeepSeek 大模型理解仓库代码。<br>过程中 AI 会向你确认权限（要不要读某个文件、执行某条命令），安全性很到位。</p>
+<h2 id="实战小结"><a href="#实战小结" class="headerlink" title="实战小结"></a>实战小结</h2><p>几个任务跑下来，DeepSeek Harness 的感受是：速度还行、缓存命中率高、执行过程透明——你能看到 AI 每一步在做什么、调用了哪些工具、读了哪些文件，不像有些工具”暗箱操作”。单看测试结果，DeepSeek V4 Pro 配合自家 Harness 的 AI 编程能力，确实可以对标 Claude 系工具（官方只差 0.1 的跑分，诚不欺我）。</p>
+<p>**费用：**这几个任务加起来不到五块钱——因为缓存命中率基本都在 99% 以上。提醒一句：DeepSeek 已宣布 8 月 17 号涨价，而且涨了不少，但即便如此，相比 Claude 系工具依然便宜很多。</p>
+<img src="/2026/08/14/DeepSeek-Harness-%E4%BD%BF%E7%94%A8/%E7%BC%93%E5%AD%98%E5%91%BD%E4%B8%AD.png" class="" title="缓存命中">
+<h2 id="五、四种运行模式详解"><a href="#五、四种运行模式详解" class="headerlink" title="五、四种运行模式详解"></a>五、四种运行模式详解</h2><p>Harness 提供四种运行模式，适配不同场景：</p>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>加载了什么</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>标准模式</td>
+<td>完整工具组合：文件编辑、Shell 命令、网页搜索、子 Agent、技能等</td>
+<td>日常开发默认，覆盖绝大多数需求</td>
+</tr>
+<tr>
+<td>极简模式</td>
+<td>只保留 Bash 和文件编辑两件最基础的工具</td>
+<td>官方跑模型基准测试用，在最小环境下考验纯编程能力，普通用户基本用不到</td>
+</tr>
+<tr>
+<td>PTC 模式（程序化工具调用）</td>
+<td>模型直接生成 TypeScript 代码，把多步工具调用串联成一段脚本一次性执行</td>
+<td>步骤多但逻辑清晰的任务：批量重命名、整套自动化流程，效率远高于一步步确认</td>
+</tr>
+<tr>
+<td>创造模式</td>
+<td>继承标准模式全部能力，还能检查当前运行时有哪些插件、在内存里试验新插件组合、创作全新的模式预设</td>
+<td>开发插件、创造新工具、定制模式预设</td>
+</tr>
+</tbody></table>
+<p>一句话总结四者的本质区别：当前会话加载了哪些工具——极简模式只留两件，标准模式叠满全套，创造模式还能让 AI 自己查看和改装插件配置。</p>
+<h2 id="六、插件系统：Harness-真正的灵魂"><a href="#六、插件系统：Harness-真正的灵魂" class="headerlink" title="六、插件系统：Harness 真正的灵魂"></a>六、插件系统：Harness 真正的灵魂</h2><p>Harness 与 Codex、Claude Code 最大的区别就是插件系统：</p>
+<blockquote>
+<p>模型、工具、技能、会话、沙箱、UI，甚至 Agent 的运行循环本身，<strong>全都是插件</strong>。</p>
+</blockquote>
+<p>哪个地方不满意，随时替换或安装插件扩展，不需要改框架源码。</p>
+<h3 id="6-1-装社区插件"><a href="#6-1-装社区插件" class="headerlink" title="6.1 装社区插件"></a>6.1 装社区插件</h3><p>官网”社区插件”页面收录了 GitHub 上打了 dsh-plugin 标签的项目；页面又多又杂的话，推荐直接看 GitHub 上的 awesome 仓库，有分类整理的精选列表。</p>
+<p>安装非常简单——比如看上”鲸鱼娘皮肤美化插件”：</p>
+<ol>
+<li>进入 Harness Web 界面，随便选一个工作目录；</li>
+<li>把插件的开源地址提供给 AI，让它帮你装；</li>
+<li>想省事可以先把手动权限改为”全放开”，AI 执行命令就不用逐个确认；</li>
+<li>装完按提示重启 Harness 网页并刷新，皮肤即刻生效。<br>不想要了，直接跟 AI 说一句”把插件卸载掉”即可。</li>
+</ol>
+<h3 id="6-2-社区里有意思的插件"><a href="#6-2-社区里有意思的插件" class="headerlink" title="6.2 社区里有意思的插件"></a>6.2 社区里有意思的插件</h3><ul>
+<li>皮肤类：鲸鱼娘皮肤、Excel 表格皮肤、终端风格皮肤，甚至离谱的”广告风格”皮肤；</li>
+<li>实用类：优化侧边栏交互体验、用 @ 符号快速引用文件；</li>
+<li>图像理解类（个人最看好）：帮助纯文本模型理解图片内容——图片本身不进会话，只有描述文本进入，隐私友好。<br>这些插件补齐了 Harness 在交互细节和能力上的短板，也印证了”一切皆插件”架构的灵活性。</li>
+</ul>
+<h3 id="6-3-自己开发一个插件"><a href="#6-3-自己开发一个插件" class="headerlink" title="6.3 自己开发一个插件"></a>6.3 自己开发一个插件</h3><p>光装别人的不过瘾？自己开发也很容易——直接让 AI 帮你写：</p>
+<ol>
+<li>切换到创造模式（AI 可检查当前插件树、试验新插件、最终打包发布）；</li>
+<li>直接提需求，例如”做一个捉宠插件，任务完成后发出’你干嘛’的声音提醒我”；</li>
+<li>AI 开发好后先找你人工审批，确认没问题才正式安装；</li>
+<li>之后每次对话完成都能听到提示音，提神醒脑。<br>发挥想象力还能做：定时提醒喝水的健康助手、实时展示账户余额的悬浮窗、定制主题皮肤……</li>
+</ol>
+<p><strong>分享给他人</strong>：让 AI 通过 GitHub MCP 插件把代码推送到 GitHub，给仓库打上 dsh-plugin 标签即可（AI 甚至会帮你把效果截图写进 README）。</p>
+<h2 id="七、写在最后"><a href="#七、写在最后" class="headerlink" title="七、写在最后"></a>七、写在最后</h2><p>DeepSeek Harness 发布才一天，就收获了 8 万多 Star，可见其受欢迎程度。还有更多进阶玩法。</p>
+<ol>
+<li>用命令行模式批量跑任务；</li>
+<li>接入和切换其他大模型；</li>
+<li>自定义 Agent 预设适配不同工作场景；</li>
+<li>把它部署到服务器上，让整个团队共享。<br>DeepSeek 模型搭配自己的 Harness 工具，真的强。梁神，受我一拜 🙏。</li>
+</ol>
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/2026/08/12/AI-%E6%97%B6%E4%BB%A3%E4%B8%9A%E5%8A%A1%E7%BC%96%E7%A8%8B%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88-DDD-%E6%98%AF%E6%9C%80%E5%A5%BD%E7%9A%84%E9%80%89%E6%8B%A9/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+     
+
+     
+    
+    
+
+</div>
+     
+  
+</article>
+          </div>
+        
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+            
+                Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> & <a target="_blank" rel="noopener" href="https://github.com/zoeingwingkei/frame/">Frame</a>
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+    
+
+  </body>
+</html>
