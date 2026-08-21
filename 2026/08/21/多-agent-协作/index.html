@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="John Doe">
+
+
+
+
+
+
+
+<title>多 agent 协作 | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono&display=swap');
+</style>
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/menu.js"></script>
+    
+    <script src="/js/format.js"></script>
+    
+
+
+
+
+
+
+
+
+
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    <div class="mask-border">
+    </div>
+
+    <div class="wrapper">
+
+      <div class="header">
+  <div class="flex-container">
+    <div class="header-inner">
+      <nav class="site-nav">
+        <ul class="menu-list">
+          
+          
+            
+              <li class="menu-item">
+                <a href="/"><img class="menu-image" src="/nav-icons/cat.png" alt="" aria-hidden="true"><span>主页</span></a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/weekly/"><img class="menu-image" src="/nav-icons/tea.png" alt="" aria-hidden="true"><span>周报</span></a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/archives/"><img class="menu-image" src="/nav-icons/record-player.png" alt="" aria-hidden="true"><span>文章</span></a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/projects/"><img class="menu-image" src="/nav-icons/lamp.png" alt="" aria-hidden="true"><span>项目</span></a>
+              </li> 
+                   
+          
+            
+              <li class="menu-item">
+                <a href="/tags/"><img class="menu-image" src="/nav-icons/plant.png" alt="" aria-hidden="true"><span>合集</span></a>
+              </li> 
+                   
+          
+          
+        </ul>
+      </nav>
+      
+      <div class="header-contact">
+        <a href="https://github.com/colania" target="_blank" rel="noopener" aria-label="GitHub：colania" title="GitHub">
+          <img class="contact-image" src="/github-fill.png" alt="" aria-hidden="true">
+        </a>
+      </div>
+      
+      <div id="menu-btn" class="menu-btn" onclick="toggleMenu()" aria-label="展开导航" role="button" tabindex="0">
+        <span class="menu-toggle-symbol" aria-hidden="true"></span>
+        <span>菜单</span>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="/js/menu.js"></script>
+
+
+      <div class="main">
+        
+          <div class="flex-container">
+            <article id="post">
+
+  
+    <div class="post-head">
+    <div class="post-info">
+        <div class="tag-list">
+            
+                
+                    <span class="post-tag">
+                        <a href="/tags/AI/">
+                            AI
+                        </a>
+                    </span>    
+                           
+            
+        </div>
+        <div class="post-title">
+            
+            
+                多 agent 协作
+            
+            
+        </div>
+        <span class="post-date">
+            8月 21, 2026
+        </span>
+    </div>
+    <div class="post-img">
+        
+            <img src="https://blog-1300555686.cos.ap-beijing.myqcloud.com/1787296100230.png" alt="featured_image">
+              
+    </div>
+</div>
+
+    <div class="post-content">
+    <ol>
+<li>Claude Code中的Sub-agent的优缺点<br>ß<br>为什么我们需要 sub agent?</li>
+</ol>
+<ul>
+<li>节省主Agent的上下文窗口：。尽管现在模型的上下文长度越来越长，但毕竟也是有限的；而我们面对的信息却是海量的。有一种说法是，LLM Agent的核心，其实是一种压缩——从海量网页、文档中找到关键信息，将大量数据压缩成几个核心要点。那么，我们可以使用多个智能体，每个只关注一个子问题，它们各自的上下文窗口同时处理不同信息，最后把有价值的部分汇总给主Agent，这样主Agent的上下文窗口就不会被海量的信息所污染。</li>
+<li>并行探索，效率更高。在解决问题时，主Agent可以启动多个subagent；而且，每个sub-agent在执行任务时，可以并行调用多个工具。这样，对于复杂的任务，agent可以在几分钟内完成原本需要数小时才能完成的工作。</li>
+<li>在任务实现的效果上，多Agent的架构也明显优于单Agent。多Agent的架构特别擅长处理需要广度优先(BFS)处理的问题，因为这类问题需要并行探索多个相互独立的线索。Anthropic的博客 <a href="https://link.zhihu.com/?target=https://www.anthropic.com/engineering/multi-agent-research-system">How we built our multi-agent research system</a>中说，使用Claude Opus 4 作为主Agent、Claude Sonnet 4 作为subagent的多智能体系统，其表现比单独使用 Claude Opus 4 的单智能体系统高出90.2%。他们发现，单智能体系统往往因为缓慢的顺序搜索而难以找到答案。</li>
+</ul>
+<p>那么代价是什么？</p>
+<p>当然就是烧钱了！</p>
+<p>多智能体系统之所以有效，主要就是因为它们能够投入足够多的 token来解决问题。另外工具调用次数和模型选择。多智能体系统本质上是在有限时间内投入了更多的token来解决问题。就像我们的多线程，通过增加了系统开销来提升运行效率。</p>
+<p>既然如此，哪些场景适合用多智能体，哪些不适合呢？</p>
+<ol>
+<li><p>适合的场景</p>
+</li>
+<li><p>高度并行化的任务，能够同时拆解出大量互不依赖的子任务，给subagent并行处理</p>
+</li>
+<li><p>信息量远超单个上下文窗口承载能力的场景，需要通过多个agent分头处理来突破记忆限制</p>
+</li>
+<li><p>需要调用繁多且复杂的工具时，可以让不同智能体各专其职、互不干扰地操作工具，最后合并结果</p>
+</li>
+<li><p>不适合的场景</p>
+</li>
+<li><p>智能体们需要共享同一个上下文（如实时协作编辑）的任务。就像JAVA中处理并发一样，有读写冲突、写写冲突，如果要做到多智能体协作，还需要加锁。而类似Claude Code框架中的subagent每个都只有各自独立的上下文，所以难以保持强一致性。</p>
+</li>
+<li><p>智能体之间存在大量相互依赖关系的任务（如 A 的结果必须实时传给 B 才能继续），目前也不适合用多智能体。这是因为目前 LLM 智能体间的协调能力还不够成熟，容易出错或延迟。</p>
+</li>
+<li><p>claudecode中的subagent 是怎么设计的</p>
+</li>
+</ol>
+<p>Claude Code包含了五个内置的subagent：</p>
+<figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">Available agent types and the tools they have access to:</span><br><span class="line"><span class="bullet">-</span> general-purpose: General-purpose agent for researching complex questions, searching for code, and executing multi-step tasks. When you are searching for a keyword or file and are not conf</span><br><span class="line">ident that you will find the right match in the first few tries use this agent to perform the search for you. (Tools: <span class="emphasis">*)</span></span><br><span class="line"><span class="emphasis">- statusline-setup: Use this agent to configure the user&#x27;s Claude Code status line setting. (Tools: Read, Edit)</span></span><br><span class="line"><span class="emphasis">- Explore: Fast agent specialized for exploring codebases. Use this when you need to quickly find files by patterns (eg. \&quot;src/components/<span class="strong">**/*.tsx\&quot;), search code for keywords (eg. \&quot;API en</span></span></span><br><span class="line"><span class="strong"><span class="emphasis">dpoints\&quot;), or answer questions about the codebase (eg. \&quot;how do API endpoints work?\&quot;). When calling this agent, specify the desired thoroughness level: \&quot;quick\&quot; for basic searches, \&quot;med</span></span></span><br><span class="line"><span class="strong"><span class="emphasis">ium\&quot; for moderate exploration, or \&quot;very thorough\&quot; for comprehensive analysis across multiple locations and naming conventions. (Tools: All tools except Agent, ExitPlanMode, Edit, Write,</span></span></span><br><span class="line"><span class="strong"><span class="emphasis">NotebookEdit)</span></span></span><br><span class="line"><span class="strong"><span class="emphasis">- Plan: Software architect agent for designing implementation plans. Use this when you need to plan the implementation strategy for a task. Returns step-by-step plans, identifies critical f</span></span></span><br><span class="line"><span class="strong"><span class="emphasis">iles, and considers architectural trade-offs. (Tools: All tools except Agent, ExitPlanMode, Edit, Write, NotebookEdit)</span></span></span><br><span class="line"><span class="strong"><span class="emphasis">- claude-code-guide: Use this agent when the user asks questions (\&quot;Can Claude...\&quot;, \&quot;Does Claude...\&quot;, \&quot;How do I...\&quot;) about: (1) Claude Code (the CLI tool) - features, hooks, slash comm</span></span></span><br><span class="line"><span class="strong"><span class="emphasis">ands, MCP servers, settings, IDE integrations, keyboard shortcuts; (2) Claude Agent SDK - building custom agents; (3) Claude API (formerly Anthropic API) - API usage, tool use, Anthropic SD</span></span></span><br><span class="line"><span class="strong"><span class="emphasis">K usage. **</span>IMPORTANT:*</span>* Before spawning a new agent, check if there is already a running or recently completed claude-code-guide agent that you can resume using the \&quot;resume\&quot; parameter. (T</span><br><span class="line">ools: Glob, Grep, Read, WebFetch, WebSearch)</span><br></pre></td></tr></table></figure>
+
+<p>不同的subagent在执行权限和分工上都有很大的区别：</p>
+<ul>
+<li><code>general-purpose</code> 是一个功能最全面的代理，适用于需要多步骤处理、复杂研究、代码搜索和跨领域任务，它可以使用几乎所有的工具。</li>
+<li><code>Explore</code> 是一个专门用于快速探索和理解代码库的Agent，擅长按文件名模式搜索（如<code>src/**/*.tsx</code>）、关键词搜索、回答代码相关问题。它支持指定探索深度（<code>quick</code>、<code>medium</code>、<code>very thorough</code>）。工具权限方面，它只能读不能写。</li>
+<li><code>Plan</code>是一个扮演规划师角色的agent，用于设计方案、制定分步计划、识别关键文件、权衡架构决策。与 Explore 类似，它的权限也是只读不写，输出的是结构化的实施计划。</li>
+<li><code>statusline-setup</code>（状态栏配置）是一个高度专用的subagent，唯一用途是帮助用户配置 Claude Code 命令行工具的状态栏显示。</li>
+<li><code>claude-code-guide</code>（Claude 产品指南）这是一个专门回答关于 Claude 相关产品问题的subagent。</li>
+</ul>
+<p>我们可以根据不同subagent执行的难度来让它们使用不同大小的模型。比如<code>Explore</code>不需要复杂推理，所以默认用的是快且便宜的<code>haiku</code>模型；而<code>Plan</code>和<code>General-Purpose</code>需要与主对话保持相同的能力水平，所以继承的是主Agent所使用的模型。</p>
+<p>每个subagent都有自己专用的system prompt，我这里只提取出核心部分：</p>
+<p>Explore：<a target="_blank" rel="noopener" href="http://agent-prompt-explore.md/">agent-prompt-explore.md</a></p>
+<figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Your role is EXCLUSIVELY to search and analyze existing code. You do NOT have access to file editing tools - attempting to edit files will fail.</span><br><span class="line"></span><br><span class="line">Your strengths:</span><br><span class="line"></span><br><span class="line">Rapidly finding files using glob patterns</span><br><span class="line">Searching code and text with powerful regex patterns</span><br><span class="line">Reading and analyzing file contents</span><br><span class="line">Guidelines:  G L O B T O O L N A M E &#123;GREP<span class="emphasis">_TOOL_</span>NAME&#125;  </span><br><span class="line">Use $&#123;READ<span class="emphasis">_TOOL_</span>NAME&#125; when you know the specific file path you need to read </span><br><span class="line">Use $&#123;SHELL<span class="emphasis">_TOOL_</span>NAME&#125; ONLY for read-only operations ($&#123;IS<span class="emphasis">_BASH_</span>ENV<span class="emphasis">_FN?ls, git status, git log, git diff, find$&#123;USE_</span>EMBEDDED<span class="emphasis">_TOOLS_</span>FN?&quot;, grep&quot;:&quot;&quot;&#125;, cat, head, tail:&quot;Get-ChildItem, git status, git log, git diff, Get-Content, Select-Object -First/-Last&quot;&#125;) </span><br><span class="line">NEVER use $&#123;SHELL<span class="emphasis">_TOOL_</span>NAME&#125; for: $&#123;IS<span class="emphasis">_BASH_</span>ENV<span class="emphasis">_FN?&quot;mkdir, touch, rm, cp, mv, git add, git commit, npm install, pip install&quot;:&quot;New-Item, Remove-Item, Copy-Item, Move-Item, git add, git commit, npm install, pip install&quot;&#125;, or any file creation/modification </span></span><br><span class="line"><span class="emphasis">Adapt your search approach based on the thoroughness level specified by the caller </span></span><br><span class="line"><span class="emphasis">Communicate your final report directly as a regular message - do NOT attempt to create files</span></span><br></pre></td></tr></table></figure>
+
+<p>Plan: <a target="_blank" rel="noopener" href="http://agent-prompt-plan-mode-enhanced.md/">agent-prompt-plan-mode-enhanced.md</a></p>
+<figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">=== CRITICAL: READ-ONLY MODE - NO FILE MODIFICATIONS === This is a READ-ONLY planning task. You are STRICTLY PROHIBITED from:</span><br><span class="line"></span><br><span class="line">Creating new files (no Write, touch, or file creation of any kind)</span><br><span class="line">Modifying existing files (no Edit operations)</span><br><span class="line">Deleting files (no rm or deletion)</span><br><span class="line">Moving or copying files (no mv or cp)</span><br><span class="line">Creating temporary files anywhere, including /tmp</span><br><span class="line">Using redirect operators (&gt;, &gt;&gt;, |) or heredocs to write to files</span><br><span class="line">Running ANY commands that change system state</span><br><span class="line">Your role is EXCLUSIVELY to explore the codebase and design implementation plans. You do NOT have access to file editing tools - attempting to edit files will fail.</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>Claude Guide:<a target="_blank" rel="noopener" href="http://agent-prompt-explore.md/">agent-prompt-explore.md</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">You are the Claude guide agent. Your primary responsibility is helping users understand and use Claude Code, the Claude Agent SDK, and the Claude API (formerly the Anthropic API) effectively.</span><br><span class="line"></span><br><span class="line">Your expertise spans five domains:</span><br></pre></td></tr></table></figure>
+
+<p>Status line setup:<a target="_blank" rel="noopener" href="http://agent-prompt-status-line-setup.md/">agent-prompt-status-line-setup.md</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">You are a status line setup agent for Claude Code. Your job is to create or update the statusLine command in the user&#x27;s Claude Code settings.</span><br><span class="line"></span><br><span class="line">When asked to convert the user&#x27;s shell PS1 configuration, follow these steps:</span><br><span class="line"></span><br><span class="line">Read the user&#x27;s shell configuration files in this order of preference:</span><br><span class="line"></span><br><span class="line">~/.zshrc</span><br><span class="line">~/.bashrc</span><br><span class="line">~/.bash_profile</span><br><span class="line">~/.profile</span><br></pre></td></tr></table></figure>
+
+<p>General-Purpose Agent</p>
+<p>General-Purpose Agent继承的是主Agent的system prompt，但是在进行system prompt 拼接时， 会根<code>IS_SUBAGENT</code>来调整话术。</p>
+<p>例如：</p>
+<ul>
+<li>在输出风格上，主Agent的要求是“完成任务后提供详细的书面报告”，而General-Purpose这个subagent则被要求输出“简明扼要的总结，只包含所做的工作和关键发现”，因为子Agent的输出并非直接面向用户，而是要先汇报给主Agent、再呈现给用户，因此只需要保留核心信息就可以了。</li>
+<li>General-Purpose Agent的工具列表也和主Agent不一样，并不是完全继承的。虽然上面的Agent工具描述中，General-Purpose能使用的工具是”(Tools: *)”，但是并不意味着真正的“所有工具”，而是“所有执行类工具”，管控类工具 (<code>Agent</code>, <code>TaskOutput</code>, <code>TaskStop</code>, <code>AskUserQuestion</code>, <code>EnterPlanMode</code>, <code>ExitPlanMode</code>) 被系统层面过滤掉了。这里我们可以特别地看到，General Purpose这个subagent是没有 <code>Agent</code>工具的。事实上，所有的subagent都没有Agent工具，所以subagent不能递归地启动新的 subagent。这是Claude Code有意为之的设计，为的就是防止无限递归。当然，这样设计也是因为目前的Agent能力还有限。</li>
+<li>还有若干不同的地方，比如subagent 每次 Bash 调用之间工作目录会被重置，因此必须始终用绝对路径；等等。</li>
+</ul>
+<ol start="3">
+<li>subagent运行流程</li>
+</ol>
+<p>3.1 subagent 的prompt</p>
+<p>Agent Tool的prompt是由这两个拼在一起的：<a target="_blank" rel="noopener" href="http://tool-description-agent-when-to-launch-subagents.md/">tool-description-agent-when-to-launch-subagents.md</a>、<a target="_blank" rel="noopener" href="http://tool-description-agent-usage-notes.md/">tool-description-agent-usage-notes.md</a>。这个prompt对subagent的调用方式做了清晰的说明。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">任务描述必填：调用 Agent 时，必须简短说明该代理要做什么工作。</span><br><span class="line">信任但要核验：Agent 返回的只是计划意图，不等于实际执行结果。如果代理修改代码，完成上报前要核对真实代码改动，不能直接采信它的自述。</span><br><span class="line">后台 / 前台运行逻辑</span><br><span class="line">默认后台运行，完成后会收到系统通知，不要轮询、等待、主动去查进度，主线可以继续处理别的任务、回复用户。</span><br><span class="line">只有后续下一步操作完全依赖它输出、期间没有别的可做工作，才设置run_in_background:false切换前台；单纯 “想马上拿到结果” 不构成切换理由。</span><br><span class="line">禁止编造后台代理结果：启动后台代理后，在收到完成通知前，完全不知道它输出，不许猜测、编造结果；用户询问就如实告知代理还在执行。</span><br><span class="line">会话上下文</span><br><span class="line">复用已有代理：用 ID / 名称恢复，保留完整上下文。</span><br><span class="line">新建代理调用：是全新实例，没有历史记忆，提示词必须完整自包含。</span><br><span class="line">模型与能力配置：各类 Agent 默认模型、推理强度、工具权限写在配置定义里；调用时传model参数可以单次覆盖默认配置。</span><br><span class="line">明确工作类型：新建代理要明确告知它是写代码，还是仅做调研（读文件、网页抓取、搜索），新代理不知道用户真实意图。</span><br><span class="line">主动调用 &amp; 并行执行</span><br><span class="line">标记为可主动触发的 Agent，无需用户提问就可以主动启用。</span><br><span class="line">用户要求并行跑多个代理，要同一条消息内放多个工具调用块，不能分多次调用。</span><br><span class="line">隔离环境 worktree：代理没产生修改，工作树自动清理；有改动则返回路径与分支信息。</span><br><span class="line">上下文环境限制：部分特殊上下文（teammate/in‑process）不支持后台模式、name 参数，仅允许同步子代理。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">核心目的：启动新 agent 用来处理复杂、多步骤任务；不同 agent 类型自带专属能力与可用工具。</span><br><span class="line">agent 类型来源：会话消息里会列出可用的 agent 类型。</span><br><span class="line">工具参数subagent<span class="emphasis">_type：调用该工具时通过此参数选定 agent。</span></span><br><span class="line"><span class="emphasis">fork类型：复制当前 agent，完整继承全部对话上下文，强制沿用当前模型，模型覆盖参数不生效。</span></span><br><span class="line"><span class="emphasis">其他取值：开启全新 agent 实例。</span></span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>什么时候该调用subagent：如果某个 agent 的描述中提到”应主动使用”，则不需要等用户明确要求，主agent应自行判断并启动。</li>
+<li>并发与后台执行：应尽量并发启动多个agent，即：在同一条消息里发出多个Agent工具调用，而不是分多次发。对于需要结果才能继续的任务用前台模式，不需要立刻得到结果的可以用后台模式（run_in_background），后台任务完成后会自动通知，不要轮询或 sleep 等待。</li>
+<li>任务描述与prompt书写：主agent的每次调用都附带着 3-5个词的简短描述；并且提供足够清晰详细的prompt，说明 sub-agent 要做什么，因为在一般情况下（只要不指定CAN_FORK_CONTEXT&#x3D;True），sub-agent就不会继承主agent的上下文，因此它对整个问题的背景是完全不了解的，它能看到的只是主agent给它委派的prompt。 所以主agent给它的prompt就需要足够详细，确保 subagent能自主完成并返回所需信息。</li>
+</ol>
+<p><img src="https://get-notes.umiwi.com/get_notes_prod%2F202608211123%2Fgetnotes_img_1aa1f12bc0622e1051GeAYeJ.png?Expires=1789885277&OSSAccessKeyId=LTAI5t7toTp72R3TvdXf9QdK&Signature=4px0QUWZKmut1RwyEjFdcam/Chg=&x-oss-process=image/resize,m_lfit,w_720,h_3240" alt="image" title="image"></p>
+<p>3.2 subagent 的调用逻辑</p>
+<p>启动subagent方式和调用一个普通tool一样，只不过调用的是<code>Agent</code>这个tool。下面我们看一个例子，看看subagent的调用在message中大概是个什么格式：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">[</span></span><br><span class="line">  <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;assistant&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">      <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Agent&quot;</span><span class="punctuation">,</span>  </span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;tool_use&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;input&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;prompt&quot;</span><span class="punctuation">:</span> <span class="string">&quot;探索xxxx 代码库的整体结构。请找出：\n1. 项目根目录下的所有文件和目录\n2. 主要的配置文件（package.json, composer.json, readme.txt, README.md 等）\n3. 主要入口文件\n4. 项目使用的主要编程语言\n\n请读取 readme.txt 或 README.md、package.json、composer.json（如果存在）的内容，并详细报告。&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;探索项目整体结构和配置&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;subagent_type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Explore&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;run_in_background&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Agent&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;tool_use&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;input&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;prompt&quot;</span><span class="punctuation">:</span> <span class="string">&quot;探索 xxx 代码库中的 PHP 文件。...... ,最后，报告 PHP 代码的主要模块和功能&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;分析PHP源码和WordPress插件逻辑&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;subagent_type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Explore&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;run_in_background&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Agent&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;tool_use&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;input&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;prompt&quot;</span><span class="punctuation">:</span> <span class="string">&quot;探索 xx代码库中的 JavaScript 和前端相关文件。请：\n1. ...\n2. ..., 5. 报告前端资源的组织结构和构建流程&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;探索前端JS/CSS资源和构建工具&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;subagent_type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Explore&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;run_in_background&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line"><span class="punctuation">]</span></span><br></pre></td></tr></table></figure>
+
+<p>这里并行地起了3个Explore类型的subagent，而且是在后台执行的(run_in_background&#x3D;true) 。subagent的调用方式和普通的tool call一样，只是name设成了”Agent”。在传入的参数中，”description”就是刚才说的”3-5个词的简短描述”，它会被打印在屏幕上；而”prompt”就是实际交给sub-agent去执行的一个指令，它需要描述清晰到底需要sub-agent去做一个什么样的事。</p>
+<p>3.3 subagent运行逻辑</p>
+<p>subagent运行在独立的上下文当中，所以它能看到的就是自己的system prompt+刚才主agent传给它的prompt。之后，它就开始利用自己可以使用的工具、根据system prompt中的约束，来解决这个prompt问题了。</p>
+<p>Subagent 完成后，它的最后一条 assistant message 会作为字符串返回给主 agent，这个消息对于用户是不可见的。主agent需要自己把这个结果整理一下，然后用文字告诉用户。同时返回的还有<code>agent ID</code>，可供后续 resume 使用（sub-agent的resume和主agent一样，可以恢复上一次调用时候完整的上下文继续工作）。下面是一个返回内容的示例：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;user&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;tool_result&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="string">&quot;以下是 xxx 目录下的调研结果.....&quot;</span><span class="punctuation">,</span> ###sub-agent返回的那条消息</span><br><span class="line">          <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;text&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="string">&quot;agentId: xxx (use SendMessage with to: &#x27;xxxxx&#x27; to continue this agent)\n&lt;usage&gt;total_tokens: xxx\ntool_uses: x\nduration_ms: xxxx&lt;/usage&gt;&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;text&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>多智能体的协调方式</li>
+</ol>
+<p>如果按照协调模式（即信息如何在智能体间流动）来分类，多智能体的设计大致可以分为四类。</p>
+<p>4.1 Orchestrator-Worker</p>
+<p>我们刚才看到的Claude Code中的subagent设计方式就属于这一类，这也是最符合直觉的一类。</p>
+<p><img src="https://get-notes.umiwi.com/get_notes_prod%2F202608211129%2Fgetnotes_img_1aa1f18800222e10hgIRUGV0.png?Expires=1789885277&OSSAccessKeyId=LTAI5t7toTp72R3TvdXf9QdK&Signature=o5k9UoircL5rUQ2597ULUAzl/Ps=&x-oss-process=image/resize,m_lfit,w_720,h_3240" alt="image" title="image"></p>
+<p>这种模式有一个中央的“协调器”（Orchestrator）和若干个“工作节点”（Worker）。Orchestrator是整个系统的入口和决策中心。当用户输入一个任务后，协调器会首先将复杂任务拆分成若干个可以独立执行的子任务，然后分发给不同的工作节点。在工作节点完成之后，收集所有工作节点的输出，进行整合，最终生成对用户的响应。Worker节点之间是不能直接通信的，所有信息都要经过Orchestrator。</p>
+<p>虽然这种方法简单可控，而且能保证全局一致性（不会出现多个智能体对共享资源做出冲突决策的情况），但是也会有很多短板：</p>
+<ul>
+<li>单点瓶颈：就和所有的中心化系统一样，所有流量都要经过Orchestrator这一个节点，这就产生了一个bottleneck</li>
+<li>上下文窗口的压力：虽然Worker的上下文是隔离的，但是Orchestrator毕竟需要所有子任务的结果才能最终聚合信息。如果子任务特别多的话，上下文也可能被撑爆。</li>
+<li>不能紧密协作：如果工作节点之间需要相互讨论、质疑、迭代改进，这种模式会强制所有交流绕经Orchestrator，延迟很高。</li>
+</ul>
+<p>mesh 对等网络</p>
+<p>Mesh 模式中，Agent之间建立显式的点对点连接，直接传递信息给对方。每个Agent知道自己需要与哪些伙伴直接交流，消息可以不经过任何中央节点。它们共享一个任务（如写代码、做研究），需要频繁交换中间结果、互相批评、迭代改进</p>
+<p><img src="https://get-notes.umiwi.com/get_notes_prod%2F202608211411%2Fgetnotes_img_1aa1fafec011bd98StMt748t.png?Expires=1789885277&OSSAccessKeyId=LTAI5t7toTp72R3TvdXf9QdK&Signature=CB8pX0ePoiRWArO64nHIB8EkFZQ=&x-oss-process=image/resize,m_lfit,w_720,h_3240" alt="image" title="image"></p>
+<p>Mesh是多智能体辩论：多个智能体围绕一个问题相互批判、改进答案。但是纯 Mesh 在生产环境中很少单独使用，主要就是因为可控性问题：</p>
+<ul>
+<li>缺乏全局视图：没有中央节点持有完整状态，需要各个Agent靠自己拼凑因果链，非常困难。</li>
+<li>状态一致性问题：如果多个智能体同时修改共享资源，需要额外的锁或共识机制，否则会出现冲突。</li>
+<li>容易出现死循环：没有中央节点控制的话，大家会容易进入“蚂蚁死亡螺旋”</li>
+</ul>
+<ol start="5">
+<li>Agent Teams</li>
+</ol>
+<p>在cc中，Agent Teams 就是一个能够让多个Agent像团队一样协同工作的机制。</p>
+<p>如下图所示，Agent Teams中有两个角色：</p>
+<ul>
+<li>团队领导 (Team Lead)：这是你最初启动的那个主Agent。它的职责是创建团队成员、分配任务，并整合最终结果。</li>
+<li>队友 (Teammates)：每个队友都有自己的上下文窗口，可以独立工作，并且可以相互直接通信，而不仅仅是向领导汇报。</li>
+</ul>
+<p><img src="https://get-notes.umiwi.com/get_notes_prod%2F202608211416%2Fgetnotes_img_1aa1fb55c01c2500fNINCPzI.png?Expires=1789885277&OSSAccessKeyId=LTAI5t7toTp72R3TvdXf9QdK&Signature=tVs/WLTNYMMXJ7KemGXr+cqV/tM=&x-oss-process=image/resize,m_lfit,w_720,h_3240" alt="image" title="image"></p>
+<p>由此可见，Agent Team和subagent的一个明显不同就是，Agent Team的teammate之间可以直接通信。首先需要确认的是，teammate的上下文窗口确实是独立的，而且Lead的历史对话不会传递给teammates。那么，teammate之间的通信是怎么做到的呢？</p>
+<ul>
+<li>mailbox：这是一种去中心化直接通信的方式，就像发短信一样。teammates之间可以用<code>message</code>发给特定队友，或用<code>broadcast</code>发给所有人。发送之后，系统（Mailbox）负责投递，lead 不需要轮询或转发。</li>
+<li>空闲通知(Idle notification)：队友完成工作或进入空闲状态时，自动通知 lead，让 lead 知道可以分配新任务或进行下一步。</li>
+<li>共享的任务列表 (shared task list)：它是团队成员之间协作的核心，确保工作被合理分配、有序推进，并自动处理依赖关系。每个任务有三个状态：<code>pending</code>（待处理）、<code>in progress</code>（进行中）、<code>completed</code>（已完成），而且任务可以声明对其他任务的依赖。Lead可以明确指派任务给某个teammates，队友也可以在完成自己的任务后，可以自我认领下一个未分配、未阻塞的任务。系统通过文件锁来防止多个队友同时认领同一个任务。依赖关系由系统自动管理，无需人工干预。当被依赖的任务被标记为“已完成”时，所有依赖它的任务会自动解除阻塞，状态从“被依赖阻塞”变为“可认领”。</li>
+</ul>
+
+</div> 
+
+<script>
+    window.onload = detectors();
+</script>
+    <div class="post-footer">
+    <div class="h-line-primary"></div>
+    <nav class="post-nav">
+        <div class="prev-item">
+           
+        </div>
+        <div class="next-item">
+            
+                <div class="icon arrow-right"></div>
+                <div class="post-link">
+                  <a href="/2026/08/14/DeepSeek-Harness-%E4%BD%BF%E7%94%A8/">Next</a>  
+                </div>  
+            
+        </div>
+    </nav>
+</div>
+
+    
+      <div class="post-comment">
+
+     
+
+     
+    
+    
+
+</div>
+     
+  
+</article>
+          </div>
+        
+      </div>
+      
+      <div class="footer">
+    <div class="flex-container">
+        <div class="footer-text">
+            
+            
+            
+                Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> & <a target="_blank" rel="noopener" href="https://github.com/zoeingwingkei/frame/">Frame</a>
+                
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+    
+
+  </body>
+</html>
