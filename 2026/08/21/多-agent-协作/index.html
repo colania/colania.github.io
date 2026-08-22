@@ -155,10 +155,11 @@
 
     <div class="post-content">
     <ol>
-<li>Claude Code中的Sub-agent的优缺点<br>ß<br>为什么我们需要 sub agent?</li>
+<li>Claude Code中的Sub-agent的优缺点</li>
 </ol>
+<p>为什么我们需要 sub agent? </p>
 <ul>
-<li>节省主Agent的上下文窗口：。尽管现在模型的上下文长度越来越长，但毕竟也是有限的；而我们面对的信息却是海量的。有一种说法是，LLM Agent的核心，其实是一种压缩——从海量网页、文档中找到关键信息，将大量数据压缩成几个核心要点。那么，我们可以使用多个智能体，每个只关注一个子问题，它们各自的上下文窗口同时处理不同信息，最后把有价值的部分汇总给主Agent，这样主Agent的上下文窗口就不会被海量的信息所污染。</li>
+<li>节省主Agent的上下文窗口：。尽管现在模型的上下文长度越来越长，但毕竟也是有限的；而我们面对的信息却是海量的。有一种说法是，LLM Agent的核心，其实是一种压缩——从海量网页、文档中找到关键信息，将大量数据压缩成几个核心要点。那么，我们可以使用多个智能体，每个只关注一个子问题，它们各自的上下文窗口同时处理不同信息，最后把有价值的部分汇总给主Agent，这样主Agent的上下文窗口就不会被海量的信息所污染 。</li>
 <li>并行探索，效率更高。在解决问题时，主Agent可以启动多个subagent；而且，每个sub-agent在执行任务时，可以并行调用多个工具。这样，对于复杂的任务，agent可以在几分钟内完成原本需要数小时才能完成的工作。</li>
 <li>在任务实现的效果上，多Agent的架构也明显优于单Agent。多Agent的架构特别擅长处理需要广度优先(BFS)处理的问题，因为这类问题需要并行探索多个相互独立的线索。Anthropic的博客 <a href="https://link.zhihu.com/?target=https://www.anthropic.com/engineering/multi-agent-research-system">How we built our multi-agent research system</a>中说，使用Claude Opus 4 作为主Agent、Claude Sonnet 4 作为subagent的多智能体系统，其表现比单独使用 Claude Opus 4 的单智能体系统高出90.2%。他们发现，单智能体系统往往因为缓慢的顺序搜索而难以找到答案。</li>
 </ul>
