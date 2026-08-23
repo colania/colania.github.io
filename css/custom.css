@@ -111,6 +111,10 @@ body::before {
   border-radius: 50%;
   object-fit: cover;
   border: 3px solid var(--color-border);
+  transition: transform 0.3s ease;
+}
+.hero-avatar img:hover {
+  animation: avatar-spin 3s linear infinite;
 }
 .tags-section {
   margin-bottom: 3rem;
@@ -1753,4 +1757,36 @@ body {
   padding: 0.2rem 0.4rem;
   border-radius: 4px;
   font-family: monospace;
+}
+@-moz-keyframes avatar-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes avatar-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-o-keyframes avatar-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes avatar-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
