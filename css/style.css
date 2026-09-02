@@ -870,6 +870,14 @@ del {
   text-decoration: line-through;
   color: #373633;
 }
+.post-content h1,
+.post-content h2,
+.post-content h3,
+.post-content h4,
+.post-content h5,
+.post-content h6 {
+  color: #2e5fa3;
+}
 .post-content a {
   padding-bottom: 2px;
   background-image: linear-gradient(#373633, #373633), linear-gradient(#373633, #373633);

@@ -10,6 +10,14 @@ h6 {
   margin-top: $margin-l-0;
   margin-bottom: $margin-m-1;
 }
+.post-content h1,
+.post-content h2,
+.post-content h3,
+.post-content h4,
+.post-content h5,
+.post-content h6 {
+  color: $color-text-title;
+}
 blockquote {
   margin-left: 0;
   margin-right: 0;
