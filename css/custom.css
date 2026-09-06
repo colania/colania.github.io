@@ -4,7 +4,9 @@
   box-sizing: border-box;
 }
 body {
-  background: #fdfbf8;
+  background: #f4efe5;
+  color: #292824;
+  overflow-x: hidden;
 }
 body::before {
   content: '';
@@ -12,7 +14,9 @@ body::before {
   inset: 0;
   pointer-events: none;
   z-index: -1;
-  background: radial-gradient(ellipse 48% 32% at 11% 4%, rgba(116,146,244,0.44), transparent 72%), radial-gradient(ellipse 46% 34% at 49% 2%, rgba(213,132,195,0.39), transparent 72%), radial-gradient(ellipse 46% 32% at 89% 5%, rgba(255,152,104,0.44), transparent 72%), radial-gradient(ellipse 40% 34% at 12% 67%, rgba(224,139,188,0.24), transparent 76%), radial-gradient(ellipse 44% 38% at 80% 84%, rgba(90,193,147,0.3), transparent 78%);
+  opacity: 0.28;
+  background-image: radial-gradient(#b7aa91 0.6px, transparent 0.6px);
+  background-size: 7px 7px;
 }
 .mask-border::before {
   display: none;
@@ -21,7 +25,7 @@ body::before {
   margin-top: 0;
   border: 0;
   border-top: 1px solid rgba(55,78,67,0.14);
-  background: rgba(255,255,255,0.42);
+  background: transparent;
 }
 .footer .footer-text {
   margin: 1.5rem 0;
@@ -788,9 +792,78 @@ body::before {
 .home-page,
 .weekly-page {
   width: 100%;
-  max-width: 1060px;
+  max-width: 1040px;
   margin: 0 auto;
   padding: 3.25rem 1.5rem 4rem;
+}
+.scrapbook-home {
+  position: relative;
+}
+.paper-scrap {
+  position: relative;
+  border: 1px solid rgba(53,48,39,0.18);
+  box-shadow: 5px 7px 0 rgba(61,53,42,0.1), 0 16px 24px rgba(74,62,46,0.08);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+.paper-scrap:hover {
+  box-shadow: 7px 10px 0 rgba(61,53,42,0.1), 0 20px 30px rgba(74,62,46,0.12);
+}
+.paper-scrap-yellow {
+  background: #f9e6a7;
+  transform: rotate(-1.2deg);
+}
+.paper-scrap-blue {
+  background: #cfe4e7;
+  transform: rotate(0.8deg);
+}
+.paper-scrap-pink {
+  background: #f1d7d2;
+  transform: rotate(-0.5deg);
+}
+.paper-scrap-white {
+  background: #fffdf7;
+}
+.scrapbook-tape {
+  position: absolute;
+  z-index: 2;
+  width: 126px;
+  height: 29px;
+  opacity: 0.82;
+  background: rgba(255,249,221,0.74);
+  border-left: 1px dashed rgba(74,62,46,0.14);
+  border-right: 1px dashed rgba(74,62,46,0.14);
+  box-shadow: 0 2px 5px rgba(74,62,46,0.06);
+  transform: rotate(3deg);
+}
+.scrapbook-tape-top {
+  top: 25px;
+  left: 31%;
+}
+.scrapbook-sticker {
+  position: absolute;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  color: #e16c52;
+  font-family: Georgia, serif;
+  font-size: 2.6rem;
+  transform: rotate(12deg);
+}
+.scrapbook-sticker-star {
+  top: 35px;
+  right: 12%;
+}
+.home-intro {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 3rem 3.25rem 2.7rem;
+  margin: 1.5rem 0 3.7rem;
+  border-bottom: 0;
+}
+.home-intro-copy {
+  min-width: 0;
 }
 .home-intro {
   display: flex;
@@ -809,20 +882,21 @@ body::before {
   align-items: center;
   gap: 0.4rem;
   margin: 0 0 0.45rem;
-  color: #5a84c9;
+  color: #7c604a;
   font-size: 0.8rem;
   font-weight: 600;
 }
 .home-intro h1,
 .weekly-page-header h1 {
   margin: 0;
-  color: #2f3538;
-  font-size: 2.15rem;
-  line-height: 1.25;
+  color: #292824;
+  font-size: 2.35rem;
+  line-height: 1.2;
+  letter-spacing: 0;
 }
 .home-role {
   margin: 0.85rem 0 0;
-  color: #5a84c9;
+  color: #4b777b;
   font-size: 1rem;
   font-weight: 600;
   white-space: pre-wrap;
@@ -830,7 +904,7 @@ body::before {
 .home-summary {
   max-width: 680px;
   margin: 0.85rem 0 0;
-  color: #626968;
+  color: #625d53;
   font-size: 0.98rem;
   line-height: 1.8;
 }
@@ -838,7 +912,7 @@ body::before {
   display: flex;
   gap: 0.75rem;
   margin-top: 1rem;
-  color: #7d8583;
+  color: #6e685d;
   font-size: 0.82rem;
 }
 .home-intro-meta span {
@@ -846,29 +920,32 @@ body::before {
   align-items: center;
   gap: 0.3rem;
   padding: 0.25rem 0.55rem;
-  border: 1px solid rgba(86,121,108,0.18);
-  border-radius: 999px;
-  background: rgba(255,255,255,0.64);
+  border: 1px solid rgba(86,75,58,0.24);
+  border-radius: 0;
+  background: rgba(255,255,255,0.38);
 }
 .home-avatar {
   width: 116px;
   height: 116px;
   flex: 0 0 116px;
-  border: 4px solid #fff;
-  border-radius: 50%;
-  box-shadow: 0 10px 26px rgba(70,95,105,0.16);
+  border: 6px solid #fffdf7;
+  border-radius: 2px;
+  box-shadow: 7px 8px 0 rgba(61,53,42,0.18);
+  transform: rotate(4deg);
   object-fit: cover;
 }
 .home-section {
-  margin-top: 2.6rem;
+  margin-top: 3rem;
+  padding: 2.1rem 2.2rem 2.4rem;
+  border-bottom: 0;
 }
 .home-section:nth-of-type(2) {
-  --section-accent: #4b83e8;
-  --section-soft: rgba(75,131,232,0.12);
+  --section-accent: #437d83;
+  --section-soft: rgba(67,125,131,0.12);
 }
 .home-section:nth-of-type(3) {
-  --section-accent: #36a67a;
-  --section-soft: rgba(54,166,122,0.12);
+  --section-accent: #b7635c;
+  --section-soft: rgba(183,99,92,0.12);
 }
 .home-section-heading {
   display: flex;
@@ -879,7 +956,7 @@ body::before {
 }
 .home-section-heading h2 {
   margin: 0;
-  color: #303937;
+  color: #292824;
   font-size: 1.25rem;
 }
 .home-section-heading h2::before {
@@ -888,7 +965,7 @@ body::before {
   width: 0.18rem;
   height: 1.05rem;
   margin-right: 0.55rem;
-  border-radius: 999px;
+  border-radius: 0;
   background: var(--section-accent, #5a84c9);
   vertical-align: -0.1rem;
 }
@@ -896,7 +973,7 @@ body::before {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  color: #4f7fc8;
+  color: #73574b;
   font-size: 0.88rem;
   font-weight: 600;
 }
@@ -1008,17 +1085,15 @@ body::before {
   justify-content: space-between;
   padding: 1.15rem;
   overflow: hidden;
-  border: 1px solid rgba(96,131,205,0.18);
-  border-radius: 8px;
-  background: linear-gradient(135deg, rgba(232,241,255,0.9), rgba(244,239,255,0.74));
-  box-shadow: 0 8px 20px rgba(78,105,145,0.06);
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
   color: #354156;
   transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
 }
 .weekly-preview-card:hover {
-  transform: translateY(-3px);
-  background: #edf3ff;
-  box-shadow: 0 12px 28px rgba(78,105,145,0.13);
+  transform: translateY(-3px) rotate(-1deg);
+  box-shadow: 3px 5px 0 rgba(61,53,42,0.12);
 }
 .weekly-preview-card h3 {
   max-width: 82%;
@@ -1041,24 +1116,24 @@ body::before {
   min-width: 38px;
   height: 30px;
   padding: 0 0.45rem;
-  border-radius: 999px;
-  background: #5f8ff1;
-  box-shadow: 0 4px 8px rgba(80,125,215,0.24);
-  color: #fff;
+  border-radius: 0;
+  background: #e27b5d;
+  box-shadow: 2px 3px 0 rgba(112,61,45,0.18);
+  color: #fffaf1;
   font-family: 'Roboto Mono', monospace;
   font-size: 0.72rem;
   font-weight: 600;
 }
 .latest-post-list,
 .weekly-list {
-  border-top: 1px solid rgba(54,166,122,0.45);
+  border-top: 1px solid rgba(92,68,56,0.35);
 }
 .latest-post-row,
 .weekly-list-row {
   display: grid;
   align-items: center;
   gap: 1rem;
-  border-bottom: 1px solid rgba(54,166,122,0.32);
+  border-bottom: 1px dashed rgba(92,68,56,0.32);
   color: #313b38;
 }
 .latest-post-row {
@@ -1071,7 +1146,7 @@ body::before {
 .latest-post-title {
   min-width: 0;
   overflow: hidden;
-  color: #313b38;
+  color: #39332d;
   font-size: 0.98rem;
   font-weight: 500;
   text-overflow: ellipsis;
@@ -1082,13 +1157,13 @@ body::before {
   align-items: center;
   justify-content: end;
   gap: 0.5rem;
-  color: #7b827f;
+  color: #746b61;
   font-size: 0.75rem;
 }
 .latest-post-meta span {
   padding: 0.15rem 0.45rem;
-  border-radius: 999px;
-  background: rgba(115,136,128,0.09);
+  border-radius: 0;
+  background: rgba(255,255,255,0.35);
 }
 .home-empty-state {
   padding: 1.5rem;
@@ -1757,6 +1832,77 @@ body {
   padding: 0.2rem 0.4rem;
   border-radius: 4px;
   font-family: monospace;
+}
+.scrapbook-home .home-intro {
+  padding: 3rem 3.25rem 2.7rem;
+  margin: 1.5rem 0 3.7rem;
+  border-bottom: 0;
+}
+.scrapbook-home .home-section {
+  padding: 2.1rem 2.2rem 2.4rem;
+  border-bottom: 0;
+}
+.scrapbook-home .weekly-preview-card {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+.scrapbook-home .home-intro-meta span,
+.scrapbook-home .latest-post-meta span {
+  border-radius: 0;
+}
+@media (max-width: 720px) {
+  .scrapbook-home {
+    padding: 2rem 1.25rem 3rem;
+  }
+  .scrapbook-home .home-intro {
+    padding: 2rem 1.25rem 2.25rem;
+    margin-top: 1rem;
+    margin-bottom: 2.7rem;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .scrapbook-home .home-intro h1 {
+    font-size: 1.75rem;
+  }
+  .scrapbook-home .home-avatar {
+    width: 82px;
+    height: 82px;
+    flex-basis: 82px;
+    align-self: flex-end;
+  }
+  .scrapbook-home .home-section {
+    padding: 1.45rem 1.1rem 1.7rem;
+    margin-top: 2.2rem;
+  }
+  .scrapbook-home .home-section-heading {
+    align-items: flex-start;
+  }
+  .scrapbook-home .home-section-heading h2 {
+    font-size: 1.1rem;
+  }
+  .scrapbook-home .weekly-preview-grid {
+    grid-template-columns: 1fr;
+  }
+  .scrapbook-home .latest-post-row {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+    padding: 0.75rem 0;
+  }
+  .scrapbook-home .latest-post-title {
+    white-space: normal;
+  }
+  .scrapbook-home .latest-post-meta {
+    justify-content: flex-start;
+  }
+  .scrapbook-home .scrapbook-tape-top {
+    top: 13px;
+    left: 25%;
+  }
+  .scrapbook-home .scrapbook-sticker-star {
+    top: 22px;
+    right: 4%;
+  }
 }
 @-moz-keyframes avatar-spin {
   from {
